@@ -6,3 +6,21 @@
 h1 {
   line-height: 3.5rem;
 }
+.img {
+  background-image: url('../images/abc.jpg');
+  height: 100%;
+
+  background-position: center;
+
+  background-size: cover;
+}
+.button {
+}
+.hhh {
+  width: 380px;
+}
+@media (max-width: 500px) {
+  .hhh {
+    width: 100%;
+  }
+}
