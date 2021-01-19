@@ -12,9 +12,26 @@ const Home = ({ history }) => {
   const { loading, oauth, error } = getOauth
   const resgoogle = (response) => {
     console.log(response)
+    console.log(
+      response.profileObj.email,
+      response.profileObj.name,
+      response.profileObj.imageUrl,
+      response.tokenObj.access_token,
+      response.tokenObj.expires_at,
+      response.tokenObj.expires_in
+    )
     console.log(response.profileObj)
     if (response) {
-      dispatch(OauthLogin(response))
+      dispatch(
+        OauthLogin(
+          response.profileObj.name,
+          response.profileObj.email,
+          response.profileObj.imageUrl,
+          response.tokenObj.access_token,
+          response.tokenObj.expires_in,
+          response.tokenObj.expires_at
+        )
+      )
       history.push('/graph')
     }
   }

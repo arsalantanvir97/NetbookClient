@@ -14,10 +14,27 @@ h1 {
 
   background-size: cover;
 }
-.button {
-}
+
 .hhh {
   width: 380px;
+}
+.slide {
+  padding: 10px;
+}
+.slide:hover {
+  background-color: grey;
+}
+.slide:nth-child(2):hover {
+  cursor: pointer;
+}
+.gg {
+  margin-bottom: 25px;
+}
+.tags {
+  padding: 5px;
+  border-radius: 1px;
+  background-color: lightgreen;
+  color: black;
 }
 @media (max-width: 500px) {
   .hhh {
