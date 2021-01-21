@@ -53,9 +53,15 @@ const Links = () => {
   const { loading: nodeloading, nodde, error: errror } = getNode
 
   useEffect(() => {
-    if (oauth._id) dispatch(Nodefetch(oauth._id))
-    console.log('helloworld', oauth._id)
+    if (oauth?._id) {
+      dispatch(Nodefetch(oauth._id))
+      console.log('helloworld', oauth._id)
+    }
   }, [])
+
+  useEffect(() => {
+    console.log("nodde =>", nodde)
+  }, [nodde])
 
   const handleOpen = () => {
     setOpen(true)
@@ -210,7 +216,7 @@ const Links = () => {
   })
 
   const data = {
-    nodes: [{ id: 'Harry' }, { id: 'Sally' }, { id: 'Alice' }],
+    nodes: nodde || [],
     links: [
       // { source: 'Harry', target: 'Sally' },
       // { source: 'Harry', target: 'Alice' },
