@@ -21,8 +21,9 @@ h1 {
 .slide {
   padding: 10px;
 }
-.slide:hover {
-  background-color: grey;
+
+.hidetext {
+  display: none;
 }
 .slide:nth-child(2):hover {
   cursor: pointer;
@@ -36,8 +37,57 @@ h1 {
   background-color: lightgreen;
   color: black;
 }
-@media (max-width: 500px) {
+.showsidebar {
+  width: 200px;
+}
+.hidesidebar {
+  width: 50px;
+}
+.filterfield {
+  width: 500px;
+}
+.graph {
+  width: 100%;
+  height: calc(100vh - 70px) !important;
+}
+.graph svg {
+  width: 100% !important;
+  height: calc(100vh - 74px) !important;
+}
+@media screen and (max-width: 500px) {
   .hhh {
     width: 100%;
+  }
+
+  .menuicon {
+    /* visibility: hidden; */
+    display: none !important;
+  }
+  .hidesidebar {
+    display: flex;
+    flex-direction: row !important;
+    position: absolute;
+    bottom: 9px;
+    height: 54px !important;
+
+    justify-content: space-around;
+    width: 94vw;
+    /* align-self: center; */
+  }
+  .showsidebar {
+    display: flex;
+    flex-direction: row !important;
+  }
+  .firsticon {
+    margin-top: 0px !important;
+  }
+  .navbar {
+    justify-content: flex-start;
+  }
+  .filterfield {
+    margin-left: 10px;
+  }
+  .gbtn {
+    visibility: hidden;
   }
 }

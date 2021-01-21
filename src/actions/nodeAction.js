@@ -7,7 +7,9 @@ import {
   HAVE_NODE_SUCCESS,
   HAVE_NODE_REQUEST,
 } from '../constants/nodeConstant'
-export const NodeAdd = (id, type, tags, attributes) => async (dispatch) => {
+export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
+  dispatch
+) => {
   try {
     dispatch({
       type: GET_NODE_REQUEST,
@@ -21,7 +23,7 @@ export const NodeAdd = (id, type, tags, attributes) => async (dispatch) => {
 
     const { data } = await axios.post(
       'http://localhost:5000/nodes',
-      { id, type, tags, attributes },
+      { nodeid, id, type, tags, attributes },
       config
     )
     console.log('heelo', data)
@@ -38,13 +40,23 @@ export const NodeAdd = (id, type, tags, attributes) => async (dispatch) => {
     })
   }
 }
-export const Nodefetch = () => async (dispatch) => {
+export const Nodefetch = (nodeid) => async (dispatch) => {
   try {
     dispatch({
       type: HAVE_NODE_REQUEST,
     })
 
-    const { data } = await axios.get('http://localhost:5000/nodes')
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.post(
+      'http://localhost:5000/nodes/get',
+      { nodeid },
+      config
+    )
     console.log('heelo', data)
 
     dispatch({
