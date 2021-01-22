@@ -10,7 +10,13 @@ import AddIcon from '@material-ui/icons/Add'
 import PersonIcon from '@material-ui/icons/Person'
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted'
 import DeleteIcon from '@material-ui/icons/Delete'
+import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
 import TimelineIcon from '@material-ui/icons/Timeline'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
 
 import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
 import {
@@ -25,12 +31,14 @@ import { OauthLogout } from '../actions/oauthAction'
 import TagsInput from 'react-tagsinput'
 import './home.css'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
-import { NodeAdd, Nodefetch } from '../actions/nodeAction'
+import { NodeAdd, Nodefetch, EdgeAdd, Edgefetch } from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
 
 const Links = ({ history }) => {
   const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
+  const [openViewNode, setOpenViewNode] = useState(false)
+  const [openAddEdge, setOpenAddEdge] = useState(false)
   const [tags, setTags] = useState([])
   const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
@@ -39,8 +47,12 @@ const Links = ({ history }) => {
   const [inputfields, setInputfields] = useState([])
   const [openPanel, setOpenPanel] = useState(false)
   const [popup, setPopup] = useState(false)
+  const [popdown, setPopdown] = useState(false)
   const [attributes, setAttributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [source, setSource] = useState('')
+  const [target, setTarget] = useState('')
+  const [edgetags, setEdgetags] = useState([])
   const [nodepopup, setNodepopup] = useState([])
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
@@ -57,6 +69,7 @@ const Links = ({ history }) => {
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
+
       console.log('hellowold', oauth._id)
     }
   }, [])
@@ -68,9 +81,17 @@ const Links = ({ history }) => {
   const handleOpen = () => {
     setOpen(true)
   }
+  const handleOpenViewNode = () => {
+    setOpenViewNode(true)
+  }
+  const handleOpenAddEdge = () => {
+    setOpenAddEdge(true)
+  }
 
   const handleClose = () => {
     setOpen(false)
+    setOpenViewNode(false)
+    setOpenAddEdge(false)
   }
 
   function rand() {
@@ -100,10 +121,20 @@ const Links = ({ history }) => {
     multilineColor: {
       color: 'white',
     },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
   }))
   const classes = useStyles()
   const handleChange = (tags) => {
     setTags(tags)
+  }
+  const handleChanges = (edgetags) => {
+    setEdgetags(edgetags)
   }
 
   const handlechangeinput = (index, event) => {
@@ -126,13 +157,23 @@ const Links = ({ history }) => {
   }
   const submitHandler = (e) => {
     e.preventDefault()
+
     dispatch(NodeAdd(oauth._id, id, type, tags, attributes))
+    dispatch(Nodefetch(oauth._id))
     handleClose()
     setId('')
     setType('')
     setTags([])
     setInputfields([])
+  }
+  const submitedgehandler = (e) => {
+    e.preventDefault()
+    dispatch(EdgeAdd(oauth._id, source, target, edgetags))
     dispatch(Nodefetch(oauth._id))
+    handleClose()
+    setSource('')
+    setTarget('')
+    setEdgetags([])
   }
 
   const body = (
@@ -222,7 +263,10 @@ const Links = ({ history }) => {
         <Button type='button' onClick={handleclickfields} color='primary'>
           Add Attribute
         </Button>
-        <Button type='submit'>
+        <Button
+          type='submit'
+          disabled={id === '' || type === '' || tags.length <= 0}
+        >
           <div>Add Node</div>
         </Button>
       </form>
@@ -234,11 +278,10 @@ const Links = ({ history }) => {
   })
 
   const data = {
-    nodes: nodde || [],
-    links: [
-      // { source: 'Harry', target: 'Sally' },
-      // { source: 'Harry', target: 'Alice' },
-    ],
+    nodes: nodde?.nodes || [],
+    links: nodde?.links || [],
+    // { source: 'Harry', target: 'Sally' },
+    // { source: 'Harry', target: 'Alice' },
   }
 
   const myConfig = {
@@ -360,14 +403,65 @@ const Links = ({ history }) => {
     </div>
   )
 
+  const bodddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id='simple-modal-title'>Add Edge</h2>
+      <form onSubmit={submitedgehandler}>
+        <Grid container>
+          <Grid item xs={6}>
+            <FormControl className={classes.formControl}>
+              <InputLabel id='demo-simple-select-label'>Source</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
+              >
+                {nodde?.nodes?.map((idd) => (
+                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl className={classes.formControl}>
+              <InputLabel id='demo-simple-select-label'>Target</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={target}
+                onChange={(e) => setTarget(e.target.value)}
+              >
+                {nodde?.nodes?.map((idd) => (
+                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <div style={{ height: 9 }}></div>
+        <TagsInput
+          style={{ color: 'black' }}
+          value={edgetags}
+          onChange={handleChanges}
+        />
+        <Button
+          type='submit'
+          disabled={source === '' || target === '' || edgetags.length <= 0}
+        >
+          <div>Add Edge</div>
+        </Button>
+      </form>
+    </div>
+  )
   useEffect(() => {
     console.log('hero', nodepopup)
   }, [nodepopup])
 
   const onClickNode = (nodeId) => {
-    handleOpen()
+    handleOpenViewNode()
     setPopup(true)
-    const nodedetails = nodde?.filter((node) => node.id === nodeId)[0]
+    const nodedetails = nodde?.nodes?.filter((node) => node.id === nodeId)[0]
     console.log('ab', nodedetails)
 
     setNodepopup(nodedetails)
@@ -388,6 +482,10 @@ const Links = ({ history }) => {
   const showmodal = () => {
     handleOpen()
     setPopup(false)
+  }
+  const addedgemodal = () => {
+    handleOpenAddEdge()
+    setPopdown(true)
   }
 
   const logout = () => {
@@ -505,6 +603,15 @@ const Links = ({ history }) => {
             </IconButton>
             <p className={visible ? 'slide' : 'hidetext'}>Add Node</p>
           </div>
+          <div
+            onClick={addedgemodal}
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <IconButton color='inherit' aria-label='open drawer'>
+              <TrendingFlatIcon style={{ color: 'grey' }} />
+            </IconButton>
+            <p className={visible ? 'slide' : 'hidetext'}>Add Edge</p>
+          </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <IconButton color='inherit' aria-label='open drawer'>
               <SearchIcon style={{ color: 'grey' }} />
@@ -529,7 +636,21 @@ const Links = ({ history }) => {
           onClose={handleClose}
           aria-labelledby='simple-modal-title'
         >
-          {popup ? boddy : body}
+          {body}
+        </Modal>
+        <Modal
+          open={openViewNode}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {boddy}
+        </Modal>
+        <Modal
+          open={openAddEdge}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {bodddy}
         </Modal>
         <div className='graph'>
           <Graph
