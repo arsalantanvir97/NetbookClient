@@ -46,8 +46,12 @@ h1 {
   .MuiInputAdornment-marginDense {
   color: black !important;
 }
+
 .MuiFormLabel-root {
   color: black !important;
+}
+.borderbottom {
+  border-bottom: 1px solid lightslategrey;
 }
 .hidetext {
   display: none;

@@ -38,9 +38,10 @@ const Links = ({ history }) => {
   const [type, setType] = useState('')
   const [inputfields, setInputfields] = useState([])
   const [openPanel, setOpenPanel] = useState(false)
-
+  const [popup, setPopup] = useState(false)
   const [attributes, setAttributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [nodepopup, setNodepopup] = useState([])
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
   const dispatch = useDispatch()
@@ -228,13 +229,6 @@ const Links = ({ history }) => {
     </div>
   )
 
-  const boddy = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2 id='simple-modal-title'>View Node</h2>
-      <h3>Hello world</h3>
-    </div>
-  )
-
   const blackTheme = createMuiTheme({
     palette: { primary: { main: '#000000' } },
   })
@@ -259,20 +253,124 @@ const Links = ({ history }) => {
     },
   }
 
+  const boddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2
+        id='simple-modal-title'
+        style={{ textAlign: 'center', marginBottom: 8 }}
+      >
+        View Node
+      </h2>
+      <Grid container>
+        <Grid xs={6}>
+          <p style={{ fontSize: 15 }}>
+            Name:
+            <span style={{ fontSize: 17, fontWeight: 500 }}>
+              {' '}
+              {nodepopup?.id}
+            </span>
+          </p>
+        </Grid>
+        <Grid xs={6}>
+          <p style={{ fontSize: 14 }}>
+            Type:{' '}
+            <span style={{ fontSize: 17, fontWeight: 500 }}>
+              {' '}
+              {nodepopup?.type}
+            </span>
+          </p>
+        </Grid>
+      </Grid>
+      <div style={{ height: 17 }}></div>
+      <p>
+        <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+        {nodepopup?.tags?.map((tagg) => (
+          <>
+            <span
+              style={{
+                display: 'inline !important',
+                backgroundColor: 'black',
+                color: 'white',
+                padding: 3.1,
+                marginRight: 3.8,
+                borderRadius: 3.3,
+                textAlign: 'center',
+              }}
+            >
+              {tagg}
+            </span>
+          </>
+        ))}
+      </p>
+      <div style={{ height: 17 }}></div>
+      {nodepopup?.attributes?.length > 0 ? (
+        <table style={{ width: '100%' }}>
+          <thead>
+            <tr>
+              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+                Attribute Name
+              </th>
+              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+                Attribute Value
+              </th>
+              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+                Attribute Type
+              </th>
+            </tr>
+            <div style={{ height: 8 }}></div>
+          </thead>
+          <tbody>
+            {nodepopup?.attributes?.map((att) => (
+              <>
+                <tr>
+                  <td style={{ fontSize: 22 }}>{att.attributeName}</td>
+                  <td style={{ fontSize: 22 }}>{att.attributeType}</td>
+                  <td style={{ fontSize: 22 }}>{att.attributeValue}</td>
+                </tr>
+
+                {/* <Grid
+              style={{ display: 'flex', justifyContent: 'space-between' }}
+              container
+            >
+              <Grid item xs={4}>
+                <p style={{ fontSize: 20 }}>
+                  Attribute Name:
+                  <span style={{ fontWeight: 500 }}> {att.attributeName} </span>
+                </p>
+              </Grid>
+              <Grid item xs={4}>
+                <p style={{ fontSize: 20 }}>
+                  Attribute Type:
+                  <span style={{ fontWeight: 500 }}> {att.attributeType}</span>
+                </p>
+              </Grid>
+              <Grid item xs={4}>
+                <p style={{ fontSize: 20 }}>
+                  Attribute Value:
+                  <span style={{ fontWeight: 500 }}> {att.attributeValue}</span>
+                </p>
+              </Grid>
+            </Grid> */}
+                <div style={{ height: 12 }}></div>
+              </>
+            ))}
+          </tbody>
+        </table>
+      ) : null}
+    </div>
+  )
+
+  useEffect(() => {
+    console.log('hero', nodepopup)
+  }, [nodepopup])
+
   const onClickNode = (nodeId) => {
     handleOpen()
-    const nodedetails = nodde.filter((node) => node.id === nodeId)
+    setPopup(true)
+    const nodedetails = nodde?.filter((node) => node.id === nodeId)[0]
     console.log('ab', nodedetails)
 
-    return (
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='simple-modal-title'
-      >
-        {boddy}
-      </Modal>
-    )
+    setNodepopup(nodedetails)
   }
 
   const onClickLink = (source, target) => {
@@ -285,6 +383,11 @@ const Links = ({ history }) => {
 
   const onSetSidebarOpen = () => {
     setSidebarOpen(true)
+  }
+
+  const showmodal = () => {
+    handleOpen()
+    setPopup(false)
   }
 
   const logout = () => {
@@ -331,6 +434,7 @@ const Links = ({ history }) => {
             label='Filter'
             fullWidth
             margin='normal'
+            // onChange={}
             size='small'
             variant='outlined'
             InputProps={{
@@ -393,7 +497,7 @@ const Links = ({ history }) => {
             <p className={visible ? 'slide' : 'hidetext'}>Graph View</p>
           </div>
           <div
-            onClick={handleOpen}
+            onClick={showmodal}
             style={{ display: 'flex', alignItems: 'center' }}
           >
             <IconButton color='inherit' aria-label='open drawer'>
@@ -425,7 +529,7 @@ const Links = ({ history }) => {
           onClose={handleClose}
           aria-labelledby='simple-modal-title'
         >
-          {body}
+          {popup ? boddy : body}
         </Modal>
         <div className='graph'>
           <Graph
