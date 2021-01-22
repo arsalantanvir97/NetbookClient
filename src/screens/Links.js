@@ -9,8 +9,9 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import AddIcon from '@material-ui/icons/Add'
 import PersonIcon from '@material-ui/icons/Person'
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted'
-
+import DeleteIcon from '@material-ui/icons/Delete'
 import TimelineIcon from '@material-ui/icons/Timeline'
+
 import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
 import {
   ThemeProvider,
@@ -27,7 +28,7 @@ import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loade
 import { NodeAdd, Nodefetch } from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
 
-const Links = () => {
+const Links = ({ history }) => {
   const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
   const [tags, setTags] = useState([])
@@ -53,9 +54,15 @@ const Links = () => {
   const { loading: nodeloading, nodde, error: errror } = getNode
 
   useEffect(() => {
-    if (oauth._id) dispatch(Nodefetch(oauth._id))
-    console.log('helloworld', oauth._id)
+    if (oauth?._id) {
+      dispatch(Nodefetch(oauth._id))
+      console.log('hellowold', oauth._id)
+    }
   }, [])
+
+  useEffect(() => {
+    console.log('nodde being updated =>', nodde)
+  }, [nodde])
 
   const handleOpen = () => {
     setOpen(true)
@@ -119,6 +126,12 @@ const Links = () => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(NodeAdd(oauth._id, id, type, tags, attributes))
+    handleClose()
+    setId('')
+    setType('')
+    setTags([])
+    setInputfields([])
+    dispatch(Nodefetch(oauth._id))
   }
 
   const body = (
@@ -150,11 +163,18 @@ const Links = () => {
           </Grid>
         </Grid>
         <div style={{ height: 9 }}></div>
-        <TagsInput value={tags} onChange={handleChange} />
+        <TagsInput
+          style={{ color: 'black' }}
+          value={tags}
+          onChange={handleChange}
+        />
         <div style={{ height: 9 }}></div>
         {inputfields.map((inputfield, index) => (
-          <div style={{ width: '100%' }} key={index}>
-            <Grid container spacing={1}>
+          <div
+            style={{ width: '100%', display: 'flex', marginBottom: 8 }}
+            key={index}
+          >
+            <Grid container spacing={1} style={{ flex: 1 }}>
               <Grid item xs={4}>
                 <TextField
                   name='attributeName'
@@ -188,20 +208,30 @@ const Links = () => {
                   onChange={(event) => handlechangeinput(index, event)}
                 />
               </Grid>
-              <IconButton
-                type='button'
-                onClick={() => inputfieldsremove(index)}
-              >
-                x
-              </IconButton>
             </Grid>
+            <IconButton
+              size='small'
+              type='button'
+              onClick={() => inputfieldsremove(index)}
+            >
+              <DeleteIcon />
+            </IconButton>
           </div>
         ))}
         <Button type='button' onClick={handleclickfields} color='primary'>
           Add Attribute
         </Button>
-        <Button type='submit'>Add Node</Button>
+        <Button type='submit'>
+          <div>Add Node</div>
+        </Button>
       </form>
+    </div>
+  )
+
+  const boddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id='simple-modal-title'>View Node</h2>
+      <h3>Hello world</h3>
     </div>
   )
 
@@ -210,7 +240,7 @@ const Links = () => {
   })
 
   const data = {
-    nodes: [{ id: 'Harry' }, { id: 'Sally' }, { id: 'Alice' }],
+    nodes: nodde || [],
     links: [
       // { source: 'Harry', target: 'Sally' },
       // { source: 'Harry', target: 'Alice' },
@@ -230,7 +260,19 @@ const Links = () => {
   }
 
   const onClickNode = (nodeId) => {
-    window.alert(`Clicked node ${nodeId}`)
+    handleOpen()
+    const nodedetails = nodde.filter((node) => node.id === nodeId)
+    console.log('ab', nodedetails)
+
+    return (
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='simple-modal-title'
+      >
+        {boddy}heelo woorld
+      </Modal>
+    )
   }
 
   const onClickLink = (source, target) => {
@@ -247,6 +289,7 @@ const Links = () => {
 
   const logout = () => {
     dispatch(OauthLogout())
+    history.push('/')
   }
 
   return (
@@ -271,8 +314,11 @@ const Links = () => {
           >
             <MenuIcon style={{ color: 'grey' }} />
           </IconButton>
-          <h3 style={{ color: 'white', display: 'flex', alignItems: 'center' }}>
-            Notebook
+          <h3
+            className='netbook'
+            style={{ color: 'white', display: 'flex', alignItems: 'center' }}
+          >
+            Netbook
           </h3>
         </div>
         <div className='filterfield'>
@@ -346,13 +392,14 @@ const Links = () => {
             </IconButton>
             <p className={visible ? 'slide' : 'hidetext'}>Graph View</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            onClick={handleOpen}
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
             <IconButton color='inherit' aria-label='open drawer'>
               <AddIcon style={{ color: 'grey' }} />
             </IconButton>
-            <p onClick={handleOpen} className={visible ? 'slide' : 'hidetext'}>
-              Add Node
-            </p>
+            <p className={visible ? 'slide' : 'hidetext'}>Add Node</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <IconButton color='inherit' aria-label='open drawer'>
