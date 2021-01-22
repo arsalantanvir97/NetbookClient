@@ -270,7 +270,7 @@ const Links = ({ history }) => {
         onClose={handleClose}
         aria-labelledby='simple-modal-title'
       >
-        {boddy}heelo woorld
+        {boddy}
       </Modal>
     )
   }
