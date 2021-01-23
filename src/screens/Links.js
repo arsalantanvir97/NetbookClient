@@ -70,6 +70,9 @@ const Links = ({ history }) => {
   const getNode = useSelector((state) => state.getNode)
   const { loading: nodeloading, nodde, error: errror } = getNode
 
+
+
+
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
@@ -105,28 +108,36 @@ const Links = ({ history }) => {
   function rand() {
     return Math.round(Math.random() * 20) - 10
   }
+  const { innerWidth, innerHeight } = window;
 
   function getModalStyle() {
-    const top = 50 + rand()
-    const left = 50 + rand()
+    const { innerWidth, innerHeight } = window;
 
+    console.log(innerWidth)
+    let top = 50, left = innerWidth < 600 ? 0 : 50
     return {
       top: `${top}%`,
       left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
+      transform: `translate(-${left}%, -${top}%)`,
     }
+
+
+
   }
 
   const useStyles = makeStyles((theme) => ({
+
     paper: {
       position: 'absolute',
-      width: 600,
+      width: innerWidth > 600 ? 600 : "100%",
+
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       maxHeight: 'calc(100vh - 200px)',
       overflow: 'auto !important',
+      top: "50%"
     },
     multilineColor: {
       color: 'white',
@@ -134,6 +145,7 @@ const Links = ({ history }) => {
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
+      width: '100%'
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
@@ -514,9 +526,9 @@ const Links = ({ history }) => {
         </IconButton>
       </div>
       <form onSubmit={submitedgehandler}>
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs={6}>
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl} variant="outlined" size="small">
               <InputLabel id='demo-simple-select-label'>Source</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
@@ -531,7 +543,7 @@ const Links = ({ history }) => {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl} variant="outlined" size="small">
               <InputLabel id='demo-simple-select-label'>Target</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
