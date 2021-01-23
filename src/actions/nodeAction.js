@@ -28,7 +28,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/nodes',
+      'https://netbook-server.herokuapp.com/nodes',
       { nodeid, id, type, tags, attributes },
       config
     )
@@ -59,7 +59,7 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/nodes/get',
+      'https://netbook-server.herokuapp.com/nodes/get',
       { nodeid },
       config
     )
@@ -91,7 +91,7 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/edges',
+      'https://netbook-server.herokuapp.com/edges',
       { edgeid, source, target, tags },
       config
     )
@@ -122,7 +122,7 @@ export const Edgefetch = (edgeid) => async (dispatch) => {
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/edges/get',
+      'https://netbook-server.herokuapp.com/edges/get',
       { edgeid },
       config
     )

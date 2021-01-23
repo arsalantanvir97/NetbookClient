@@ -41,12 +41,18 @@ h1 {
 .filterfield .MuiFormLabel-root {
   color: white !important;
 }
+.filterfield .MuiFormControl-marginNormal {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
 .MuiInputAdornment-root
   .MuiInputAdornment-positionEnd
   .MuiInputAdornment-marginDense {
   color: black !important;
 }
-
+.gg {
+  margin-bottom: 0px !important;
+}
 .MuiFormLabel-root {
   color: black !important;
 }
@@ -130,5 +136,44 @@ h1 {
     width: 100% !important;
     height: 100vh !important;
     background-color: red !important;
+  }
+  .makeStyles-paper-17 {
+    width: 100% !important;
+    border: 2px solid #000 !important;
+    padding: 16px 32px 24px !important;
+    position: absolute !important;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
+    background-color: #fff !important;
+    height: calc(100vh - 124px) !important;
+    top: 49% !important;
+    left: 45% !important;
+    transform: translate(-45%, -49%) !important;
+  }
+  .makeStyles-paper-25 {
+    width: 100% !important;
+    border: 2px solid #000 !important;
+    padding: 16px 32px 24px !important;
+    position: absolute !important;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
+    background-color: #fff !important;
+    height: calc(100vh - 124px) !important;
+    top: 49% !important;
+    left: 45% !important;
+    transform: translate(-45%, -49%) !important;
+  }
+  .makeStyles-paper-33 {
+    width: 100% !important;
+    border: 2px solid #000 !important;
+    padding: 16px 32px 24px !important;
+    position: absolute !important;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
+    background-color: #fff !important;
+    height: calc(100vh - 124px) !important;
+    top: 49% !important;
+    left: 45% !important;
+    transform: translate(-45%, -49%) !important;
   }
 }

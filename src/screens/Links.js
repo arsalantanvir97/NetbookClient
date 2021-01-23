@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import { GoogleLogout } from 'react-google-login'
+import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import AddIcon from '@material-ui/icons/Add'
@@ -17,6 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+import Alert from '@material-ui/lab/Alert'
 
 import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
 import {
@@ -38,11 +40,13 @@ const Links = ({ history }) => {
   const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
   const [openViewNode, setOpenViewNode] = useState(false)
+  const [openViewEdge, setOpenViewEdge] = useState(false)
   const [openAddEdge, setOpenAddEdge] = useState(false)
   const [tags, setTags] = useState([])
   const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
   const [id, setId] = useState('')
+  const [haveedgedetails, setHaveedgedetails] = useState([])
   const [type, setType] = useState('')
   const [inputfields, setInputfields] = useState([])
   const [openPanel, setOpenPanel] = useState(false)
@@ -87,11 +91,15 @@ const Links = ({ history }) => {
   const handleOpenAddEdge = () => {
     setOpenAddEdge(true)
   }
+  const handleOpenViewEdge = () => {
+    setOpenViewEdge(true)
+  }
 
   const handleClose = () => {
     setOpen(false)
     setOpenViewNode(false)
     setOpenAddEdge(false)
+    setOpenViewEdge(false)
   }
 
   function rand() {
@@ -114,9 +122,11 @@ const Links = ({ history }) => {
       position: 'absolute',
       width: 600,
       backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
+      // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
+      maxHeight: 'calc(100vh - 200px)',
+      overflow: 'auto !important',
     },
     multilineColor: {
       color: 'white',
@@ -127,6 +137,12 @@ const Links = ({ history }) => {
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
+    },
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
     },
   }))
   const classes = useStyles()
@@ -178,7 +194,17 @@ const Links = ({ history }) => {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id='simple-modal-title'>Add Node</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>Add Node</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
+
       <form onSubmit={submitHandler}>
         <Grid container spacing={1}>
           <Grid item xs={6}>
@@ -286,24 +312,33 @@ const Links = ({ history }) => {
 
   const myConfig = {
     nodeHighlightBehavior: true,
+    directed: true,
     node: {
-      color: 'lightgreen',
-      size: 120,
+      color: '#3A4A57',
+      size: 550,
       highlightStrokeColor: 'blue',
+      fontSize: 18,
     },
     link: {
       highlightColor: 'lightblue',
+      size: 1500,
+      strokeWidth: 2.4,
+      color: '#6F93B0',
     },
   }
 
   const boddy = (
     <div style={modalStyle} className={classes.paper}>
-      <h2
-        id='simple-modal-title'
-        style={{ textAlign: 'center', marginBottom: 8 }}
-      >
-        View Node
-      </h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>View Node</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
       <Grid container>
         <Grid xs={6}>
           <p style={{ fontSize: 15 }}>
@@ -335,6 +370,9 @@ const Links = ({ history }) => {
                 backgroundColor: 'black',
                 color: 'white',
                 padding: 3.1,
+                paddingLeft: 9,
+                paddingRight: 9,
+                minWidth: 400,
                 marginRight: 3.8,
                 borderRadius: 3.3,
                 textAlign: 'center',
@@ -402,10 +440,79 @@ const Links = ({ history }) => {
       ) : null}
     </div>
   )
+  const boddddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>View Edge</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
+      <Grid container>
+        <Grid xs={6}>
+          <p style={{ fontSize: 15 }}>
+            Source:
+            <span style={{ fontSize: 17, fontWeight: 500 }}>
+              {' '}
+              {haveedgedetails?.source}
+            </span>
+          </p>
+        </Grid>
+        <Grid xs={6}>
+          <p style={{ fontSize: 14 }}>
+            Target:{' '}
+            <span style={{ fontSize: 17, fontWeight: 500 }}>
+              {' '}
+              {haveedgedetails?.target}
+            </span>
+          </p>
+        </Grid>
+      </Grid>
+      <div style={{ height: 17 }}></div>
+      <p>
+        <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+        {haveedgedetails?.tags?.map((tagg) => (
+          <>
+            <span
+              style={{
+                display: 'inline !important',
+                backgroundColor: 'black',
+                color: 'white',
+                padding: 3.1,
+
+                paddingLeft: 9,
+                paddingRight: 9,
+                minWidth: 400,
+                marginRight: 3.8,
+                borderRadius: 3.3,
+                textAlign: 'center',
+              }}
+            >
+              {tagg}
+            </span>
+          </>
+        ))}
+      </p>
+      <div style={{ height: 17 }}></div>
+    </div>
+  )
 
   const bodddy = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id='simple-modal-title'>Add Edge</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>Add Edge</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
       <form onSubmit={submitedgehandler}>
         <Grid container>
           <Grid item xs={6}>
@@ -454,6 +561,7 @@ const Links = ({ history }) => {
       </form>
     </div>
   )
+
   useEffect(() => {
     console.log('hero', nodepopup)
   }, [nodepopup])
@@ -468,7 +576,12 @@ const Links = ({ history }) => {
   }
 
   const onClickLink = (source, target) => {
-    window.alert(`Clicked link between ${source} and ${target}`)
+    handleOpenViewEdge()
+    const edgedetails = nodde?.links?.filter(
+      (link) => link.source === source
+    )[0]
+    console.log('ew', edgedetails)
+    setHaveedgedetails(edgedetails)
   }
 
   const showtheVisiblity = () => {
@@ -546,6 +659,7 @@ const Links = ({ history }) => {
             }}
           />
         </div>
+
         <div className='gbtn' style={{ display: 'flex', alignItems: 'center' }}>
           <GoogleLogout
             className='gg'
@@ -557,6 +671,7 @@ const Links = ({ history }) => {
           ></GoogleLogout>
         </div>
       </nav>
+
       <div
         style={{
           display: 'flex',
@@ -651,6 +766,13 @@ const Links = ({ history }) => {
           aria-labelledby='simple-modal-title'
         >
           {bodddy}
+        </Modal>
+        <Modal
+          open={openViewEdge}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {boddddy}
         </Modal>
         <div className='graph'>
           <Graph

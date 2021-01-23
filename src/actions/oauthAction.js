@@ -25,7 +25,7 @@ export const OauthLogin = (
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/items',
+      'https://netbook-server.herokuapp.com/items',
       { name, email, imageUrl, access_token, expires_in, expires_at },
       config
     )
