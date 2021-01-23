@@ -212,6 +212,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
@@ -347,6 +348,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
@@ -460,6 +462,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
@@ -521,6 +524,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
