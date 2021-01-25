@@ -42,6 +42,8 @@ const Links = ({ history }) => {
   const [openViewNode, setOpenViewNode] = useState(false)
   const [openViewEdge, setOpenViewEdge] = useState(false)
   const [openAddEdge, setOpenAddEdge] = useState(false)
+
+  const [haveupdateedge, setHaveupdateedge] = useState(false)
   const [tags, setTags] = useState([])
   const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
@@ -54,9 +56,12 @@ const Links = ({ history }) => {
   const [popdown, setPopdown] = useState(false)
   const [attributes, setAttributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [source, setSource] = useState('')
-  const [target, setTarget] = useState('')
+  const [source, setSource] = useState()
+  const [target, setTarget] = useState()
   const [edgetags, setEdgetags] = useState([])
+  const [updatesource, setUpdatesource] = useState('')
+  const [updatetarget, setUpdatetarget] = useState('')
+  const [updateedgetags, setUpdateedgetags] = useState([])
   const [nodepopup, setNodepopup] = useState([])
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
@@ -79,11 +84,19 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
+    setUpdatesource(haveedgedetails?.source)
+    setUpdatetarget(haveedgedetails?.target)
+  }, [haveedgedetails])
+
+  useEffect(() => {
     console.log('nodde being updated =>', nodde)
   }, [nodde])
 
   const handleOpen = () => {
     setOpen(true)
+  }
+  const updatetheedge = () => {
+    setHaveupdateedge(true)
   }
   const handleOpenViewNode = () => {
     setOpenViewNode(true)
@@ -100,6 +113,7 @@ const Links = ({ history }) => {
     setOpenViewNode(false)
     setOpenAddEdge(false)
     setOpenViewEdge(false)
+    setHaveupdateedge(false)
   }
 
   function rand() {
@@ -152,6 +166,9 @@ const Links = ({ history }) => {
   const handleChanges = (edgetags) => {
     setEdgetags(edgetags)
   }
+  const handleupdateChanges = (updateedgetags) => {
+    setUpdateedgetags(updateedgetags)
+  }
 
   const handlechangeinput = (index, event) => {
     const values = [...inputfields]
@@ -164,6 +181,10 @@ const Links = ({ history }) => {
       ...inputfields,
       { attributeName: '', attributeValue: '', attributeType: '' },
     ])
+  }
+
+  const handlgeupdateedge = () => {
+    updatetheedge()
   }
 
   const inputfieldsremove = (index) => {
@@ -191,7 +212,9 @@ const Links = ({ history }) => {
     setTarget('')
     setEdgetags([])
   }
-
+  const submitupdateedgehandler = (e) => {
+    e.preventDefault()
+  }
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -498,6 +521,9 @@ const Links = ({ history }) => {
         ))}
       </p>
       <div style={{ height: 17 }}></div>
+      <Button type='button' onClick={handlgeupdateedge}>
+        Edit Edge
+      </Button>
     </div>
   )
 
@@ -557,6 +583,70 @@ const Links = ({ history }) => {
           disabled={source === '' || target === '' || edgetags.length <= 0}
         >
           <div>Add Edge</div>
+        </Button>
+      </form>
+    </div>
+  )
+  const bodddddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>Update Edge</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
+      <form onSubmit={submitupdateedgehandler}>
+        <Grid container>
+          <Grid item xs={6}>
+            <FormControl className={classes.formControl}>
+              <InputLabel id='demo-simple-select-label'>Edit Source</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={updatesource}
+                onChange={(e) => setUpdatesource(e.target.value)}
+              >
+                {nodde?.nodes?.map((idd) => (
+                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl className={classes.formControl}>
+              <InputLabel id='demo-simple-select-label'>Edit Target</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={updatetarget}
+                onChange={(e) => setUpdatetarget(e.target.value)}
+              >
+                {nodde?.nodes?.map((idd) => (
+                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <div style={{ height: 9 }}></div>
+        <TagsInput
+          style={{ color: 'black' }}
+          value={updateedgetags}
+          onChange={handleupdateChanges}
+        />
+        <Button
+          type='submit'
+          disabled={
+            updatesource === '' ||
+            updatetarget === '' ||
+            updateedgetags.length <= 0
+          }
+        >
+          <div>Edit Edge</div>
         </Button>
       </form>
     </div>
@@ -773,6 +863,13 @@ const Links = ({ history }) => {
           aria-labelledby='simple-modal-title'
         >
           {boddddy}
+        </Modal>
+        <Modal
+          open={haveupdateedge}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {bodddddy}
         </Modal>
         <div className='graph'>
           <Graph
