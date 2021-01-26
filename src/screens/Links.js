@@ -33,7 +33,16 @@ import { OauthLogout } from '../actions/oauthAction'
 import TagsInput from 'react-tagsinput'
 import './home.css'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
-import { NodeAdd, Nodefetch, EdgeAdd, Edgefetch } from '../actions/nodeAction'
+import {
+  NodeAdd,
+  Nodefetch,
+  EdgeAdd,
+  Edgefetch,
+  EdgeUpdate,
+  NodeUpdate,
+  NodeDeletion,
+  EdgeDeletion,
+} from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
 
 const Links = ({ history }) => {
@@ -42,12 +51,19 @@ const Links = ({ history }) => {
   const [openViewNode, setOpenViewNode] = useState(false)
   const [openViewEdge, setOpenViewEdge] = useState(false)
   const [openAddEdge, setOpenAddEdge] = useState(false)
-
   const [haveupdateedge, setHaveupdateedge] = useState(false)
+  const [haveupdatenode, setHaveupdatenode] = useState(false)
+  const [newLinks, setNewLinks] = useState([])
+
   const [tags, setTags] = useState([])
   const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
   const [id, setId] = useState('')
+  const [updatenodeid, setUpdatenodeid] = useState('')
+  const [updatenodetype, setUpdatenodetype] = useState('')
+  const [updatenodetags, setUpdatenodetags] = useState([])
+  const [updateinputfields, setUpdateinputfields] = useState([])
+
   const [haveedgedetails, setHaveedgedetails] = useState([])
   const [type, setType] = useState('')
   const [inputfields, setInputfields] = useState([])
@@ -55,6 +71,7 @@ const Links = ({ history }) => {
   const [popup, setPopup] = useState(false)
   const [popdown, setPopdown] = useState(false)
   const [attributes, setAttributes] = useState([])
+  const [updateattributes, setUpdateattributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [source, setSource] = useState()
   const [target, setTarget] = useState()
@@ -84,8 +101,29 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
+    console.log('nodde links', nodde?.links)
+    const links = []
+    if (nodde?.links.length > 0) {
+      nodde.links.map((link) => {
+        links.push({
+          edgeid: link.edgeid,
+          tags: link.tags,
+          source: link.source.id,
+          target: link.target.id,
+        })
+      })
+      setNewLinks(links)
+      console.log('ooooo', newLinks)
+    }
+  }, [nodde?.links])
+
+  useEffect(() => {
     setUpdatesource(haveedgedetails?.source)
     setUpdatetarget(haveedgedetails?.target)
+    setUpdatenodeid(nodepopup?.id)
+    setUpdatenodetags(nodepopup?.tags)
+
+    // setUpdateedgetags(haveedgedetails?.tags)
   }, [haveedgedetails])
 
   useEffect(() => {
@@ -97,6 +135,9 @@ const Links = ({ history }) => {
   }
   const updatetheedge = () => {
     setHaveupdateedge(true)
+  }
+  const updatethenode = () => {
+    setHaveupdatenode(true)
   }
   const handleOpenViewNode = () => {
     setOpenViewNode(true)
@@ -114,33 +155,39 @@ const Links = ({ history }) => {
     setOpenAddEdge(false)
     setOpenViewEdge(false)
     setHaveupdateedge(false)
+    setHaveupdatenode(false)
   }
 
   function rand() {
     return Math.round(Math.random() * 20) - 10
   }
+  const { innerWidth, innerHeight } = window
 
   function getModalStyle() {
-    const top = 50 + rand()
-    const left = 50 + rand()
+    const { innerWidth, innerHeight } = window
 
+    console.log(innerWidth)
+    let top = 50,
+      left = innerWidth < 600 ? 0 : 50
     return {
       top: `${top}%`,
       left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
+      transform: `translate(-${left}%, -${top}%)`,
     }
   }
 
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
-      width: 600,
+      width: innerWidth > 600 ? 600 : '100%',
+
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       maxHeight: 'calc(100vh - 200px)',
       overflow: 'auto !important',
+      top: '50%',
     },
     multilineColor: {
       color: 'white',
@@ -148,6 +195,7 @@ const Links = ({ history }) => {
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
+      width: '100%',
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
@@ -160,8 +208,21 @@ const Links = ({ history }) => {
     },
   }))
   const classes = useStyles()
+
+  const deleteanode = () => {
+    dispatch(NodeDeletion(nodepopup?._id))
+    handleClose()
+  }
+
+  const deleteaedge = () => {
+    dispatch(EdgeDeletion(haveedgedetails?._id))
+    handleClose()
+  }
   const handleChange = (tags) => {
     setTags(tags)
+  }
+  const handlenodeChange = (updatenodetags) => {
+    setUpdatenodetags(updatenodetags)
   }
   const handleChanges = (edgetags) => {
     setEdgetags(edgetags)
@@ -176,21 +237,41 @@ const Links = ({ history }) => {
     setInputfields(values)
     setAttributes(inputfields)
   }
+  const handlechangeupdateinput = (index, event) => {
+    const values = [...updateinputfields]
+    values[index][event.target.name] = event.target.value
+    setUpdateinputfields(values)
+    setUpdateattributes(updateinputfields)
+  }
+
   const handleclickfields = () => {
     setInputfields([
       ...inputfields,
       { attributeName: '', attributeValue: '', attributeType: '' },
     ])
   }
-
+  const handleclickupdatefields = () => {
+    setUpdateinputfields([
+      ...updateinputfields,
+      { attributeName: '', attributeValue: '', attributeType: '' },
+    ])
+  }
   const handlgeupdateedge = () => {
     updatetheedge()
+  }
+  const handleupdatenode = () => {
+    updatethenode()
   }
 
   const inputfieldsremove = (index) => {
     const values = [...inputfields]
     values.splice(index, 1)
     setInputfields(values)
+  }
+  const updateinputfieldsremove = (index) => {
+    const values = [...updateinputfields]
+    values.splice(index, 1)
+    setUpdateinputfields(values)
   }
   const submitHandler = (e) => {
     e.preventDefault()
@@ -203,6 +284,22 @@ const Links = ({ history }) => {
     setTags([])
     setInputfields([])
   }
+  const submitupdatenodehandler = (e) => {
+    e.preventDefault()
+
+    dispatch(
+      NodeUpdate(
+        nodepopup?._id,
+        oauth._id,
+        updatenodeid,
+        updatenodetype,
+        updatenodetags,
+        updateattributes
+      )
+    )
+    dispatch(Nodefetch(oauth._id))
+    handleClose()
+  }
   const submitedgehandler = (e) => {
     e.preventDefault()
     dispatch(EdgeAdd(oauth._id, source, target, edgetags))
@@ -214,6 +311,17 @@ const Links = ({ history }) => {
   }
   const submitupdateedgehandler = (e) => {
     e.preventDefault()
+    dispatch(
+      EdgeUpdate(
+        haveedgedetails?._id,
+        oauth._id,
+        updatesource,
+        updatetarget,
+        updateedgetags
+      )
+    )
+    dispatch(Nodefetch(oauth._id))
+    handleClose()
   }
   const body = (
     <div style={modalStyle} className={classes.paper}>
@@ -223,6 +331,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
@@ -328,7 +437,7 @@ const Links = ({ history }) => {
 
   const data = {
     nodes: nodde?.nodes || [],
-    links: nodde?.links || [],
+    links: nodde?.newLinks || [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
   }
@@ -358,6 +467,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
@@ -461,6 +571,12 @@ const Links = ({ history }) => {
           </tbody>
         </table>
       ) : null}
+      <Button type='button' onClick={handleupdatenode}>
+        Edit Node
+      </Button>
+      <Button type='button' onClick={deleteanode}>
+        Delete Node
+      </Button>
     </div>
   )
   const boddddy = (
@@ -471,6 +587,7 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
@@ -524,6 +641,9 @@ const Links = ({ history }) => {
       <Button type='button' onClick={handlgeupdateedge}>
         Edit Edge
       </Button>
+      <Button type='button' onClick={deleteaedge}>
+        Delete Edge
+      </Button>
     </div>
   )
 
@@ -535,14 +655,19 @@ const Links = ({ history }) => {
           onClick={handleClose}
           color='inherit'
           aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
         >
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
       </div>
       <form onSubmit={submitedgehandler}>
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs={6}>
-            <FormControl className={classes.formControl}>
+            <FormControl
+              className={classes.formControl}
+              variant='outlined'
+              size='small'
+            >
               <InputLabel id='demo-simple-select-label'>Source</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
@@ -551,13 +676,17 @@ const Links = ({ history }) => {
                 onChange={(e) => setSource(e.target.value)}
               >
                 {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <FormControl className={classes.formControl}>
+            <FormControl
+              className={classes.formControl}
+              variant='outlined'
+              size='small'
+            >
               <InputLabel id='demo-simple-select-label'>Target</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
@@ -566,7 +695,7 @@ const Links = ({ history }) => {
                 onChange={(e) => setTarget(e.target.value)}
               >
                 {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -611,7 +740,7 @@ const Links = ({ history }) => {
                 onChange={(e) => setUpdatesource(e.target.value)}
               >
                 {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -626,7 +755,7 @@ const Links = ({ history }) => {
                 onChange={(e) => setUpdatetarget(e.target.value)}
               >
                 {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd.id}>{idd.id}</MenuItem>
+                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -651,11 +780,122 @@ const Links = ({ history }) => {
       </form>
     </div>
   )
-
+  const bodddddddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>Update Node</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
+      <form onSubmit={submitupdatenodehandler}>
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <TextField
+              style={{ color: 'black', width: '100%', marginTop: 9 }}
+              id='outlined-basic'
+              size='small'
+              label='Name'
+              value={updatenodeid}
+              onChange={(e) => setUpdatenodeid(e.target.value)}
+              variant='outlined'
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              style={{ width: '100%', marginTop: 9 }}
+              id='outlined-basic'
+              label='Type'
+              size='small'
+              value={updatenodetype}
+              onChange={(e) => setUpdatenodetype(e.target.value)}
+              variant='outlined'
+            />
+          </Grid>
+        </Grid>
+        <div style={{ height: 9 }}></div>
+        <TagsInput
+          style={{ color: 'black' }}
+          value={updatenodetags}
+          onChange={handlenodeChange}
+        />
+        <div style={{ height: 9 }}></div>
+        {updateinputfields.map((updateinputfield, index) => (
+          <div
+            style={{ width: '100%', display: 'flex', marginBottom: 8 }}
+            key={index}
+          >
+            <Grid container spacing={1} style={{ flex: 1 }}>
+              <Grid item xs={4}>
+                <TextField
+                  name='attributeName'
+                  label='Type'
+                  size='small'
+                  variant='outlined'
+                  label='Attribute Name'
+                  value={updateinputfield.attributeName}
+                  onChange={(event) => handlechangeupdateinput(index, event)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  name='attributeValue'
+                  label='Type'
+                  size='small'
+                  variant='outlined'
+                  label='Attribute Value'
+                  value={updateinputfield.attributeValue}
+                  onChange={(event) => handlechangeupdateinput(index, event)}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  name='attributeType'
+                  label='Type'
+                  size='small'
+                  variant='outlined'
+                  label='Attribute Type'
+                  value={updateinputfield.attributeType}
+                  onChange={(event) => handlechangeupdateinput(index, event)}
+                />
+              </Grid>
+            </Grid>
+            <IconButton
+              size='small'
+              type='button'
+              onClick={() => updateinputfieldsremove(index)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
+        ))}
+        <Button type='button' onClick={handleclickupdatefields} color='primary'>
+          Update Attribute
+        </Button>
+        <Button
+          type='submit'
+          disabled={
+            updatenodeid === '' ||
+            updatenodetype === '' ||
+            updatenodetags.length <= 0
+          }
+        >
+          <div>Edit Node</div>
+        </Button>
+      </form>
+    </div>
+  )
   useEffect(() => {
     console.log('hero', nodepopup)
   }, [nodepopup])
 
+  useEffect(() => {
+    console.log('heeeero', haveedgedetails?._id)
+  }, [haveedgedetails])
   const onClickNode = (nodeId) => {
     handleOpenViewNode()
     setPopup(true)
@@ -667,11 +907,12 @@ const Links = ({ history }) => {
 
   const onClickLink = (source, target) => {
     handleOpenViewEdge()
-    const edgedetails = nodde?.links?.filter(
-      (link) => link.source === source
+    const edgedetails = nodde?.newLinks?.filter(
+      (link) => link.target === target
     )[0]
     console.log('ew', edgedetails)
     setHaveedgedetails(edgedetails)
+    console.log('heeero', haveedgedetails)
   }
 
   const showtheVisiblity = () => {
@@ -870,6 +1111,13 @@ const Links = ({ history }) => {
           aria-labelledby='simple-modal-title'
         >
           {bodddddy}
+        </Modal>
+        <Modal
+          open={haveupdatenode}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {bodddddddy}
         </Modal>
         <div className='graph'>
           <Graph

@@ -7,6 +7,10 @@ import {
   getNodeReducer,
   getEdgeReducer,
   putEdgeReducer,
+  updateEdgeReducer,
+  updateNodeReducer,
+  deleteEdgeReducer,
+  deleteNodeReducer,
 } from './reducers/nodeReducer'
 const reducer = combineReducers({
   getOauth: getOauthReducer,
@@ -14,6 +18,10 @@ const reducer = combineReducers({
   getNode: getNodeReducer,
   getEdge: getEdgeReducer,
   putEdge: putEdgeReducer,
+  updateEdge: updateEdgeReducer,
+  updateNode: updateNodeReducer,
+  deleteNode: deleteNodeReducer,
+  deleteEdge: deleteEdgeReducer,
 })
 const Oauthofuser = localStorage.getItem('useroauth')
   ? JSON.parse(localStorage.getItem('useroauth'))
