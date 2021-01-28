@@ -113,6 +113,7 @@ const Links = ({ history }) => {
             tags: link.tags,
             source: link.source.id,
             target: link.target.id,
+            _id: link._id,
           })
         })
 
@@ -129,13 +130,15 @@ const Links = ({ history }) => {
   }, [newLinks])
 
   useEffect(() => {
+    setUpdatenodeid(nodepopup?.id)
+    setUpdatenodetype(nodepopup?.type)
     setUpdatesource(haveedgedetails?.source)
     setUpdatetarget(haveedgedetails?.target)
-    setUpdatenodeid(nodepopup?.id)
-    setUpdatenodetags(nodepopup?.tags)
+    console.log('jo', haveedgedetails?.source)
+    // setUpdatenodetags(nodepopup?.tags)
 
     // setUpdateedgetags(haveedgedetails?.tags)
-  }, [haveedgedetails])
+  }, [haveedgedetails, nodepopup])
 
   useEffect(() => {
     console.log('nodde being updated =>', nodde, newLinks)
@@ -808,11 +811,11 @@ const Links = ({ history }) => {
         <div style={{ height: 9 }}></div>
         <TagsInput
           style={{ color: 'black' }}
-          value={updatenodetags}
+          value={updatenodetags ? updatenodetags : null}
           onChange={handlenodeChange}
         />
         <div style={{ height: 9 }}></div>
-        {updateinputfields.map((updateinputfield, index) => (
+        {updateinputfields?.map((updateinputfield, index) => (
           <div
             style={{ width: '100%', display: 'flex', marginBottom: 8 }}
             key={index}
@@ -879,8 +882,8 @@ const Links = ({ history }) => {
   )
 
   const data = {
-    nodes: nodde?.nodes || [],
-    links: newLinks || [],
+    nodes: newLinks && nodde?.nodes ? nodde?.nodes : [],
+    links: newLinks && nodde?.nodes ? newLinks : [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
   }
