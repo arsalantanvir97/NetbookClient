@@ -101,21 +101,32 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
-    console.log('nodde links', nodde?.links)
-    const links = []
-    if (nodde?.links.length > 0) {
-      nodde.links.map((link) => {
-        links.push({
-          edgeid: link.edgeid,
-          tags: link.tags,
-          source: link.source.id,
-          target: link.target.id,
+    let unmounted = false
+    if (!unmounted) {
+      console.log('nodde links', nodde?.links)
+      const links = []
+
+      if (nodde?.links.length > 0) {
+        nodde.links.map((link) => {
+          links.push({
+            edgeid: link.edgeid,
+            tags: link.tags,
+            source: link.source.id,
+            target: link.target.id,
+          })
         })
-      })
-      setNewLinks(links)
-      console.log('ooooo', newLinks)
+
+        setNewLinks(links)
+      }
+      console.log('ooooo', newLinks, nodde)
+    }
+    return () => {
+      unmounted = true
     }
   }, [nodde?.links])
+  useEffect(() => {
+    console.log('ooooo', newLinks)
+  }, [newLinks])
 
   useEffect(() => {
     setUpdatesource(haveedgedetails?.source)
@@ -127,7 +138,7 @@ const Links = ({ history }) => {
   }, [haveedgedetails])
 
   useEffect(() => {
-    console.log('nodde being updated =>', nodde)
+    console.log('nodde being updated =>', nodde, newLinks)
   }, [nodde])
 
   const handleOpen = () => {
@@ -434,30 +445,7 @@ const Links = ({ history }) => {
   const blackTheme = createMuiTheme({
     palette: { primary: { main: '#000000' } },
   })
-
-  const data = {
-    nodes: nodde?.nodes || [],
-    links: nodde?.newLinks || [],
-    // { source: 'Harry', target: 'Sally' },
-    // { source: 'Harry', target: 'Alice' },
-  }
-
-  const myConfig = {
-    nodeHighlightBehavior: true,
-    directed: true,
-    node: {
-      color: '#3A4A57',
-      size: 550,
-      highlightStrokeColor: 'blue',
-      fontSize: 18,
-    },
-    link: {
-      highlightColor: 'lightblue',
-      size: 1500,
-      strokeWidth: 2.4,
-      color: '#6F93B0',
-    },
-  }
+  console.log('ppp', newLinks, nodde?.nodes)
 
   const boddy = (
     <div style={modalStyle} className={classes.paper}>
@@ -889,6 +877,31 @@ const Links = ({ history }) => {
       </form>
     </div>
   )
+
+  const data = {
+    nodes: nodde?.nodes || [],
+    links: newLinks || [],
+    // { source: 'Harry', target: 'Sally' },
+    // { source: 'Harry', target: 'Alice' },
+  }
+
+  const myConfig = {
+    nodeHighlightBehavior: true,
+    directed: true,
+    node: {
+      color: '#3A4A57',
+      size: 550,
+      highlightStrokeColor: 'blue',
+      fontSize: 18,
+    },
+    link: {
+      highlightColor: 'lightblue',
+      size: 1500,
+      strokeWidth: 2.4,
+      color: '#6F93B0',
+    },
+  }
+
   useEffect(() => {
     console.log('hero', nodepopup)
   }, [nodepopup])
@@ -907,9 +920,7 @@ const Links = ({ history }) => {
 
   const onClickLink = (source, target) => {
     handleOpenViewEdge()
-    const edgedetails = nodde?.newLinks?.filter(
-      (link) => link.target === target
-    )[0]
+    const edgedetails = newLinks?.filter((link) => link.target === target)[0]
     console.log('ew', edgedetails)
     setHaveedgedetails(edgedetails)
     console.log('heeero', haveedgedetails)
