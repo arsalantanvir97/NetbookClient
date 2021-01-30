@@ -30,7 +30,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
 ) => {
   try {
     dispatch({
-      type: GET_NODE_REQUEST,
+      type: HAVE_NODE_REQUEST,
     })
 
     const config = {
@@ -50,7 +50,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
       type: GET_NODE_SUCCESS,
       payload: data,
     })
-    localStorage.setItem('nodeadded', JSON.stringify(data))
+    localStorage.setItem('nodehave', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: GET_NODE_FAIL,
@@ -158,7 +158,7 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
 ) => {
   try {
     dispatch({
-      type: UPDATE_NODE_REQUEST,
+      type: HAVE_NODE_REQUEST,
     })
 
     const config = {
@@ -175,9 +175,10 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
     console.log('heelo', data)
 
     dispatch({
-      type: UPDATE_NODE_SUCCESS,
+      type: HAVE_NODE_SUCCESS,
       payload: data,
     })
+    localStorage.setItem('nodehave', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: UPDATE_NODE_FAIL,
@@ -192,11 +193,14 @@ export const NodeDeletion = (id) => async (dispatch) => {
       type: REMOVE_NODE_REQUEST,
     })
 
-    await axios.delete(`https://netbook-server.herokuapp.com/nodes/${id}`)
+    const { data } = await axios.delete(
+      `https://netbook-server.herokuapp.com/nodes/${id}`
+    )
 
     dispatch({
       type: REMOVE_NODE_SUCCESS,
     })
+    localStorage.setItem('nodehave', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: REMOVE_NODE_FAIL,

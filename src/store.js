@@ -41,9 +41,7 @@ const Haveaedge = localStorage.getItem('edgehave')
 const initialState = {
   getOauth: { oauth: Oauthofuser },
   putNode: { node: Createanode },
-  getNode: {
-    nodde: Haveanode,
-  },
+  getNode: { nodde: Haveanode },
   putEdge: { edge: Createaedge },
   getEdge: { eddge: Haveaedge },
 }

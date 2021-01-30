@@ -28,8 +28,8 @@ export const putNodeReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_NODE_REQUEST:
       return { loading: true }
-    case GET_NODE_SUCCESS:
-      return { loading: false, node: action.payload }
+    // case GET_NODE_SUCCESS:
+    //   return { loading: false, node: action.payload }
     case GET_NODE_FAIL:
       return { loading: false, error: action.payload }
     default:
@@ -41,7 +41,20 @@ export const getNodeReducer = (state = {}, action) => {
     case HAVE_NODE_REQUEST:
       return { loading: true }
     case HAVE_NODE_SUCCESS:
-      return { loading: false, nodde: action.payload }
+      return { ...state, loading: false, nodde: action.payload }
+    case GET_NODE_SUCCESS:
+      return {
+        ...state,
+        nodde: [action.payload, ...state.nodde],
+        loading: false,
+      }
+    case UPDATE_NODE_SUCCESS:
+      return {
+        ...state,
+        nodde: [action.payload, ...state.nodde],
+        loading: false,
+      }
+
     case HAVE_NODE_FAIL:
       return { loading: false, error: action.payload }
     default:
@@ -64,8 +77,8 @@ export const updateNodeReducer = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_NODE_REQUEST:
       return { loading: true }
-    case UPDATE_NODE_SUCCESS:
-      return { loading: false, updatethenode: action.payload }
+    // case UPDATE_NODE_SUCCESS:
+    //   return { loading: false, updatethenode: action.payload }
     case UPDATE_NODE_FAIL:
       return { loading: false, error: action.payload }
     default:
