@@ -97,12 +97,12 @@ const Links = ({ history }) => {
   const { loading: nodeloading, nodde, error: errror } = getNode
 
   useEffect(() => {
-    if (oauth?._id && !update) {
+    if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
-      setUpdate(false)
+
       console.log('hellowold', oauth._id)
     }
-  }, [update])
+  }, [nodde?.id])
 
   useEffect(() => {
     let unmounted = false
@@ -110,7 +110,7 @@ const Links = ({ history }) => {
       console.log('nodde links', nodde?.links)
       const links = []
 
-      if (nodde?.links.length > 0) {
+      if (nodde?.links?.length > 0) {
         nodde.links.map((link) => {
           links.push({
             edgeid: link.edgeid,
@@ -235,11 +235,13 @@ const Links = ({ history }) => {
 
   const deleteanode = () => {
     dispatch(NodeDeletion(nodepopup?._id))
+    dispatch(Nodefetch(oauth._id))
     handleClose()
   }
 
   const deleteaedge = () => {
     dispatch(EdgeDeletion(haveedgedetails?._id))
+    dispatch(Nodefetch(oauth._id))
     handleClose()
   }
   const handleChange = (tags) => {
@@ -297,12 +299,11 @@ const Links = ({ history }) => {
     values.splice(index, 1)
     setUpdateinputfields(values)
   }
-  const submitHandler = (e) => {
-    e.preventDefault()
 
-    dispatch(NodeAdd(oauth._id, id, type, tags, attributes))
-    dispatch(Nodefetch(oauth._id))
-    setUpdate(true)
+  const submitHandler = (e) => {
+    dispatch(NodeAdd(oauth?._id, id, type, tags, attributes))
+
+    dispatch(Nodefetch(oauth?._id))
 
     handleClose()
     setId('')
@@ -325,7 +326,12 @@ const Links = ({ history }) => {
     )
     dispatch(Nodefetch(oauth._id))
     handleClose()
+    setUpdatenodeid('')
+    setUpdatenodetype('')
+    setUpdatenodetags([])
+    setUpdateinputfields([])
   }
+
   const submitedgehandler = (e) => {
     e.preventDefault()
     dispatch(EdgeAdd(oauth._id, source, target, edgetags))

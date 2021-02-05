@@ -45,6 +45,7 @@ export const OauthLogin = (
 }
 export const OauthLogout = () => async (dispatch) => {
   localStorage.removeItem('useroauth')
+  localStorage.removeItem('nodehave')
   dispatch({
     type: GET_OAUTH_LOGOUT,
   })

@@ -52,6 +52,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
     })
     localStorage.setItem('nodehave', JSON.stringify(data))
   } catch (error) {
+    console.log('error', error)
     dispatch({
       type: GET_NODE_FAIL,
       payload: error,

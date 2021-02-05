@@ -189,7 +189,7 @@ const Profile = ({ history }) => {
         <div style={{ marginTop: 15, marginLeft: 16, display: 'flex' }}>
           <div style={{}}>
             <img
-              src={oauth.imageUrl}
+              src={oauth?.imageUrl}
               alt='my-img'
               style={{ marginBottom: 8, borderRadius: 48 }}
             />

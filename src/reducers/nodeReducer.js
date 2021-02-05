@@ -40,12 +40,23 @@ export const getNodeReducer = (state = {}, action) => {
   switch (action.type) {
     case HAVE_NODE_REQUEST:
       return { loading: true }
+
     case HAVE_NODE_SUCCESS:
-      return { ...state, loading: false, nodde: action.payload }
+      let pushed = action.payload
+      if (state.newnode?.nodes.length > 0) {
+        pushed.nodes.push(state.newnode.nodes[0])
+      }
+      console.log('ppp', pushed)
+      const arra = state.newnode?.nodes.length > 0 ? pushed : action.payload
+      // const arra = action.payload
+      console.log('hasan', arra)
+      return { ...state, loading: false, nodde: arra }
     case GET_NODE_SUCCESS:
+      console.log('helo', state.nodde)
+      console.log('hi', action.payload)
       return {
         ...state,
-        nodde: [action.payload, ...state.nodde],
+        newnode: { nodes: [action.payload] },
         loading: false,
       }
     case UPDATE_NODE_SUCCESS:
@@ -66,6 +77,7 @@ export const putEdgeReducer = (state = {}, action) => {
     case GET_EDGE_REQUEST:
       return { loading: true }
     case GET_EDGE_SUCCESS:
+      console.log('hhg', state.edge)
       return { loading: false, edge: action.payload }
     case GET_EDGE_FAIL:
       return { loading: false, error: action.payload }
