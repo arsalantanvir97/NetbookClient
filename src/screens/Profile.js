@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import Links from '../screens/Links'
 import { GoogleLogout } from 'react-google-login'
 import ClearIcon from '@material-ui/icons/Clear'
 import SearchIcon from '@material-ui/icons/Search'
@@ -142,15 +143,17 @@ const Profile = ({ history }) => {
             backgroundColor: 'white',
           }}
         >
-          <div
-            className='firsticon'
-            style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
-          >
-            <IconButton color='inherit' aria-label='open drawer'>
-              <TimelineIcon style={{ color: 'grey' }} />
-            </IconButton>
-            <p className={visible ? 'slide' : 'hidetext'}>Graph View</p>
-          </div>
+          <Link to='/graph'>
+            <div
+              className='firsticon'
+              style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
+            >
+              <IconButton color='inherit' aria-label='open drawer'>
+                <TimelineIcon style={{ color: 'grey' }} />
+              </IconButton>
+              <p className={visible ? 'slide' : 'hidetext'}>Graph View</p>
+            </div>
+          </Link>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <IconButton color='inherit' aria-label='open drawer'>
               <AddIcon style={{ color: 'grey' }} />

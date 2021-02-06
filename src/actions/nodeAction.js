@@ -201,7 +201,7 @@ export const NodeDeletion = (id) => async (dispatch) => {
     dispatch({
       type: REMOVE_NODE_SUCCESS,
     })
-    localStorage.setItem('nodehave', JSON.stringify(data))
+    localStorage.removeItem('nodehave', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: REMOVE_NODE_FAIL,

@@ -18,6 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import FilterResults from 'react-filter-search'
 
 import Select from '@material-ui/core/Select'
 import Alert from '@material-ui/lab/Alert'
@@ -80,6 +81,9 @@ const Links = ({ history }) => {
   const [source, setSource] = useState()
   const [target, setTarget] = useState()
   const [edgetags, setEdgetags] = useState([])
+  const [searchdata, setSearchdata] = useState([])
+  const [searchvalue, setSearchvalue] = useState('')
+  const [filtereddata, setFiltereddata] = useState([])
   const [updatesource, setUpdatesource] = useState('')
   const [updatetarget, setUpdatetarget] = useState('')
   const [updateedgetags, setUpdateedgetags] = useState([])
@@ -95,14 +99,17 @@ const Links = ({ history }) => {
   const { loading, node, error: noderror } = putNode
   const getNode = useSelector((state) => state.getNode)
   const { loading: nodeloading, nodde, error: errror } = getNode
+  const deleteNode = useSelector((state) => state.deleteNode)
+  const { loading: deletenodeloading, nodedelete, error: errrror } = deleteNode
 
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
 
       console.log('hellowold', oauth._id)
+      setSearchdata(nodde?.nodes)
     }
-  }, [nodde?.id])
+  }, [nodedelete])
 
   useEffect(() => {
     let unmounted = false
@@ -139,6 +146,8 @@ const Links = ({ history }) => {
     setUpdatesource(haveedgedetails?.source)
     setUpdatetarget(haveedgedetails?.target)
     console.log('jo', haveedgedetails?.source)
+    setUpdatenodetags(nodepopup?.tags)
+    setUpdateedgetags(haveedgedetails?.tags)
     // setUpdatenodetags(nodepopup?.tags)
 
     // setUpdateedgetags(haveedgedetails?.tags)
@@ -236,6 +245,7 @@ const Links = ({ history }) => {
   const deleteanode = () => {
     dispatch(NodeDeletion(nodepopup?._id))
     dispatch(Nodefetch(oauth._id))
+
     handleClose()
   }
 
@@ -244,6 +254,13 @@ const Links = ({ history }) => {
     dispatch(Nodefetch(oauth._id))
     handleClose()
   }
+
+  const handlesearchchange = (event) => {
+    const { value } = event.target
+    setSearchvalue(value)
+    console.log('ji', searchvalue)
+  }
+
   const handleChange = (tags) => {
     setTags(tags)
   }
@@ -453,10 +470,7 @@ const Links = ({ history }) => {
         <Button type='button' onClick={handleclickfields} color='primary'>
           Add Attribute
         </Button>
-        <Button
-          type='submit'
-          disabled={id === '' || type === '' || tags.length <= 0}
-        >
+        <Button type='submit' disabled={id === '' || type === ''}>
           <div>Add Node</div>
         </Button>
       </form>
@@ -716,10 +730,7 @@ const Links = ({ history }) => {
           value={edgetags}
           onChange={handleChanges}
         />
-        <Button
-          type='submit'
-          disabled={source === '' || target === '' || edgetags.length <= 0}
-        >
+        <Button type='submit' disabled={source === '' || target === ''}>
           <div>Add Edge</div>
         </Button>
       </form>
@@ -781,7 +792,7 @@ const Links = ({ history }) => {
           disabled={
             updatesource === '' ||
             updatetarget === '' ||
-            updateedgetags.length <= 0
+            updateedgetags?.length <= 0
           }
         >
           <div>Edit Edge</div>
@@ -890,7 +901,7 @@ const Links = ({ history }) => {
           disabled={
             updatenodeid === '' ||
             updatenodetype === '' ||
-            updatenodetags.length <= 0
+            updatenodetags?.length <= 0
           }
         >
           <div>Edit Node</div>
@@ -900,7 +911,12 @@ const Links = ({ history }) => {
   )
 
   const data = {
-    nodes: newLinks && nodde?.nodes ? nodde?.nodes : [],
+    nodes:
+      newLinks && nodde?.nodes
+        ? nodde?.nodes
+        : filtereddata
+        ? filtereddata
+        : [],
     links: newLinks && nodde?.nodes ? newLinks : [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
@@ -1016,6 +1032,8 @@ const Links = ({ history }) => {
               // onChange={}
               size='small'
               variant='outlined'
+              value={searchvalue}
+              onChange={handlesearchchange}
               InputProps={{
                 className: classes.multilineColor,
 
@@ -1157,6 +1175,20 @@ const Links = ({ history }) => {
           >
             {bodddddy}
           </Modal>
+          <FilterResults
+            value={searchvalue}
+            data={searchdata}
+            renderResults={(results) => (
+              <div>
+                {results.map(
+                  (data) => (
+                    (<>{setFiltereddata(data)}</>),
+                    console.log('jji', filtereddata)
+                  )
+                )}
+              </div>
+            )}
+          />
           <Modal
             open={haveupdatenode}
             onClose={handleClose}
@@ -1164,7 +1196,7 @@ const Links = ({ history }) => {
           >
             {bodddddddy}
           </Modal>
-          {nodeloading ? (
+          {nodeloading || deletenodeloading ? (
             <div className={classes.rooot}>
               <CircularProgress />
             </div>
