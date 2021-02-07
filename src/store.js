@@ -3,25 +3,25 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { getOauthReducer } from './reducers/oauthReducer'
 import {
-  putNodeReducer,
+  // putNodeReducer,
   getNodeReducer,
-  getEdgeReducer,
-  putEdgeReducer,
-  updateEdgeReducer,
-  updateNodeReducer,
-  deleteEdgeReducer,
-  deleteNodeReducer,
+  // getEdgeReducer,
+  // putEdgeReducer,
+  // updateEdgeReducer,
+  // updateNodeReducer,
+  // deleteEdgeReducer,
+  // deleteNodeReducer,
 } from './reducers/nodeReducer'
 const reducer = combineReducers({
   getOauth: getOauthReducer,
-  putNode: putNodeReducer,
+  // putNode: putNodeReducer,
   getNode: getNodeReducer,
-  getEdge: getEdgeReducer,
-  putEdge: putEdgeReducer,
-  updateEdge: updateEdgeReducer,
-  updateNode: updateNodeReducer,
-  deleteNode: deleteNodeReducer,
-  deleteEdge: deleteEdgeReducer,
+  // getEdge: getEdgeReducer,
+  // putEdge: putEdgeReducer,
+  // updateEdge: updateEdgeReducer,
+  // updateNode: updateNodeReducer,
+  // deleteNode: deleteNodeReducer,
+  // deleteEdge: deleteEdgeReducer,
 })
 const Oauthofuser = localStorage.getItem('useroauth')
   ? JSON.parse(localStorage.getItem('useroauth'))
@@ -40,10 +40,10 @@ const Haveaedge = localStorage.getItem('edgehave')
   : null
 const initialState = {
   getOauth: { oauth: Oauthofuser },
-  putNode: { node: Createanode },
+  // putNode: { node: Createanode },
   getNode: { nodde: Haveanode },
-  putEdge: { edge: Createaedge },
-  getEdge: { eddge: Haveaedge },
+  // putEdge: { edge: Createaedge },
+  // getEdge: { eddge: Haveaedge },
 }
 const middleware = [thunk]
 const store = createStore(

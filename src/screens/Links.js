@@ -95,21 +95,18 @@ const Links = ({ history }) => {
   const getOauth = useSelector((state) => state.getOauth)
   const { loading: oauthloading, oauth, error: oautherror } = getOauth
 
-  const putNode = useSelector((state) => state.putNode)
-  const { loading, node, error: noderror } = putNode
+  // const putNode = useSelector((state) => state.putNode)
+  // const { loading, node, error: noderror } = putNode
   const getNode = useSelector((state) => state.getNode)
   const { loading: nodeloading, nodde, error: errror } = getNode
-  const deleteNode = useSelector((state) => state.deleteNode)
-  const { loading: deletenodeloading, nodedelete, error: errrror } = deleteNode
+  // const deleteNode = useSelector((state) => state.deleteNode)
+  // const { loading: deletenodeloading, nodedelete, error: errrror } = deleteNode
 
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
-
-      console.log('hellowold', oauth._id)
-      setSearchdata(nodde?.nodes)
     }
-  }, [nodedelete])
+  }, [])
 
   useEffect(() => {
     let unmounted = false
@@ -136,9 +133,7 @@ const Links = ({ history }) => {
       unmounted = true
     }
   }, [nodde?.links])
-  useEffect(() => {
-    console.log('ooooo', newLinks)
-  }, [newLinks])
+
 
   useEffect(() => {
     setUpdatenodeid(nodepopup?.id)
@@ -153,9 +148,7 @@ const Links = ({ history }) => {
     // setUpdateedgetags(haveedgedetails?.tags)
   }, [haveedgedetails, nodepopup])
 
-  useEffect(() => {
-    console.log('nodde being updated =>', nodde, newLinks)
-  }, [nodde])
+
 
   const handleOpen = () => {
     setOpen(true)
@@ -244,14 +237,13 @@ const Links = ({ history }) => {
 
   const deleteanode = () => {
     dispatch(NodeDeletion(nodepopup?._id))
-    dispatch(Nodefetch(oauth._id))
 
     handleClose()
   }
 
   const deleteaedge = () => {
     dispatch(EdgeDeletion(haveedgedetails?._id))
-    dispatch(Nodefetch(oauth._id))
+    // dispatch(Nodefetch(oauth._id))
     handleClose()
   }
 
@@ -320,7 +312,7 @@ const Links = ({ history }) => {
   const submitHandler = (e) => {
     dispatch(NodeAdd(oauth?._id, id, type, tags, attributes))
 
-    dispatch(Nodefetch(oauth?._id))
+    // dispatch(Nodefetch(oauth?._id))
 
     handleClose()
     setId('')
@@ -341,7 +333,7 @@ const Links = ({ history }) => {
         updateattributes
       )
     )
-    dispatch(Nodefetch(oauth._id))
+    // dispatch(Nodefetch(oauth._id))
     handleClose()
     setUpdatenodeid('')
     setUpdatenodetype('')
@@ -352,7 +344,7 @@ const Links = ({ history }) => {
   const submitedgehandler = (e) => {
     e.preventDefault()
     dispatch(EdgeAdd(oauth._id, source, target, edgetags))
-    dispatch(Nodefetch(oauth._id))
+    // dispatch(Nodefetch(oauth._id))
     handleClose()
     setSource('')
     setTarget('')
@@ -369,9 +361,16 @@ const Links = ({ history }) => {
         updateedgetags
       )
     )
-    dispatch(Nodefetch(oauth._id))
+    // dispatch(Nodefetch(oauth._id))
     handleClose()
   }
+
+
+  const blackTheme = createMuiTheme({
+    palette: { primary: { main: '#000000' } },
+  })
+  // console.log('ppp', newLinks, nodde?.nodes)
+
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -476,12 +475,6 @@ const Links = ({ history }) => {
       </form>
     </div>
   )
-
-  const blackTheme = createMuiTheme({
-    palette: { primary: { main: '#000000' } },
-  })
-  console.log('ppp', newLinks, nodde?.nodes)
-
   const boddy = (
     <div style={modalStyle} className={classes.paper}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -669,7 +662,6 @@ const Links = ({ history }) => {
       </Button>
     </div>
   )
-
   const bodddy = (
     <div style={modalStyle} className={classes.paper}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -791,8 +783,7 @@ const Links = ({ history }) => {
           type='submit'
           disabled={
             updatesource === '' ||
-            updatetarget === '' ||
-            updateedgetags?.length <= 0
+            updatetarget === ''
           }
         >
           <div>Edit Edge</div>
@@ -900,8 +891,7 @@ const Links = ({ history }) => {
           type='submit'
           disabled={
             updatenodeid === '' ||
-            updatenodetype === '' ||
-            updatenodetags?.length <= 0
+            updatenodetype === ''
           }
         >
           <div>Edit Node</div>
@@ -915,8 +905,8 @@ const Links = ({ history }) => {
       newLinks && nodde?.nodes
         ? nodde?.nodes
         : filtereddata
-        ? filtereddata
-        : [],
+          ? filtereddata
+          : [],
     links: newLinks && nodde?.nodes ? newLinks : [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
@@ -939,13 +929,9 @@ const Links = ({ history }) => {
     },
   }
 
-  useEffect(() => {
-    console.log('hero', nodepopup)
-  }, [nodepopup])
 
-  useEffect(() => {
-    console.log('heeeero', haveedgedetails?._id)
-  }, [haveedgedetails])
+
+
   const onClickNode = (nodeId) => {
     handleOpenViewNode()
     setPopup(true)
@@ -1182,8 +1168,8 @@ const Links = ({ history }) => {
               <div>
                 {results.map(
                   (data) => (
-                    (<>{setFiltereddata(data)}</>),
-                    console.log('jji', filtereddata)
+                    (<>{setFiltereddata(data)}</>)
+                    // console.log('jji', filtereddata)
                   )
                 )}
               </div>
@@ -1196,21 +1182,21 @@ const Links = ({ history }) => {
           >
             {bodddddddy}
           </Modal>
-          {nodeloading || deletenodeloading ? (
+          {nodeloading ? (
             <div className={classes.rooot}>
               <CircularProgress />
             </div>
           ) : (
-            <div className='graph'>
-              <Graph
-                id='graph-id' // id is mandatory
-                data={data}
-                config={myConfig}
-                onClickNode={onClickNode}
-                onClickLink={onClickLink}
-              />
-            </div>
-          )}
+              <div className='graph'>
+                <Graph
+                  id='graph-id' // id is mandatory
+                  data={data}
+                  config={myConfig}
+                  onClickNode={onClickNode}
+                  onClickLink={onClickLink}
+                />
+              </div>
+            )}
         </div>
       </>
     </>

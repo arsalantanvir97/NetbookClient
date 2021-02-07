@@ -25,6 +25,7 @@ import {
   REMOVE_EDGE_REQUEST,
   REMOVE_EDGE_FAIL,
 } from '../constants/nodeConstant'
+
 export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
   dispatch
 ) => {
@@ -59,6 +60,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
     })
   }
 }
+
 export const Nodefetch = (nodeid) => async (dispatch) => {
   try {
     dispatch({
@@ -122,6 +124,7 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
     })
   }
 }
+
 export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
   dispatch
 ) => {
@@ -154,12 +157,13 @@ export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
     })
   }
 }
+
 export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
   dispatch
 ) => {
   try {
     dispatch({
-      type: HAVE_NODE_REQUEST,
+      type: UPDATE_NODE_REQUEST,
     })
 
     const config = {
@@ -176,7 +180,7 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
     console.log('heelo', data)
 
     dispatch({
-      type: HAVE_NODE_SUCCESS,
+      type: UPDATE_NODE_SUCCESS,
       payload: data,
     })
     localStorage.setItem('nodehave', JSON.stringify(data))
@@ -200,6 +204,7 @@ export const NodeDeletion = (id) => async (dispatch) => {
 
     dispatch({
       type: REMOVE_NODE_SUCCESS,
+      payload: id
     })
     localStorage.removeItem('nodehave', JSON.stringify(data))
   } catch (error) {
@@ -220,6 +225,7 @@ export const EdgeDeletion = (id) => async (dispatch) => {
 
     dispatch({
       type: REMOVE_EDGE_SUCCESS,
+      payload: id
     })
   } catch (error) {
     dispatch({
