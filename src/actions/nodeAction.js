@@ -45,7 +45,6 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
       { nodeid, id, type, tags, attributes },
       config
     )
-    console.log('heelo', data)
 
     dispatch({
       type: GET_NODE_SUCCESS,
@@ -62,6 +61,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
 }
 
 export const Nodefetch = (nodeid) => async (dispatch) => {
+  console.log("fetching data")
   try {
     dispatch({
       type: HAVE_NODE_REQUEST,
@@ -78,13 +78,28 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
       { nodeid },
       config
     )
-    console.log('heelo', data)
+
+
+    const links = []
+
+    if (data.links?.length > 0) {
+      data.links.map((link) => {
+        links.push({
+          edgeid: link.edgeid,
+          tags: link.tags,
+          source: link.source.id,
+          target: link.target.id,
+          _id: link._id,
+        })
+      })
+
+    }
 
     dispatch({
       type: HAVE_NODE_SUCCESS,
-      payload: data,
+      payload: { ...data, links },
     })
-    localStorage.setItem('nodehave', JSON.stringify(data))
+    localStorage.setItem('nodehave', JSON.stringify({ ...data, links }))
   } catch (error) {
     dispatch({
       type: HAVE_NODE_FAIL,
@@ -110,13 +125,26 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
       { edgeid, source, target, tags },
       config
     )
-    console.log('heelo', data)
+
+
 
     dispatch({
       type: GET_EDGE_SUCCESS,
-      payload: data,
+      payload: {
+        edgeid: data.edgeid,
+        tags: data.tags,
+        source: data.source.id,
+        target: data.target.id,
+        _id: data._id,
+      },
     })
-    localStorage.setItem('edgeadded', JSON.stringify(data))
+    localStorage.setItem('edgeadded', JSON.stringify({
+      edgeid: data.edgeid,
+      tags: data.tags,
+      source: data.source.id,
+      target: data.target.id,
+      _id: data._id,
+    }))
   } catch (error) {
     dispatch({
       type: GET_EDGE_FAIL,
@@ -144,12 +172,21 @@ export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
       { edgeid, source, target, tags },
       config
     )
-    console.log('heelo', data)
+
+    console.log("added data", data);
+
 
     dispatch({
       type: UPDATE_EDGE_SUCCESS,
-      payload: data,
+      payload: {
+        edgeid: data.edgeid,
+        tags: data.tags,
+        source: data.source.id,
+        target: data.target.id,
+        _id: data._id,
+      },
     })
+
   } catch (error) {
     dispatch({
       type: UPDATE_EDGE_FAIL,
@@ -177,7 +214,6 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
       { nodeid, id, type, tags, attributes },
       config
     )
-    console.log('heelo', data)
 
     dispatch({
       type: UPDATE_NODE_SUCCESS,
@@ -252,7 +288,6 @@ export const Edgefetch = (edgeid) => async (dispatch) => {
       { edgeid },
       config
     )
-    console.log('heelo', data)
 
     dispatch({
       type: HAVE_EDGE_SUCCESS,

@@ -57,7 +57,6 @@ const Links = ({ history }) => {
   const [openAddEdge, setOpenAddEdge] = useState(false)
   const [haveupdateedge, setHaveupdateedge] = useState(false)
   const [haveupdatenode, setHaveupdatenode] = useState(false)
-  const [newLinks, setNewLinks] = useState([])
 
   const [tags, setTags] = useState([])
   const [visi, setVisi] = useState(false)
@@ -109,30 +108,10 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
-    let unmounted = false
-    if (!unmounted) {
-      console.log('nodde links', nodde?.links)
-      const links = []
+    console.log("node updated", nodde)
 
-      if (nodde?.links?.length > 0) {
-        nodde.links.map((link) => {
-          links.push({
-            edgeid: link.edgeid,
-            tags: link.tags,
-            source: link.source.id,
-            target: link.target.id,
-            _id: link._id,
-          })
-        })
 
-        setNewLinks(links)
-      }
-      console.log('ooooo', newLinks, nodde)
-    }
-    return () => {
-      unmounted = true
-    }
-  }, [nodde?.links])
+  }, [nodde])
 
 
   useEffect(() => {
@@ -186,7 +165,6 @@ const Links = ({ history }) => {
   function getModalStyle() {
     const { innerWidth, innerHeight } = window
 
-    console.log(innerWidth)
     let top = 50,
       left = innerWidth < 600 ? 0 : 50
     return {
@@ -369,7 +347,6 @@ const Links = ({ history }) => {
   const blackTheme = createMuiTheme({
     palette: { primary: { main: '#000000' } },
   })
-  // console.log('ppp', newLinks, nodde?.nodes)
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
@@ -902,12 +879,12 @@ const Links = ({ history }) => {
 
   const data = {
     nodes:
-      newLinks && nodde?.nodes
+      nodde?.nodes
         ? nodde?.nodes
         : filtereddata
           ? filtereddata
           : [],
-    links: newLinks && nodde?.nodes ? newLinks : [],
+    links: nodde?.links ? nodde?.links : [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
   }
@@ -943,7 +920,7 @@ const Links = ({ history }) => {
 
   const onClickLink = (source, target) => {
     handleOpenViewEdge()
-    const edgedetails = newLinks?.filter((link) => link.target === target)[0]
+    const edgedetails = nodde?.links?.filter((link) => link.target === target)[0]
     console.log('ew', edgedetails)
     setHaveedgedetails(edgedetails)
     console.log('heeero', haveedgedetails)

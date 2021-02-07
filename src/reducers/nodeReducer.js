@@ -44,15 +44,7 @@ export const getNodeReducer = (state = {}, action) => {
       return { ...state, loading: true }
 
     case HAVE_NODE_SUCCESS:
-      let pushed = action.payload
-      if (state.newnode?.nodes.length > 0) {
-        pushed.nodes.push(state.newnode.nodes[0])
-      }
-      // console.log('ppp', pushed)
-      const arra = state.newnode?.nodes.length > 0 ? pushed : action.payload
-      // const arra = action.payload
-      console.log('hasan', arra)
-      return { ...state, loading: false, nodde: arra }
+      return { ...state, loading: false, nodde: action.payload }
 
     case GET_NODE_SUCCESS:
       return {
@@ -88,10 +80,10 @@ export const getNodeReducer = (state = {}, action) => {
     case REMOVE_NODE_SUCCESS:
       console.log("node id", action.payload)
       let updatedNodeArray = state.nodde.nodes.filter(node => node._id != action.payload)
-      console.log("state.nodde.links", state.nodde.links);
-      console.log("state.nodde.link.target", state.nodde.links[0].target._id);
-      console.log("state.nodde.link.source", state.nodde.links[0].source._id);
-      let updatedEdges = state.nodde.links.filter(link => link.source._id != action.payload && link.target._id != action.payload)
+      let deletedNode = state.nodde.nodes.filter(node => node._id == action.payload)
+      console.log("state.nodde.links -->", state.nodde.links);
+      console.log("deleted node -->", deletedNode);
+      let updatedEdges = state.nodde.links.filter(link => link.source != deletedNode[0].id && link.target != deletedNode[0].id)
       console.log("updated edge and node array", updatedEdges, updatedNodeArray, state);
       return {
         ...state,

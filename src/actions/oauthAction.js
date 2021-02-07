@@ -29,7 +29,6 @@ export const OauthLogin = (
       { name, email, imageUrl, access_token, expires_in, expires_at },
       config
     )
-    console.log('heelo', data)
 
     dispatch({
       type: GET_OAUTH_SUCCESS,
