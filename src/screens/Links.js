@@ -108,11 +108,17 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
+
+
     setUpdatenodeid(nodepopup?.id)
     setUpdatenodetype(nodepopup?.type)
-    setUpdatesource(haveedgedetails?.source)
-    setUpdatetarget(haveedgedetails?.target)
     setUpdatenodetags(nodepopup?.tags)
+
+    let sourceNode = nodde?.nodes?.filter(node => node.id === haveedgedetails?.source)[0];
+    let targetNode = nodde?.nodes?.filter(node => node.id === haveedgedetails?.target)[0];
+
+    setUpdatesource(sourceNode?._id)
+    setUpdatetarget(targetNode?._id)
     setUpdateedgetags(haveedgedetails?.tags)
     // setUpdatenodetags(nodepopup?.tags)
 
@@ -477,30 +483,37 @@ const Links = ({ history }) => {
           </p>
         </Grid>
       </Grid>
-      <div style={{ height: 17 }}></div>
-      <p>
-        <span style={{ fontSize: 15 }}>Tags:</span>{' '}
-        {nodepopup?.tags?.map((tagg) => (
-          <>
-            <span
-              style={{
-                display: 'inline !important',
-                backgroundColor: 'black',
-                color: 'white',
-                padding: 3.1,
-                paddingLeft: 9,
-                paddingRight: 9,
-                minWidth: 400,
-                marginRight: 3.8,
-                borderRadius: 3.3,
-                textAlign: 'center',
-              }}
-            >
-              {tagg}
-            </span>
+      {
+        nodepopup?.tags?.length > 0
+          ? <>
+            <div style={{ height: 17 }}></div>
+            <p>
+              <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+              {nodepopup?.tags?.map((tagg) => (
+                <>
+                  <span
+                    style={{
+                      display: 'inline !important',
+                      backgroundColor: 'black',
+                      color: 'white',
+                      padding: 3.1,
+                      paddingLeft: 9,
+                      paddingRight: 9,
+                      minWidth: 400,
+                      marginRight: 3.8,
+                      borderRadius: 3.3,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {tagg}
+                  </span>
+                </>
+              ))}
+            </p>
           </>
-        ))}
-      </p>
+          : null
+      }
+
       <div style={{ height: 17 }}></div>
       {nodepopup?.attributes?.length > 0 ? (
         <table style={{ width: '100%' }}>
@@ -597,31 +610,38 @@ const Links = ({ history }) => {
           </p>
         </Grid>
       </Grid>
-      <div style={{ height: 17 }}></div>
-      <p>
-        <span style={{ fontSize: 15 }}>Tags:</span>{' '}
-        {haveedgedetails?.tags?.map((tagg) => (
-          <>
-            <span
-              style={{
-                display: 'inline !important',
-                backgroundColor: 'black',
-                color: 'white',
-                padding: 3.1,
+      {
+        haveedgedetails?.tags?.length > 0
+          ? <>
+            <div style={{ height: 17 }}></div>
+            <p>
+              <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+              {haveedgedetails?.tags?.map((tagg) => (
+                <>
+                  <span
+                    style={{
+                      display: 'inline !important',
+                      backgroundColor: 'black',
+                      color: 'white',
+                      padding: 3.1,
 
-                paddingLeft: 9,
-                paddingRight: 9,
-                minWidth: 400,
-                marginRight: 3.8,
-                borderRadius: 3.3,
-                textAlign: 'center',
-              }}
-            >
-              {tagg}
-            </span>
+                      paddingLeft: 9,
+                      paddingRight: 9,
+                      minWidth: 400,
+                      marginRight: 3.8,
+                      borderRadius: 3.3,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {tagg}
+                  </span>
+                </>
+              ))}
+            </p>
           </>
-        ))}
-      </p>
+          : null
+      }
+
       <div style={{ height: 17 }}></div>
       <Button type='button' onClick={handlgeupdateedge}>
         Edit Edge
@@ -655,7 +675,7 @@ const Links = ({ history }) => {
               <InputLabel id='demo-simple-select-label'>Source</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-                id='demo-simple-select'
+
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
               >
@@ -674,7 +694,7 @@ const Links = ({ history }) => {
               <InputLabel id='demo-simple-select-label'>Target</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-                id='demo-simple-select'
+
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
@@ -710,13 +730,16 @@ const Links = ({ history }) => {
         </IconButton>
       </div>
       <form onSubmit={submitupdateedgehandler}>
-        <Grid container>
+        <Grid container spacing={1}>
+
+
           <Grid item xs={6}>
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl} variant='outlined'
+              size='small'>
               <InputLabel id='demo-simple-select-label'>Edit Source</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-                id='demo-simple-select'
+
                 value={updatesource}
                 onChange={(e) => setUpdatesource(e.target.value)}
               >
@@ -727,11 +750,12 @@ const Links = ({ history }) => {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl} variant='outlined'
+              size='small'>
               <InputLabel id='demo-simple-select-label'>Edit Target</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-                id='demo-simple-select'
+
                 value={updatetarget}
                 onChange={(e) => setUpdatetarget(e.target.value)}
               >
@@ -910,12 +934,11 @@ const Links = ({ history }) => {
     setNodepopup(nodedetails)
   }
 
-  const onClickLink = (source, target) => {
+  const onClickLink = (source, target,) => {
+    console.log("source and target", source, target)
     handleOpenViewEdge()
-    const edgedetails = nodde?.links?.filter((link) => link.target === target)[0]
-    console.log('ew', edgedetails)
+    const edgedetails = nodde?.links?.filter((link) => link.target === target && link.source === source)[0]
     setHaveedgedetails(edgedetails)
-    console.log('heeero', haveedgedetails)
   }
 
   // const showtheVisiblity = () => {

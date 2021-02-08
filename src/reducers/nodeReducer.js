@@ -119,7 +119,8 @@ export const getNodeReducer = (state = {}, action) => {
       return { ...state, loading: true }
 
     case UPDATE_EDGE_SUCCESS:
-      const indexEdge = state.nodde.links.findIndex(link => link._id !== action.payload._id);
+      const indexEdge = state.nodde.links.findIndex(link => link._id === action.payload._id);
+      console.log("index edge", indexEdge)
       let newArrayEdge = state.nodde.links;
       newArrayEdge[indexEdge] = action.payload;
       console.log("new Array -->", newArrayEdge)
