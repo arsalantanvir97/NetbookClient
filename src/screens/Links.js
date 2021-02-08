@@ -50,7 +50,7 @@ import {
 import { Graph } from 'react-d3-graph'
 
 const Links = ({ history }) => {
-  const [hid, setHid] = useState(false)
+  // const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
   const [openViewNode, setOpenViewNode] = useState(false)
   const [openViewEdge, setOpenViewEdge] = useState(false)
@@ -59,7 +59,7 @@ const Links = ({ history }) => {
   const [haveupdatenode, setHaveupdatenode] = useState(false)
 
   const [tags, setTags] = useState([])
-  const [visi, setVisi] = useState(false)
+  // const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
   const [id, setId] = useState('')
   const [updatenodeid, setUpdatenodeid] = useState('')
@@ -70,9 +70,9 @@ const Links = ({ history }) => {
   const [haveedgedetails, setHaveedgedetails] = useState([])
   const [type, setType] = useState('')
   const [inputfields, setInputfields] = useState([])
-  const [openPanel, setOpenPanel] = useState(false)
+  // const [openPanel, setOpenPanel] = useState(false)
   const [popup, setPopup] = useState(false)
-  const [update, setUpdate] = useState(false)
+  // const [update, setUpdate] = useState(false)
   const [popdown, setPopdown] = useState(false)
   const [attributes, setAttributes] = useState([])
   const [updateattributes, setUpdateattributes] = useState([])
@@ -108,18 +108,10 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
-    console.log("node updated", nodde)
-
-
-  }, [nodde])
-
-
-  useEffect(() => {
     setUpdatenodeid(nodepopup?.id)
     setUpdatenodetype(nodepopup?.type)
     setUpdatesource(haveedgedetails?.source)
     setUpdatetarget(haveedgedetails?.target)
-    console.log('jo', haveedgedetails?.source)
     setUpdatenodetags(nodepopup?.tags)
     setUpdateedgetags(haveedgedetails?.tags)
     // setUpdatenodetags(nodepopup?.tags)
@@ -191,7 +183,7 @@ const Links = ({ history }) => {
       color: 'white',
     },
     formControl: {
-      margin: theme.spacing(1),
+      // margin: theme.spacing(1),
       minWidth: 120,
       width: '100%',
     },
@@ -585,8 +577,8 @@ const Links = ({ history }) => {
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
       </div>
-      <Grid container>
-        <Grid xs={6}>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
           <p style={{ fontSize: 15 }}>
             Source:
             <span style={{ fontSize: 17, fontWeight: 500 }}>
@@ -595,7 +587,7 @@ const Links = ({ history }) => {
             </span>
           </p>
         </Grid>
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <p style={{ fontSize: 14 }}>
             Target:{' '}
             <span style={{ fontSize: 17, fontWeight: 500 }}>
@@ -926,9 +918,9 @@ const Links = ({ history }) => {
     console.log('heeero', haveedgedetails)
   }
 
-  const showtheVisiblity = () => {
-    setHid(true)
-  }
+  // const showtheVisiblity = () => {
+  //   setHid(true)
+  // }
 
   const onSetSidebarOpen = () => {
     setSidebarOpen(true)

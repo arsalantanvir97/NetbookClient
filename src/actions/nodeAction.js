@@ -61,7 +61,6 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
 }
 
 export const Nodefetch = (nodeid) => async (dispatch) => {
-  console.log("fetching data")
   try {
     dispatch({
       type: HAVE_NODE_REQUEST,
@@ -196,7 +195,8 @@ export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
 }
 
 export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
-  dispatch
+  dispatch,
+  getState
 ) => {
   try {
     dispatch({
@@ -214,6 +214,23 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
       { nodeid, id, type, tags, attributes },
       config
     )
+
+    const [oldNode] = getState().getNode.nodde.nodes.filter(node => node._id == _id)
+
+    let updatedLinks = getState().getNode.nodde.links;
+
+    if (id !== oldNode.id) {
+      for (let i = 0; i < updatedLinks.length; i++) {
+        if (updatedLinks[i].target == oldNode.id) {
+          updatedLinks[i].target = data.id
+        }
+        if (updatedLinks[i].source == oldNode.id) {
+
+          updatedLinks[i].source = data.id
+        }
+      }
+    }
+
 
     dispatch({
       type: UPDATE_NODE_SUCCESS,
