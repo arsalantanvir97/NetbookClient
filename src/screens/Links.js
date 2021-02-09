@@ -69,8 +69,8 @@ const Links = ({ history }) => {
   const [attributes, setAttributes] = useState([])
   const [updateattributes, setUpdateattributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [source, setSource] = useState()
-  const [target, setTarget] = useState()
+  const [source, setSource] = useState('')
+  const [target, setTarget] = useState('')
   const [edgetags, setEdgetags] = useState([])
   const [searchdata, setSearchdata] = useState([])
   const [searchvalue, setSearchvalue] = useState('')
@@ -961,20 +961,28 @@ const Links = ({ history }) => {
       <Navbar setVisiblity={setVisiblity} logout={logout} />
       <div className="graph-actions">
         <div className="web">
-          <Button onClick={handleOpen} style={{ marginRight: 10 }} variant="contained" color="primary">Add Node</Button>
-          <Button onClick={handleOpenAddEdge} variant="contained" color="primary">Add Edge</Button>
+          <Button onClick={handleOpen} variant="contained" color="primary">Add Node</Button>
+          {
+            nodde.nodes.length > 1
+              ? <Button onClick={handleOpenAddEdge} style={{ marginLeft: 10 }} variant="contained" color="primary">Add Edge</Button>
+              : null
+          }
         </div>
         <div className="mobile">
           <div>
-            <Fab onClick={handleOpen} style={{ marginBottom: 10 }} color="primary" aria-label="add">
+            <Fab onClick={handleOpen} color="primary" aria-label="add">
               <AddIcon />
             </Fab>
           </div>
-          <div>
-            <Fab onClick={handleOpenAddEdge} color="primary" aria-label="add">
-              <TrendingFlatIcon />
-            </Fab>
-          </div>
+          {
+            nodde?.nodes.length > 1
+              ? <div>
+                <Fab onClick={handleOpenAddEdge} style={{ marginTop: 10 }} color="primary" aria-label="add">
+                  <TrendingFlatIcon />
+                </Fab>
+              </div>
+              : null
+          }
         </div>
       </div>
       <div
