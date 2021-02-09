@@ -2,29 +2,19 @@ import React, { useState, useEffect } from 'react'
 // import Sidebar from 'react-sidebar'
 // import SlidingPanel from 'react-sliding-side-panel'
 import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
-import { GoogleLogout } from 'react-google-login'
 import ClearIcon from '@material-ui/icons/Clear'
-import SearchIcon from '@material-ui/icons/Search'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import AddIcon from '@material-ui/icons/Add'
-import PersonIcon from '@material-ui/icons/Person'
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted'
 import DeleteIcon from '@material-ui/icons/Delete'
-import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
-import TimelineIcon from '@material-ui/icons/Timeline'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import FilterResults from 'react-filter-search'
+import AddIcon from '@material-ui/icons/Add';
+import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
 
 import Select from '@material-ui/core/Select'
-import Alert from '@material-ui/lab/Alert'
-import { Link } from 'react-router-dom'
 
-import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
+import { Grid, Container, Modal, TextField, Button, Fab } from '@material-ui/core'
 import {
   ThemeProvider,
   createMuiTheme,
@@ -48,6 +38,8 @@ import {
   EdgeDeletion,
 } from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
+import Navbar from '../components/Navbar'
+import Sidebar from '../components/Sidebar'
 
 const Links = ({ history }) => {
   // const [hid, setHid] = useState(false)
@@ -964,234 +956,111 @@ const Links = ({ history }) => {
   }
 
   return (
+
     <>
-      <>
-        <nav
-          className='navbar'
-          style={{
-            backgroundColor: 'rgb(32,32,32)',
-            width: '100%',
-            height: 70,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <div style={{ display: 'flex' }}>
-            <IconButton
-              className='menuicon'
-              onClick={() => setVisiblity((visiblity) => !visiblity)}
-              color='inherit'
-              aria-label='open drawer'
-            >
-              <MenuIcon style={{ color: 'grey' }} />
-            </IconButton>
-            <h3
-              className='netbook'
-              style={{
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Netbook
-            </h3>
-          </div>
-          <div className='filterfield'>
-            <TextField
-              style={{
-                color: 'white',
-                backgroundColor: 'rgb(18,18,18)',
-                display: 'flex',
-              }}
-              label='Filter'
-              fullWidth
-              margin='normal'
-              // onChange={}
-              size='small'
-              variant='outlined'
-              value={searchvalue}
-              onChange={handlesearchchange}
-              InputProps={{
-                className: classes.multilineColor,
-
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
-
-          <div
-            className='gbtn'
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <GoogleLogout
-              className='gg'
-              color='white'
-              theme='dark'
-              clientId='542443202716-1162el1e1nqk02h64h08frl40vsl5hgp.apps.googleusercontent.com'
-              buttonText='Logout'
-              onLogoutSuccess={logout}
-            ></GoogleLogout>
-          </div>
-        </nav>
-
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            height: 'calc(100vh - 70px)',
-            backgroundColor: 'rgba(230, 230, 230,1)',
-          }}
-        >
-          <div
-            className={visible ? 'showsidebar' : 'hidesidebar'}
-            style={{
-              marginTop: 15,
-              marginLeft: 12,
-              borderRadius: 8,
-
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'start',
-              height: 'calc(100vh - 100px)',
-              transition: '0.3s',
-              // position: 'absolute',
-              // zIndex: 1,
-              // height: '100vh',
-              // justifyContent: 'space-between',
-              backgroundColor: 'white',
-            }}
-          >
-            <div
-              className='firsticon'
-              style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
-            >
-              <IconButton color='inherit' aria-label='open drawer'>
-                <TimelineIcon style={{ color: 'grey' }} />
-              </IconButton>
-              <p className={visible ? 'slide' : 'hidetext'}>Graph View</p>
-            </div>
-            <div
-              onClick={showmodal}
-              style={{ display: 'flex', alignItems: 'center' }}
-            >
-              <IconButton color='inherit' aria-label='open drawer'>
-                <AddIcon style={{ color: 'grey' }} />
-              </IconButton>
-              <p className={visible ? 'slide' : 'hidetext'}>Add Node</p>
-            </div>
-            <div
-              onClick={addedgemodal}
-              style={{ display: 'flex', alignItems: 'center' }}
-            >
-              <IconButton color='inherit' aria-label='open drawer'>
-                <TrendingFlatIcon style={{ color: 'grey' }} />
-              </IconButton>
-              <p className={visible ? 'slide' : 'hidetext'}>Add Edge</p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton color='inherit' aria-label='open drawer'>
-                <SearchIcon style={{ color: 'grey' }} />
-              </IconButton>
-              <p className={visible ? 'slide' : 'hidetext'}>Queries</p>
-            </div>
-            <Link to='/feed'>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <IconButton color='inherit' aria-label='open drawer'>
-                  <FormatListBulletedIcon style={{ color: 'grey' }} />
-                </IconButton>
-                <p className={visible ? 'slide' : 'hidetext'}>Feed View</p>
-              </div>
-            </Link>
-            <Link to='/profile'>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <IconButton color='inherit' aria-label='open drawer'>
-                  <PersonIcon style={{ color: 'grey' }} />
-                </IconButton>
-                <p className={visible ? 'slide' : 'hidetext'}>Profile</p>
-              </div>
-            </Link>
-          </div>
-
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby='simple-modal-title'
-          >
-            {body}
-          </Modal>
-          <Modal
-            open={openViewNode}
-            onClose={handleClose}
-            aria-labelledby='simple-modal-title'
-          >
-            {boddy}
-          </Modal>
-          <Modal
-            open={openAddEdge}
-            onClose={handleClose}
-            aria-labelledby='simple-modal-title'
-          >
-            {bodddy}
-          </Modal>
-          <Modal
-            open={openViewEdge}
-            onClose={handleClose}
-            aria-labelledby='simple-modal-title'
-          >
-            {boddddy}
-          </Modal>
-          <Modal
-            open={haveupdateedge}
-            onClose={handleClose}
-            aria-labelledby='simple-modal-title'
-          >
-            {bodddddy}
-          </Modal>
-          <FilterResults
-            value={searchvalue}
-            data={searchdata}
-            renderResults={(results) => (
-              <div>
-                {results.map(
-                  (data) => (
-                    (<>{setFiltereddata(data)}</>)
-                    // console.log('jji', filtereddata)
-                  )
-                )}
-              </div>
-            )}
-          />
-          <Modal
-            open={haveupdatenode}
-            onClose={handleClose}
-            aria-labelledby='simple-modal-title'
-          >
-            {bodddddddy}
-          </Modal>
-          {nodeloading ? (
-            <div className={classes.rooot}>
-              <CircularProgress />
-            </div>
-          ) : (
-              <div className='graph'>
-                <Graph
-                  id='graph-id' // id is mandatory
-                  data={data}
-                  config={myConfig}
-                  onClickNode={onClickNode}
-                  onClickLink={onClickLink}
-                />
-              </div>
-            )}
+      <Navbar setVisiblity={setVisiblity} logout={logout} />
+      <div className="graph-actions">
+        <div className="web">
+          <Button onClick={handleOpen} style={{ marginRight: 10 }} variant="contained" color="primary">Add Node</Button>
+          <Button onClick={handleOpenAddEdge} variant="contained" color="primary">Add Edge</Button>
         </div>
-      </>
+        <div className="mobile">
+          <div>
+            <Fab onClick={handleOpen} style={{ marginBottom: 10 }} color="primary" aria-label="add">
+              <AddIcon />
+            </Fab>
+          </div>
+          <div>
+            <Fab onClick={handleOpenAddEdge} color="primary" aria-label="add">
+              <TrendingFlatIcon />
+            </Fab>
+          </div>
+        </div>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          height: 'calc(100vh - 70px)',
+          backgroundColor: 'rgba(230, 230, 230,1)',
+        }}
+      >
+        <Sidebar visible={visible} />
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {body}
+        </Modal>
+        <Modal
+          open={openViewNode}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {boddy}
+        </Modal>
+        <Modal
+          open={openAddEdge}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {bodddy}
+        </Modal>
+        <Modal
+          open={openViewEdge}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {boddddy}
+        </Modal>
+        <Modal
+          open={haveupdateedge}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {bodddddy}
+        </Modal>
+        <FilterResults
+          value={searchvalue}
+          data={searchdata}
+          renderResults={(results) => (
+            <div>
+              {results.map(
+                (data) => (
+                  (<>{setFiltereddata(data)}</>)
+                  // console.log('jji', filtereddata)
+                )
+              )}
+            </div>
+          )}
+        />
+        <Modal
+          open={haveupdatenode}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {bodddddddy}
+        </Modal>
+        {nodeloading ? (
+          <div className={classes.rooot}>
+            <CircularProgress />
+          </div>
+        ) : (
+            <div className='graph'>
+              <Graph
+                id='graph-id' // id is mandatory
+                data={data}
+                config={myConfig}
+                onClickNode={onClickNode}
+                onClickLink={onClickLink}
+              />
+            </div>
+          )}
+      </div>
     </>
+
   )
 }
 

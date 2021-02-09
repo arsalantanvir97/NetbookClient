@@ -9,7 +9,7 @@ import {
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 
-const Profile = ({ history }) => {
+const Query = ({ history }) => {
   const [visible, setVisiblity] = useState(false)
   const dispatch = useDispatch()
   const getOauth = useSelector((state) => state.getOauth)
@@ -45,17 +45,7 @@ const Profile = ({ history }) => {
         <Sidebar visible={visible} />
         <div style={{ marginTop: 15, marginLeft: 16, display: 'flex' }}>
           <div style={{}}>
-            <img
-              src={oauth?.imageUrl}
-              alt='my-img'
-              style={{ marginBottom: 8, borderRadius: 48 }}
-            />
-            <h5 style={{ marginBottom: 8, fontSize: 15 }}>
-              Name: <span style={{ fontWeight: 'normal' }}>{oauth.name}</span>
-            </h5>
-            <h5 style={{ marginBottom: 8, fontSize: 15 }}>
-              Email: <span style={{ fontWeight: 'normal' }}>{oauth.email}</span>
-            </h5>
+            Query View
           </div>
         </div>
       </div>
@@ -63,4 +53,4 @@ const Profile = ({ history }) => {
   )
 }
 
-export default Profile
+export default Query

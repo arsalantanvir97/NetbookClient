@@ -1,38 +1,21 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
-import { GoogleLogout } from 'react-google-login'
 import ClearIcon from '@material-ui/icons/Clear'
-import SearchIcon from '@material-ui/icons/Search'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Links from '../screens/Links'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import AddIcon from '@material-ui/icons/Add'
-import PersonIcon from '@material-ui/icons/Person'
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted'
 import DeleteIcon from '@material-ui/icons/Delete'
-import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
-import TimelineIcon from '@material-ui/icons/Timeline'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import FormControl from '@material-ui/core/FormControl'
 import TagsInput from 'react-tagsinput'
-
-import Select from '@material-ui/core/Select'
 import { OauthLogout } from '../actions/oauthAction'
-import { Link } from 'react-router-dom'
 import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
 
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
 import { NodeUpdate, NodeDeletion, Nodefetch } from '../actions/nodeAction'
 import './home.css'
 import {
-  ThemeProvider,
-  createMuiTheme,
   makeStyles,
 } from '@material-ui/core/styles'
+import Navbar from '../components/Navbar'
+import Sidebar from '../components/Sidebar'
 
 const FeedView = ({ history }) => {
   const [visible, setVisiblity] = useState(false)
@@ -414,69 +397,8 @@ const FeedView = ({ history }) => {
 
   return (
     <>
-      <nav
-        className='navbar'
-        style={{
-          backgroundColor: 'rgb(32,32,32)',
-          width: '100%',
-          height: 70,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <div style={{ display: 'flex' }}>
-          <IconButton
-            className='menuicon'
-            onClick={() => setVisiblity((visiblity) => !visiblity)}
-            color='inherit'
-            aria-label='open drawer'
-          >
-            <MenuIcon style={{ color: 'grey' }} />
-          </IconButton>
-          <h3
-            className='netbook'
-            style={{ color: 'white', display: 'flex', alignItems: 'center' }}
-          >
-            Netbook
-          </h3>
-        </div>
-        <div className='filterfield'>
-          <TextField
-            style={{
-              color: 'white',
-              backgroundColor: 'rgb(18,18,18)',
-              display: 'flex',
-            }}
-            label='Filter'
-            fullWidth
-            margin='normal'
-            // onChange={}
-            size='small'
-            variant='outlined'
-            InputProps={{
-              className: classes.multilineColor,
+      <Navbar setVisiblity={setVisiblity} logout={logout} />
 
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-
-        <div className='gbtn' style={{ display: 'flex', alignItems: 'center' }}>
-          <GoogleLogout
-            className='gg'
-            color='white'
-            theme='dark'
-            clientId='542443202716-1162el1e1nqk02h64h08frl40vsl5hgp.apps.googleusercontent.com'
-            buttonText='Logout'
-            onLogoutSuccess={logout}
-          ></GoogleLogout>
-        </div>
-      </nav>
       <div
         className='feedviewside'
         style={{
@@ -487,98 +409,44 @@ const FeedView = ({ history }) => {
           backgroundColor: 'rgba(230, 230, 230,1)',
         }}
       >
-        <div
-          className={visible ? 'showsidebar' : 'hidesidebar'}
-          style={{
-            marginTop: 15,
-            marginLeft: 12,
-            borderRadius: 8,
-
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-            height: 'calc(100vh - 100px)',
-            transition: '0.3s',
-            // position: 'absolute',
-            // zIndex: 1,
-            // height: '100vh',
-            // justifyContent: 'space-between',
-            backgroundColor: 'white',
-          }}
-        >
-          <Link to='graph'>
-            <div
-              className='firsticon'
-              style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}
-            >
-              <IconButton color='inherit' aria-label='open drawer'>
-                <TimelineIcon style={{ color: 'grey' }} />
-              </IconButton>
-              <p className={visible ? 'slide' : 'hidetext'}>Graph View</p>
-            </div>
-          </Link>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton color='inherit' aria-label='open drawer'>
-              <AddIcon style={{ color: 'grey' }} />
-            </IconButton>
-            <p className={visible ? 'slide' : 'hidetext'}>Add Node</p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton color='inherit' aria-label='open drawer'>
-              <TrendingFlatIcon style={{ color: 'grey' }} />
-            </IconButton>
-            <p className={visible ? 'slide' : 'hidetext'}>Add Edge</p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton color='inherit' aria-label='open drawer'>
-              <SearchIcon style={{ color: 'grey' }} />
-            </IconButton>
-            <p className={visible ? 'slide' : 'hidetext'}>Queries</p>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton color='inherit' aria-label='open drawer'>
-              <FormatListBulletedIcon style={{ color: 'grey' }} />
-            </IconButton>
-            <p className={visible ? 'slide' : 'hidetext'}>Feed View</p>
-          </div>
-          <Link to='/profile'>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton color='inherit' aria-label='open drawer'>
-                <PersonIcon style={{ color: 'grey' }} />
-              </IconButton>
-              <p className={visible ? 'slide' : 'hidetext'}>Profile</p>
-            </div>
-          </Link>
-        </div>
+        <Sidebar visible={visible} />
         {nodeloading ? (
           <div className={classes.rooot}>
             <CircularProgress />
           </div>
         ) : (
-          <div style={{ marginTop: 15, marginLeft: 16 }}>
-            {nodde?.nodes?.map((node) => (
-              <div onClick={() => showdetails(node._id)}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginBottom: 10,
-                  }}
-                >
+            <div style={{ marginTop: 15, marginLeft: 16 }}>
+              {nodde?.nodes?.map((node, id) => (
+                <div key={id} onClick={() => showdetails(node._id)}>
                   <div
                     style={{
-                      backgroundColor: 'black',
-                      borderRadius: 22,
-                      padding: 22,
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginBottom: 10,
+                      cursor: 'pointer'
                     }}
-                  ></div>
-                  <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
+                  >
+                    <div
+                      style={{
+                        backgroundColor: 'black',
+                        borderRadius: 20,
+                        height: 40,
+                        width: 40,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        color: 'white',
+
+                      }}
+                    >
+                      <p style={{ fontWeight: 500, fontSize: 18 }} >{node.id[0]}</p>
+                    </div>
+                    <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
         <Modal
           open={openViewNode}
           onClose={handleClose}
