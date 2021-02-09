@@ -10,7 +10,7 @@ const PublicRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        !oauth ? <Redirect to='/' /> : <Component {...props} />
+        oauth ? <Redirect to='/graph' /> : <Component {...props} />
       }
     />
   )

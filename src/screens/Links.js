@@ -9,12 +9,19 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import FilterResults from 'react-filter-search'
-import AddIcon from '@material-ui/icons/Add';
-import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
+import AddIcon from '@material-ui/icons/Add'
+import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
 
 import Select from '@material-ui/core/Select'
 
-import { Grid, Container, Modal, TextField, Button, Fab } from '@material-ui/core'
+import {
+  Grid,
+  Container,
+  Modal,
+  TextField,
+  Button,
+  Fab,
+} from '@material-ui/core'
 import {
   ThemeProvider,
   createMuiTheme,
@@ -100,14 +107,16 @@ const Links = ({ history }) => {
   }, [])
 
   useEffect(() => {
-
-
     setUpdatenodeid(nodepopup?.id)
     setUpdatenodetype(nodepopup?.type)
     setUpdatenodetags(nodepopup?.tags)
 
-    let sourceNode = nodde?.nodes?.filter(node => node.id === haveedgedetails?.source)[0];
-    let targetNode = nodde?.nodes?.filter(node => node.id === haveedgedetails?.target)[0];
+    let sourceNode = nodde?.nodes?.filter(
+      (node) => node.id === haveedgedetails?.source
+    )[0]
+    let targetNode = nodde?.nodes?.filter(
+      (node) => node.id === haveedgedetails?.target
+    )[0]
 
     setUpdatesource(sourceNode?._id)
     setUpdatetarget(targetNode?._id)
@@ -116,8 +125,6 @@ const Links = ({ history }) => {
 
     // setUpdateedgetags(haveedgedetails?.tags)
   }, [haveedgedetails, nodepopup])
-
-
 
   const handleOpen = () => {
     setOpen(true)
@@ -333,7 +340,6 @@ const Links = ({ history }) => {
     handleClose()
   }
 
-
   const blackTheme = createMuiTheme({
     palette: { primary: { main: '#000000' } },
   })
@@ -475,36 +481,34 @@ const Links = ({ history }) => {
           </p>
         </Grid>
       </Grid>
-      {
-        nodepopup?.tags?.length > 0
-          ? <>
-            <div style={{ height: 17 }}></div>
-            <p>
-              <span style={{ fontSize: 15 }}>Tags:</span>{' '}
-              {nodepopup?.tags?.map((tagg) => (
-                <>
-                  <span
-                    style={{
-                      display: 'inline !important',
-                      backgroundColor: 'black',
-                      color: 'white',
-                      padding: 3.1,
-                      paddingLeft: 9,
-                      paddingRight: 9,
-                      minWidth: 400,
-                      marginRight: 3.8,
-                      borderRadius: 3.3,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {tagg}
-                  </span>
-                </>
-              ))}
-            </p>
-          </>
-          : null
-      }
+      {nodepopup?.tags?.length > 0 ? (
+        <>
+          <div style={{ height: 17 }}></div>
+          <p>
+            <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+            {nodepopup?.tags?.map((tagg) => (
+              <>
+                <span
+                  style={{
+                    display: 'inline !important',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    padding: 3.1,
+                    paddingLeft: 9,
+                    paddingRight: 9,
+                    minWidth: 400,
+                    marginRight: 3.8,
+                    borderRadius: 3.3,
+                    textAlign: 'center',
+                  }}
+                >
+                  {tagg}
+                </span>
+              </>
+            ))}
+          </p>
+        </>
+      ) : null}
 
       <div style={{ height: 17 }}></div>
       {nodepopup?.attributes?.length > 0 ? (
@@ -602,37 +606,35 @@ const Links = ({ history }) => {
           </p>
         </Grid>
       </Grid>
-      {
-        haveedgedetails?.tags?.length > 0
-          ? <>
-            <div style={{ height: 17 }}></div>
-            <p>
-              <span style={{ fontSize: 15 }}>Tags:</span>{' '}
-              {haveedgedetails?.tags?.map((tagg) => (
-                <>
-                  <span
-                    style={{
-                      display: 'inline !important',
-                      backgroundColor: 'black',
-                      color: 'white',
-                      padding: 3.1,
+      {haveedgedetails?.tags?.length > 0 ? (
+        <>
+          <div style={{ height: 17 }}></div>
+          <p>
+            <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+            {haveedgedetails?.tags?.map((tagg) => (
+              <>
+                <span
+                  style={{
+                    display: 'inline !important',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    padding: 3.1,
 
-                      paddingLeft: 9,
-                      paddingRight: 9,
-                      minWidth: 400,
-                      marginRight: 3.8,
-                      borderRadius: 3.3,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {tagg}
-                  </span>
-                </>
-              ))}
-            </p>
-          </>
-          : null
-      }
+                    paddingLeft: 9,
+                    paddingRight: 9,
+                    minWidth: 400,
+                    marginRight: 3.8,
+                    borderRadius: 3.3,
+                    textAlign: 'center',
+                  }}
+                >
+                  {tagg}
+                </span>
+              </>
+            ))}
+          </p>
+        </>
+      ) : null}
 
       <div style={{ height: 17 }}></div>
       <Button type='button' onClick={handlgeupdateedge}>
@@ -667,7 +669,6 @@ const Links = ({ history }) => {
               <InputLabel id='demo-simple-select-label'>Source</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
               >
@@ -686,7 +687,6 @@ const Links = ({ history }) => {
               <InputLabel id='demo-simple-select-label'>Target</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
@@ -723,15 +723,15 @@ const Links = ({ history }) => {
       </div>
       <form onSubmit={submitupdateedgehandler}>
         <Grid container spacing={1}>
-
-
           <Grid item xs={6}>
-            <FormControl className={classes.formControl} variant='outlined'
-              size='small'>
+            <FormControl
+              className={classes.formControl}
+              variant='outlined'
+              size='small'
+            >
               <InputLabel id='demo-simple-select-label'>Edit Source</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-
                 value={updatesource}
                 onChange={(e) => setUpdatesource(e.target.value)}
               >
@@ -742,12 +742,14 @@ const Links = ({ history }) => {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <FormControl className={classes.formControl} variant='outlined'
-              size='small'>
+            <FormControl
+              className={classes.formControl}
+              variant='outlined'
+              size='small'
+            >
               <InputLabel id='demo-simple-select-label'>Edit Target</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
-
                 value={updatetarget}
                 onChange={(e) => setUpdatetarget(e.target.value)}
               >
@@ -766,10 +768,7 @@ const Links = ({ history }) => {
         />
         <Button
           type='submit'
-          disabled={
-            updatesource === '' ||
-            updatetarget === ''
-          }
+          disabled={updatesource === '' || updatetarget === ''}
         >
           <div>Edit Edge</div>
         </Button>
@@ -874,10 +873,7 @@ const Links = ({ history }) => {
         </Button>
         <Button
           type='submit'
-          disabled={
-            updatenodeid === '' ||
-            updatenodetype === ''
-          }
+          disabled={updatenodeid === '' || updatenodetype === ''}
         >
           <div>Edit Node</div>
         </Button>
@@ -886,12 +882,7 @@ const Links = ({ history }) => {
   )
 
   const data = {
-    nodes:
-      nodde?.nodes
-        ? nodde?.nodes
-        : filtereddata
-          ? filtereddata
-          : [],
+    nodes: nodde?.nodes ? nodde?.nodes : filtereddata ? filtereddata : [],
     links: nodde?.links ? nodde?.links : [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
@@ -914,9 +905,6 @@ const Links = ({ history }) => {
     },
   }
 
-
-
-
   const onClickNode = (nodeId) => {
     handleOpenViewNode()
     setPopup(true)
@@ -926,10 +914,12 @@ const Links = ({ history }) => {
     setNodepopup(nodedetails)
   }
 
-  const onClickLink = (source, target,) => {
-    console.log("source and target", source, target)
+  const onClickLink = (source, target) => {
+    console.log('source and target', source, target)
     handleOpenViewEdge()
-    const edgedetails = nodde?.links?.filter((link) => link.target === target && link.source === source)[0]
+    const edgedetails = nodde?.links?.filter(
+      (link) => link.target === target && link.source === source
+    )[0]
     setHaveedgedetails(edgedetails)
   }
 
@@ -956,33 +946,42 @@ const Links = ({ history }) => {
   }
 
   return (
-
     <>
       <Navbar setVisiblity={setVisiblity} logout={logout} />
-      <div className="graph-actions">
-        <div className="web">
-          <Button onClick={handleOpen} variant="contained" color="primary">Add Node</Button>
-          {
-            nodde.nodes.length > 1
-              ? <Button onClick={handleOpenAddEdge} style={{ marginLeft: 10 }} variant="contained" color="primary">Add Edge</Button>
-              : null
-          }
+      <div className='graph-actions'>
+        <div className='web'>
+          <Button onClick={handleOpen} variant='contained' color='primary'>
+            Add Node
+          </Button>
+          {nodde?.nodes.length > 1 ? (
+            <Button
+              onClick={handleOpenAddEdge}
+              style={{ marginLeft: 10 }}
+              variant='contained'
+              color='primary'
+            >
+              Add Edge
+            </Button>
+          ) : null}
         </div>
-        <div className="mobile">
+        <div className='mobile'>
           <div>
-            <Fab onClick={handleOpen} color="primary" aria-label="add">
+            <Fab onClick={handleOpen} color='primary' aria-label='add'>
               <AddIcon />
             </Fab>
           </div>
-          {
-            nodde?.nodes.length > 1
-              ? <div>
-                <Fab onClick={handleOpenAddEdge} style={{ marginTop: 10 }} color="primary" aria-label="add">
-                  <TrendingFlatIcon />
-                </Fab>
-              </div>
-              : null
-          }
+          {nodde?.nodes.length > 1 ? (
+            <div>
+              <Fab
+                onClick={handleOpenAddEdge}
+                style={{ marginTop: 10 }}
+                color='primary'
+                aria-label='add'
+              >
+                <TrendingFlatIcon />
+              </Fab>
+            </div>
+          ) : null}
         </div>
       </div>
       <div
@@ -1035,12 +1034,10 @@ const Links = ({ history }) => {
           data={searchdata}
           renderResults={(results) => (
             <div>
-              {results.map(
-                (data) => (
-                  (<>{setFiltereddata(data)}</>)
-                  // console.log('jji', filtereddata)
-                )
-              )}
+              {results.map((data) => (
+                <>{setFiltereddata(data)}</>
+                // console.log('jji', filtereddata)
+              ))}
             </div>
           )}
         />
@@ -1056,19 +1053,18 @@ const Links = ({ history }) => {
             <CircularProgress />
           </div>
         ) : (
-            <div className='graph'>
-              <Graph
-                id='graph-id' // id is mandatory
-                data={data}
-                config={myConfig}
-                onClickNode={onClickNode}
-                onClickLink={onClickLink}
-              />
-            </div>
-          )}
+          <div className='graph'>
+            <Graph
+              id='graph-id' // id is mandatory
+              data={data}
+              config={myConfig}
+              onClickNode={onClickNode}
+              onClickLink={onClickLink}
+            />
+          </div>
+        )}
       </div>
     </>
-
   )
 }
 
