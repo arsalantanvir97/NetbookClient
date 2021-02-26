@@ -7,11 +7,18 @@ import {
   HAVE_NODE_SUCCESS,
   HAVE_NODE_REQUEST,
   GET_EDGE_FAIL,
+  SEARCH_EDGE_SUCCESS,
   GET_EDGE_REQUEST,
   GET_EDGE_SUCCESS,
+  CLEAR_EDGE,
+  CLEAR_NODE,
   HAVE_EDGE_FAIL,
   HAVE_EDGE_REQUEST,
   HAVE_EDGE_SUCCESS,
+  GET_AIQUERIES_REQUEST,
+  GET_AIQUERIES_SUCCESS,
+  GET_AIQUERIES_FAIL,
+  SEARCH_NODE_SUCCESS,
   UPDATE_EDGE_SUCCESS,
   UPDATE_EDGE_REQUEST,
   UPDATE_EDGE_FAIL,
@@ -78,7 +85,6 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
       config
     )
 
-
     const links = []
 
     if (data.links?.length > 0) {
@@ -91,7 +97,6 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
           _id: link._id,
         })
       })
-
     }
 
     dispatch({
@@ -125,8 +130,6 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
       config
     )
 
-
-
     dispatch({
       type: GET_EDGE_SUCCESS,
       payload: {
@@ -137,13 +140,16 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
         _id: data._id,
       },
     })
-    localStorage.setItem('edgeadded', JSON.stringify({
-      edgeid: data.edgeid,
-      tags: data.tags,
-      source: data.source.id,
-      target: data.target.id,
-      _id: data._id,
-    }))
+    localStorage.setItem(
+      'edgeadded',
+      JSON.stringify({
+        edgeid: data.edgeid,
+        tags: data.tags,
+        source: data.source.id,
+        target: data.target.id,
+        _id: data._id,
+      })
+    )
   } catch (error) {
     dispatch({
       type: GET_EDGE_FAIL,
@@ -172,8 +178,7 @@ export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
       config
     )
 
-    console.log("added data", data);
-
+    console.log('added data', data)
 
     dispatch({
       type: UPDATE_EDGE_SUCCESS,
@@ -185,7 +190,6 @@ export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
         _id: data._id,
       },
     })
-
   } catch (error) {
     dispatch({
       type: UPDATE_EDGE_FAIL,
@@ -215,9 +219,11 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
       config
     )
 
-    const [oldNode] = getState().getNode.nodde.nodes.filter(node => node._id == _id)
+    const [oldNode] = getState().getNode.nodde.nodes.filter(
+      (node) => node._id == _id
+    )
 
-    let updatedLinks = getState().getNode.nodde.links;
+    let updatedLinks = getState().getNode.nodde.links
 
     if (id !== oldNode.id) {
       for (let i = 0; i < updatedLinks.length; i++) {
@@ -225,12 +231,10 @@ export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
           updatedLinks[i].target = data.id
         }
         if (updatedLinks[i].source == oldNode.id) {
-
           updatedLinks[i].source = data.id
         }
       }
     }
-
 
     dispatch({
       type: UPDATE_NODE_SUCCESS,
@@ -257,7 +261,7 @@ export const NodeDeletion = (id) => async (dispatch) => {
 
     dispatch({
       type: REMOVE_NODE_SUCCESS,
-      payload: id
+      payload: id,
     })
     localStorage.removeItem('nodehave', JSON.stringify(data))
   } catch (error) {
@@ -278,7 +282,7 @@ export const EdgeDeletion = (id) => async (dispatch) => {
 
     dispatch({
       type: REMOVE_EDGE_SUCCESS,
-      payload: id
+      payload: id,
     })
   } catch (error) {
     dispatch({
@@ -317,4 +321,35 @@ export const Edgefetch = (edgeid) => async (dispatch) => {
       payload: error,
     })
   }
+}
+export const Searchnode = (text) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SEARCH_NODE_SUCCESS,
+      payload: text,
+    })
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+export const Searchedge = (text) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SEARCH_EDGE_SUCCESS,
+      payload: text,
+    })
+    console.log('payload', text)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+export const Clearnode = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_NODE,
+  })
+}
+export const Clearedge = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_EDGE,
+  })
 }

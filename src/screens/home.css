@@ -44,13 +44,26 @@ h1 {
 .filterfield .MuiFormLabel-root {
   color: white !important;
 }
-
+.filterr .MuiFormLabel-root {
+  color: white !important;
+}
 .filterfield .MuiFormControl-marginNormal {
   margin-top: 8px !important;
   margin-bottom: 8px !important;
 }
-
-.MuiInputAdornment-root .MuiInputAdornment-positionEnd .MuiInputAdornment-marginDense {
+.filterr .MuiFormControl-marginNormal {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+.filterr
+  .MuiInputAdornment-root
+  .MuiInputAdornment-positionEnd
+  .MuiInputAdornment-marginDense {
+  color: black !important;
+}
+.MuiInputAdornment-root
+  .MuiInputAdornment-positionEnd
+  .MuiInputAdornment-marginDense {
   color: black !important;
 }
 
@@ -100,6 +113,15 @@ h1 {
   width: 500px;
 }
 
+.showsearchbars {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.hidesearchbars {
+  display: none;
+}
 .graph {
   width: 100%;
   height: calc(100vh - 70px) !important;
@@ -112,7 +134,7 @@ h1 {
 
 .link {
   text-decoration: none;
-  color: #2d2d2d
+  color: #2d2d2d;
 }
 
 .graph-actions {
@@ -123,6 +145,41 @@ h1 {
 
 .graph-actions .mobile {
   display: none;
+}
+.pmtresp {
+  height: 100vh;
+  display: flex !important;
+  align-items: center !important;
+  background-color: rgb(230, 230, 230) !important;
+}
+.queryform {
+  padding: 32px;
+  border-radius: 10px;
+  background-color: white;
+  width: 450px;
+  box-shadow: 0 0 20px #00000010;
+}
+.euros {
+  font-size: 20px;
+
+  position: absolute;
+  left: 29%;
+  top: -2%;
+}
+.month {
+  /* position: absolute;
+  left: 62%;
+  top: 45%; */
+  font-size: 17px !important;
+}
+.rooot {
+  min-width: 275px;
+  box-shadow: 0 0 20px #00000010 !important;
+}
+
+.rooot:focus {
+  border: 5px solid rgb(133, 176, 229);
+  opacity: 1px;
 }
 
 @media screen and (max-width: 500px) {
@@ -173,7 +230,8 @@ h1 {
     border: 2px solid #000 !important;
     padding: 16px 32px 24px !important;
     position: absolute !important;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
     background-color: #fff !important;
     height: calc(100vh - 124px) !important;
     top: 49% !important;
@@ -185,7 +243,8 @@ h1 {
     border: 2px solid #000 !important;
     padding: 16px 32px 24px !important;
     position: absolute !important;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
     background-color: #fff !important;
     height: calc(100vh - 124px) !important;
     top: 49% !important;
@@ -197,7 +256,8 @@ h1 {
     border: 2px solid #000 !important;
     padding: 16px 32px 24px !important;
     position: absolute !important;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12) !important;
     background-color: #fff !important;
     height: calc(100vh - 124px) !important;
     top: 49% !important;
@@ -217,5 +277,22 @@ h1 {
   .graph-actions .mobile {
     display: flex;
     flex-direction: column;
+  }
+  .queryform {
+    padding: 32px;
+    border-radius: 10px;
+    background-color: white;
+    width: 390px;
+    box-shadow: 0 0 20px #00000010;
+  }
+  .pmtresp {
+    display: flex !important;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh !important;
+  }
+  .rooot {
+    min-width: 200px;
+    min-height: 280px;
   }
 }

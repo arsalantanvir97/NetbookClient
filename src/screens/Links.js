@@ -8,7 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import FilterResults from 'react-filter-search'
+
 import AddIcon from '@material-ui/icons/Add'
 import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
 
@@ -31,6 +31,7 @@ import {
 // import DeleteIcon from '@material-ui/icons/Delete'
 import { useDispatch, useSelector } from 'react-redux'
 import { OauthLogout } from '../actions/oauthAction'
+import { Link } from 'react-router-dom'
 import TagsInput from 'react-tagsinput'
 import './home.css'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
@@ -56,14 +57,22 @@ const Links = ({ history }) => {
   const [openAddEdge, setOpenAddEdge] = useState(false)
   const [haveupdateedge, setHaveupdateedge] = useState(false)
   const [haveupdatenode, setHaveupdatenode] = useState(false)
-
+  const [openimportview, setOpenimportview] = useState(false)
   const [tags, setTags] = useState([])
   // const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
+  const [payvisi, setPayvisi] = useState(false)
   const [id, setId] = useState('')
   const [updatenodeid, setUpdatenodeid] = useState('')
+  const [author, setAuthor] = useState('')
+  const [numberpublication, setNumberpublication] = useState(null)
+  const [numbercoauthor, setNumbercoauthor] = useState(null)
+  const [institution, setInstitution] = useState('')
+  const [limit, setLimit] = useState(null)
+
   const [updatenodetype, setUpdatenodetype] = useState('')
   const [updatenodetags, setUpdatenodetags] = useState([])
+  const [selectimport, setSelectimport] = useState([])
   const [updateinputfields, setUpdateinputfields] = useState([])
 
   const [haveedgedetails, setHaveedgedetails] = useState([])
@@ -82,6 +91,12 @@ const Links = ({ history }) => {
   const [searchdata, setSearchdata] = useState([])
   const [searchvalue, setSearchvalue] = useState('')
   const [filtereddata, setFiltereddata] = useState([])
+  const [apilabel, setApilabel] = useState([
+    'Google Scholar',
+    'Imdb',
+    'Twitter',
+    'Facebook',
+  ])
   const [updatesource, setUpdatesource] = useState('')
   const [updatetarget, setUpdatetarget] = useState('')
   const [updateedgetags, setUpdateedgetags] = useState([])
@@ -96,15 +111,29 @@ const Links = ({ history }) => {
   // const putNode = useSelector((state) => state.putNode)
   // const { loading, node, error: noderror } = putNode
   const getNode = useSelector((state) => state.getNode)
-  const { loading: nodeloading, nodde, error: errror } = getNode
+  const {
+    loading: nodeloading,
+    filterednode,
+    filterededge,
+    nodde,
+    error: errror,
+  } = getNode
   // const deleteNode = useSelector((state) => state.deleteNode)
   // const { loading: deletenodeloading, nodedelete, error: errrror } = deleteNode
 
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
+      console.log('oauth', oauth)
     }
   }, [])
+  useEffect(() => {
+    console.log('selectimport:', selectimport)
+  }, [selectimport])
+
+  useEffect(() => {
+    console.log('searchednode:', filterednode)
+  }, [filterednode])
 
   useEffect(() => {
     setUpdatenodeid(nodepopup?.id)
@@ -132,11 +161,17 @@ const Links = ({ history }) => {
   const updatetheedge = () => {
     setHaveupdateedge(true)
   }
+  const showimportview = () => {
+    setOpenimportview(true)
+  }
   const updatethenode = () => {
     setHaveupdatenode(true)
   }
   const handleOpenViewNode = () => {
     setOpenViewNode(true)
+  }
+  const handlepayvisi = () => {
+    setPayvisi(true)
   }
   const handleOpenAddEdge = () => {
     setOpenAddEdge(true)
@@ -152,6 +187,8 @@ const Links = ({ history }) => {
     setOpenViewEdge(false)
     setHaveupdateedge(false)
     setHaveupdatenode(false)
+    setOpenimportview(false)
+    setPayvisi(false)
   }
 
   function rand() {
@@ -175,6 +212,18 @@ const Links = ({ history }) => {
     paper: {
       position: 'absolute',
       width: innerWidth > 600 ? 600 : '100%',
+
+      backgroundColor: theme.palette.background.paper,
+      // border: '2px solid #000',
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      maxHeight: 'calc(100vh - 200px)',
+      overflow: 'auto !important',
+      top: '50%',
+    },
+    papper: {
+      position: 'absolute',
+      width: innerWidth > 600 ? 450 : '100%',
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
@@ -285,15 +334,25 @@ const Links = ({ history }) => {
   }
 
   const submitHandler = (e) => {
-    dispatch(NodeAdd(oauth?._id, id, type, tags, attributes))
+    e.preventDefault()
+    if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
+      dispatch(NodeAdd(oauth?._id, id, type, tags, attributes))
 
-    // dispatch(Nodefetch(oauth?._id))
+      // dispatch(Nodefetch(oauth?._id))
 
-    handleClose()
-    setId('')
-    setType('')
-    setTags([])
-    setInputfields([])
+      handleClose()
+      setId('')
+      setType('')
+      setTags([])
+      setInputfields([])
+    } else {
+      handlepayvisi()
+
+      setId('')
+      setType('')
+      setTags([])
+      setInputfields([])
+    }
   }
   const submitupdatenodehandler = (e) => {
     e.preventDefault()
@@ -318,12 +377,20 @@ const Links = ({ history }) => {
 
   const submitedgehandler = (e) => {
     e.preventDefault()
-    dispatch(EdgeAdd(oauth._id, source, target, edgetags))
-    // dispatch(Nodefetch(oauth._id))
-    handleClose()
-    setSource('')
-    setTarget('')
-    setEdgetags([])
+    if (nodde?.links?.length < oauth?.packageid?.Edges) {
+      dispatch(EdgeAdd(oauth._id, source, target, edgetags))
+      // dispatch(Nodefetch(oauth._id))
+      handleClose()
+      setSource('')
+      setTarget('')
+      setEdgetags([])
+    } else {
+      handlepayvisi()
+      // handleClose()
+      setSource('')
+      setTarget('')
+      setEdgetags([])
+    }
   }
   const submitupdateedgehandler = (e) => {
     e.preventDefault()
@@ -442,14 +509,18 @@ const Links = ({ history }) => {
         <Button type='button' onClick={handleclickfields} color='primary'>
           Add Attribute
         </Button>
+
         <Button type='submit' disabled={id === '' || type === ''}>
           <div>Add Node</div>
+        </Button>
+        <Button type='button' onClick={showimportview} color='primary'>
+          Import View
         </Button>
       </form>
     </div>
   )
   const boddy = (
-    <div style={modalStyle} className={classes.paper}>
+    <div style={modalStyle} className={classes.papper}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h2 id='simple-modal-title'>View Node</h2>
         <IconButton
@@ -881,11 +952,164 @@ const Links = ({ history }) => {
     </div>
   )
 
+  const boddddddddy = (
+    <div style={modalStyle} className={classes.paper}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 id='simple-modal-title'>Import View</h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
+
+      <form onSubmit={submitHandler}>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <FormControl
+              className={classes.formControl}
+              variant='outlined'
+              size='small'
+            >
+              <InputLabel id='demo-simple-select-label'>
+                Select import
+              </InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                value={selectimport}
+                onChange={(e) => setSelectimport(e.target.value)}
+              >
+                {apilabel.map((apilab) => (
+                  <MenuItem value={apilab}>{apilab}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          {selectimport === 'Google Scholar' && (
+            <>
+              <Grid item xs={12}>
+                <TextField
+                  style={{ color: 'black', width: '100%', marginTop: 9 }}
+                  id='outlined-basic'
+                  size='small'
+                  label='Author'
+                  value={author}
+                  onChange={(e) => setAuthor(e.target.value)}
+                  variant='outlined'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  style={{ color: 'black', width: '100%', marginTop: 9 }}
+                  id='outlined-basic'
+                  size='small'
+                  label='Institution'
+                  value={institution}
+                  onChange={(e) => setInstitution(e.target.value)}
+                  variant='outlined'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  style={{ color: 'black', width: '100%', marginTop: 9 }}
+                  id='outlined-basic'
+                  size='small'
+                  label='Limit'
+                  type='number'
+                  value={limit}
+                  onChange={(e) => setLimit(e.target.value)}
+                  variant='outlined'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  style={{ color: 'black', width: '100%', marginTop: 9 }}
+                  id='outlined-basic'
+                  size='small'
+                  label='Number Publication'
+                  type='number'
+                  value={numberpublication}
+                  onChange={(e) => setNumberpublication(e.target.value)}
+                  variant='outlined'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  style={{ color: 'black', width: '100%', marginTop: 9 }}
+                  id='outlined-basic'
+                  size='small'
+                  label='Number Coauthor'
+                  type='number'
+                  value={numbercoauthor}
+                  onChange={(e) => setNumberpublication(e.target.value)}
+                  variant='outlined'
+                />
+              </Grid>
+            </>
+          )}
+        </Grid>
+        <div style={{ height: 9 }}></div>
+        <div className='graph'>
+          {/* <Graph
+            id='graph-id' // id is mandatory
+            data={data}
+            config={myConfig}
+            onClickNode={onClickNode}
+            onClickLink={onClickLink}
+          /> */}
+        </div>
+
+        <div style={{ height: 9 }}></div>
+      </form>
+    </div>
+  )
+  const paymentbody = (
+    <div style={modalStyle} className={classes.paper}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 style={{ textAlign: 'center' }} id='simple-modal-title'>
+          Upgrade payment subscription
+        </h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Link to='/payment'>
+          <Button
+            style={{ backgroundColor: 'rgb(32, 32, 32)', color: 'white' }}
+          >
+            Upgrade
+          </Button>
+        </Link>
+        <Button
+          onClick={handleClose}
+          style={{ backgroundColor: 'rgb(32, 32, 32)', color: 'white' }}
+        >
+          Close
+        </Button>
+      </div>
+    </div>
+  )
+
+  console.log(
+    'data in nodes -->',
+    filterednode ? filterednode : nodde?.nodes ? nodde?.nodes : []
+  )
+
   const data = {
-    nodes: nodde?.nodes ? nodde?.nodes : filtereddata ? filtereddata : [],
-    links: nodde?.links ? nodde?.links : [],
+    nodes: filterednode ? filterednode : nodde?.nodes ? nodde?.nodes : [],
+    links: filterededge ? filterededge : nodde?.links ? nodde?.links : [],
     // { source: 'Harry', target: 'Sally' },
     // { source: 'Harry', target: 'Alice' },
+    // links: [],
   }
 
   const myConfig = {
@@ -953,7 +1177,7 @@ const Links = ({ history }) => {
           <Button onClick={handleOpen} variant='contained' color='primary'>
             Add Node
           </Button>
-          {nodde?.nodes.length > 1 ? (
+          {nodde?.nodes?.length > 1 ? (
             <Button
               onClick={handleOpenAddEdge}
               style={{ marginLeft: 10 }}
@@ -970,7 +1194,7 @@ const Links = ({ history }) => {
               <AddIcon />
             </Fab>
           </div>
-          {nodde?.nodes.length > 1 ? (
+          {nodde?.nodes?.length > 1 ? (
             <div>
               <Fab
                 onClick={handleOpenAddEdge}
@@ -993,7 +1217,7 @@ const Links = ({ history }) => {
           backgroundColor: 'rgba(230, 230, 230,1)',
         }}
       >
-        <Sidebar visible={visible} />
+        <Sidebar visible={visible} showimportview={showimportview} />
         <Modal
           open={open}
           onClose={handleClose}
@@ -1029,24 +1253,27 @@ const Links = ({ history }) => {
         >
           {bodddddy}
         </Modal>
-        <FilterResults
-          value={searchvalue}
-          data={searchdata}
-          renderResults={(results) => (
-            <div>
-              {results.map((data) => (
-                <>{setFiltereddata(data)}</>
-                // console.log('jji', filtereddata)
-              ))}
-            </div>
-          )}
-        />
+        <Modal
+          open={openimportview}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {boddddddddy}
+        </Modal>
+
         <Modal
           open={haveupdatenode}
           onClose={handleClose}
           aria-labelledby='simple-modal-title'
         >
           {bodddddddy}
+        </Modal>
+        <Modal
+          open={payvisi}
+          onClose={handleClose}
+          aria-labelledby='simple-modal-title'
+        >
+          {paymentbody}
         </Modal>
         {nodeloading ? (
           <div className={classes.rooot}>

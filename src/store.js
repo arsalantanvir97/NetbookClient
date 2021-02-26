@@ -1,10 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { getOauthReducer } from './reducers/oauthReducer'
+import { getOauthReducer, getAIQueriesReducer } from './reducers/oauthReducer'
 import {
   // putNodeReducer,
   getNodeReducer,
+
   // getEdgeReducer,
   // putEdgeReducer,
   // updateEdgeReducer,
@@ -16,6 +17,7 @@ const reducer = combineReducers({
   getOauth: getOauthReducer,
   // putNode: putNodeReducer,
   getNode: getNodeReducer,
+  getAIQueries: getAIQueriesReducer,
   // getEdge: getEdgeReducer,
   // putEdge: putEdgeReducer,
   // updateEdge: updateEdgeReducer,

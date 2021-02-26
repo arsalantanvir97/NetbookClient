@@ -8,6 +8,7 @@ import { OauthLogin } from '../actions/oauthAction'
 
 const Home = ({ history }) => {
   const dispatch = useDispatch()
+  const packageid = '602f94f28be78a84324eeb1a'
   const getOauth = useSelector((state) => state.getOauth)
   const { loading, oauth, error } = getOauth
   const resgoogle = (response) => {
@@ -29,7 +30,8 @@ const Home = ({ history }) => {
           response.profileObj.imageUrl,
           response.tokenObj.access_token,
           response.tokenObj.expires_in,
-          response.tokenObj.expires_at
+          response.tokenObj.expires_at,
+          packageid
         )
       )
       history.push('/graph')

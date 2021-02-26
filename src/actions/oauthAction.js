@@ -4,6 +4,9 @@ import {
   GET_OAUTH_LOGOUT,
   GET_OAUTH_REQUEST,
   GET_OAUTH_SUCCESS,
+  GET_AIQUERIES_REQUEST,
+  GET_AIQUERIES_SUCCESS,
+  GET_AIQUERIES_FAIL,
 } from '../constants/oauthConstant'
 export const OauthLogin = (
   name,
@@ -11,7 +14,8 @@ export const OauthLogin = (
   imageUrl,
   access_token,
   expires_in,
-  expires_at
+  expires_at,
+  packageid
 ) => async (dispatch) => {
   try {
     dispatch({
@@ -25,8 +29,16 @@ export const OauthLogin = (
     }
 
     const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/items',
-      { name, email, imageUrl, access_token, expires_in, expires_at },
+      'http://localhost:5000/items',
+      {
+        name,
+        email,
+        imageUrl,
+        access_token,
+        expires_in,
+        expires_at,
+        packageid,
+      },
       config
     )
 
@@ -48,4 +60,38 @@ export const OauthLogout = () => async (dispatch) => {
   dispatch({
     type: GET_OAUTH_LOGOUT,
   })
+}
+export const AIQueriesfetch = (id, query) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_AIQUERIES_REQUEST,
+    })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.post(
+      `http://localhost:5000/items/${id}`,
+      { query },
+      config
+    )
+
+    console.log('aiqueries', data)
+
+    // localStorage.setItem('useroauth', JSON.stringify(data))
+
+    dispatch({
+      type: GET_AIQUERIES_SUCCESS,
+      payload: data,
+    })
+    localStorage.setItem('useroauth', JSON.stringify(data))
+  } catch (error) {
+    dispatch({
+      type: GET_AIQUERIES_FAIL,
+      payload: error,
+    })
+  }
 }

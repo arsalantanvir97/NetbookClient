@@ -8,6 +8,12 @@ import Profile from './screens/Profile'
 import PrivateRoute from './components/PrivateRoute'
 import Import from './screens/Query'
 import Query from './screens/Query'
+import HomePage from './components/HomePage'
+import Payment from './screens/Payment'
+import { Elements } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+const stripePromise = loadStripe('pk_test_IdCqGO7sona7aWZqqiXTs3MN00vl1vkEQa')
+
 const App = () => {
   return (
     <Router>
@@ -16,6 +22,10 @@ const App = () => {
       <PrivateRoute path='/feed' component={FeedView} />
       <PrivateRoute path='/profile' component={Profile} />
       <PrivateRoute path='/query' component={Query} />
+      <PrivateRoute path='/payment' component={Payment} />
+      <Elements stripe={stripePromise}>
+        <Route path='/homepage' component={HomePage} />
+      </Elements>
     </Router>
   )
 }
