@@ -115,13 +115,22 @@ export const getNodeReducer = (state = {}, action) => {
         const abc = xxd.tags.map((s) => {
           return s.match(regex)
         })
-
         return !abc.every((element) => element === null)
       })
-      console.log('filteredge -- >', filter)
+      const filtersnode = state.nodde.nodes.filter((xi, index) => {
+        let flag = false
+        for (let item of filter) {
+          if (item.source === xi.id || item.target === xi.id) {
+            flag = true
+          }
+        }
+        return flag
+      })
+      console.log('filteredge -- >', filtersnode)
       return {
         ...state,
         filterededge: filter,
+        filterednode: filtersnode,
       }
 
     case CLEAR_NODE:
