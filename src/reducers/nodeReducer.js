@@ -103,20 +103,47 @@ export const getNodeReducer = (state = {}, action) => {
           return null
         }
       })
-      console.log('filtered -- >', filtered)
+      const filtersedge = state.nodde.links.filter((xi, index) => {
+        let flag1 = false
+        let flag2 = false
+        let flag = false
+        for (let item of filtered) {
+          if (xi.target === item.id) {
+            flag1 = true
+            console.log('abc', xi.target, item.id)
+          }
+          if (xi.source === item.id) {
+            flag2 = true
+            console.log('bcs', xi.source, item.id)
+          }
+          if (flag1 === true && flag2 === true) flag = true
+        }
+        return flag
+      })
+      console.log('filtered -- >', filtersedge)
       return {
         ...state,
         filterednode: filtered,
+        filterededge: filtersedge,
       }
 
     case SEARCH_EDGE_SUCCESS:
-      const filter = state.nodde.links.filter((xxd, ind) => {
+      console.log('filter edge', state.filterededge)
+      const filter = state.filterededge
+        ? state.filterededge
+        : state.nodde.links
+        ? state.nodde.links
+        : []
+      console.log('filter object', filter)
+      filter.filter((xxd, ind) => {
         const regex = new RegExp(`${action.payload}`, 'gi')
         const abc = xxd.tags.map((s) => {
           return s.match(regex)
         })
+        console.log('abc', abc)
         return !abc.every((element) => element === null)
       })
+      console.log('filtered result', filter)
       const filtersnode = state.nodde.nodes.filter((xi, index) => {
         let flag = false
         for (let item of filter) {
