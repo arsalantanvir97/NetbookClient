@@ -9,6 +9,7 @@ import {
   GET_EDGE_FAIL,
   SEARCH_EDGE_SUCCESS,
   GET_EDGE_REQUEST,
+  SEARCH_NODE_EDGE,
   GET_EDGE_SUCCESS,
   CLEAR_EDGE,
   CLEAR_NODE,
@@ -332,6 +333,17 @@ export const Searchnode = (text) => async (dispatch) => {
     console.log('error', error)
   }
 }
+export const Searchnodeedge = (text) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SEARCH_NODE_EDGE,
+      payload: text,
+    })
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
 export const Searchedge = (text) => async (dispatch) => {
   try {
     dispatch({

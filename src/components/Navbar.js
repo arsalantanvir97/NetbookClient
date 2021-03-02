@@ -13,6 +13,7 @@ import {
   Clearnode,
   Searchedge,
   Clearedge,
+  Searchnodeedge,
 } from '../actions/nodeAction'
 import { useDispatch, useSelector } from 'react-redux'
 const Navbar = (props) => {
@@ -89,13 +90,20 @@ const Navbar = (props) => {
   const classes = useStyles()
 
   const onChange = (e) => {
-    if (nodesearch.current.value !== '') {
+    if (e.nativeEvent.data === null) {
+      dispatch(Searchnodeedge())
+      console.log('delete')
+    } else if (nodesearch.current.value !== '') {
       dispatch(Searchnode(e.target.value))
     } else {
       dispatch(Clearnode())
     }
   }
   const onedgeChange = (e) => {
+    if (e.nativeEvent.data === null) {
+      dispatch(Searchnodeedge(e.target.value))
+      console.log('delete')
+    }
     if (edgesearch.current.value !== '') {
       dispatch(Searchedge(e.target.value))
     } else {
@@ -103,6 +111,24 @@ const Navbar = (props) => {
     }
   }
 
+  const onkeydownEdge = (e) => {
+    if (e.keyCode === 8) {
+      console.log('delete')
+    } else if (edgesearch.current.value !== '') {
+      dispatch(Searchedge(e.target.value))
+    } else {
+      dispatch(Clearedge())
+    }
+  }
+  const onkeydownNode = (e) => {
+    if (e.keyCode === 8) {
+      console.log('delete')
+    } else if (nodesearch.current.value !== '') {
+      dispatch(Searchnode(e.target.value))
+    } else {
+      dispatch(Clearnode())
+    }
+  }
   return (
     <>
       <nav
@@ -191,6 +217,7 @@ const Navbar = (props) => {
           type='text'
           ref={nodesearch}
           onChange={onChange}
+          // onKeyDown={onkeydownNode}
           // onChange={}
           size='small'
           variant='outlined'
@@ -216,6 +243,7 @@ const Navbar = (props) => {
           margin='normal'
           ref={edgesearch}
           onChange={onedgeChange}
+          // onKeyDown={onkeydownEdge}
           // onChange={}
           size='small'
           variant='outlined'
