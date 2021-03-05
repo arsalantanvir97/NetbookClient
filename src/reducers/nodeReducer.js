@@ -174,7 +174,7 @@ export const getNodeReducer = (state = {}, action) => {
       // const old = state.nodde.nodes
       // console.log('filter node', filtered)
       const filteredd = state.nodde.nodes.filter((xd) => {
-        const regex = new RegExp(`${action.payload}`, 'gi')
+        const regex = new RegExp(`${action.payload.text}`, 'gi')
         const abc = xd.id.match(regex)
         if (abc) {
           return abc
@@ -182,6 +182,7 @@ export const getNodeReducer = (state = {}, action) => {
           return null
         }
       })
+      console.log('actionpayload', action.payload)
       console.log('filteredd', filteredd)
       const filtersedgee = state.nodde.links.filter((xi, index) => {
         let flag1 = false
@@ -207,7 +208,7 @@ export const getNodeReducer = (state = {}, action) => {
         : []
       console.log('filter object', filterr)
       filterr = filterr.filter((xxd, ind) => {
-        const regex = new RegExp(`${action.payload}`, 'gi')
+        const regex = new RegExp(`${action.payload.texts}`, 'gi')
         const abc = xxd.tags.map((s) => {
           return s.match(regex)
         })
@@ -215,7 +216,12 @@ export const getNodeReducer = (state = {}, action) => {
         return !abc.every((element) => element === null)
       })
       console.log('filtered result', filterr)
-      const filtersnodee = filteredd.filter((xi, index) => {
+      const cde = filteredd
+        ? filteredd
+        : state.nodde.nodes
+        ? state.nodde.nodes
+        : []
+      const filtersnodee = cde.filter((xi, index) => {
         let flag = false
         for (let item of filterr) {
           if (item.source === xi.id || item.target === xi.id) {

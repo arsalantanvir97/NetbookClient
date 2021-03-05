@@ -30,6 +30,8 @@ const Navbar = (props) => {
 
   const nodesearch = useRef('')
   const edgesearch = useRef('')
+  const [edgeval, setEdgeval] = useState('')
+  const [nodeval, setNodeval] = useState('')
   const [vissible, setVissiblity] = useState(false)
   const [searchedge, setSearchedge] = useState('')
   const [checked, setChecked] = useState(true)
@@ -90,8 +92,13 @@ const Navbar = (props) => {
   const classes = useStyles()
 
   const onChange = (e) => {
+    nodesearch.current.value = e.target.value
+    console.log('1', nodesearch.current.value, edgesearch.current.value)
+
     if (e.nativeEvent.data === null) {
-      dispatch(Searchnodeedge())
+      dispatch(
+        Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
+      )
       console.log('delete')
     } else if (nodesearch.current.value !== '') {
       dispatch(Searchnode(e.target.value))
@@ -100,11 +107,14 @@ const Navbar = (props) => {
     }
   }
   const onedgeChange = (e) => {
+    edgesearch.current.value = e.target.value
+    console.log('2', nodesearch.current.value, edgesearch.current.value)
     if (e.nativeEvent.data === null) {
-      dispatch(Searchnodeedge(e.target.value))
+      dispatch(
+        Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
+      )
       console.log('delete')
-    }
-    if (edgesearch.current.value !== '') {
+    } else if (edgesearch.current.value !== '') {
       dispatch(Searchedge(e.target.value))
     } else {
       dispatch(Clearedge())

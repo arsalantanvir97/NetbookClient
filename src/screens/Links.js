@@ -47,6 +47,7 @@ import {
 } from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
 import Navbar from '../components/Navbar'
+import axios from 'axios'
 import Sidebar from '../components/Sidebar'
 
 const Links = ({ history }) => {
@@ -64,11 +65,11 @@ const Links = ({ history }) => {
   const [payvisi, setPayvisi] = useState(false)
   const [id, setId] = useState('')
   const [updatenodeid, setUpdatenodeid] = useState('')
-  const [author, setAuthor] = useState('')
-  const [numberpublication, setNumberpublication] = useState(null)
-  const [numbercoauthor, setNumbercoauthor] = useState(null)
-  const [institution, setInstitution] = useState('')
-  const [limit, setLimit] = useState(null)
+  const [author_data, setAuthor_data] = useState('')
+  const [institution_data, setInstitution_data] = useState('')
+  const [limit_data, setLimit_data] = useState(-1)
+  const [pubs_data, setPubs_data] = useState(-1)
+  const [co_author_data, setCo_author_data] = useState(-1)
 
   const [updatenodetype, setUpdatenodetype] = useState('')
   const [updatenodetags, setUpdatenodetags] = useState([])
@@ -90,6 +91,7 @@ const Links = ({ history }) => {
   const [edgetags, setEdgetags] = useState([])
   const [searchdata, setSearchdata] = useState([])
   const [searchvalue, setSearchvalue] = useState('')
+  // const [name, setName] = useState('')
   const [filtereddata, setFiltereddata] = useState([])
   const [apilabel, setApilabel] = useState([
     'Google Scholar',
@@ -127,6 +129,15 @@ const Links = ({ history }) => {
       console.log('oauth', oauth)
     }
   }, [])
+  // useEffect(() => {
+  //   const apires = async () => {
+  //     const { data } = await axios.get(
+  //       'https://smart-vampirebat-89.loca.lt/api'
+  //     )
+  //   }
+  //   console.log('apidata', data)
+  //   apires()
+  // })
   useEffect(() => {
     console.log('selectimport:', selectimport)
   }, [selectimport])
@@ -392,6 +403,47 @@ const Links = ({ history }) => {
       setEdgetags([])
     }
   }
+  const importviewHandler = async (e) => {
+    e.preventDefault()
+
+    console.log(
+      'respone',
+      author_data,
+      institution_data,
+      limit_data,
+      pubs_data,
+      co_author_data,
+      typeof author_data,
+      typeof institution_data,
+      typeof limit_data,
+      typeof pubs_data,
+      typeof co_author_data
+    )
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    }
+    const { data } = await axios.post(
+      'https://ancient-cobra-61.loca.lt/api/gs_search',
+      {
+        author_data,
+        institution_data,
+        limit_data,
+        pubs_data,
+        co_author_data,
+      },
+      config
+    )
+    console.log('importview api res', data, limit_data)
+    // const {
+    //   data,
+    // } = await axios.post('https://yellow-termite-80.loca.lt/api/none', { name })
+    // console.log('apireps', data)
+  }
+
   const submitupdateedgehandler = (e) => {
     e.preventDefault()
     dispatch(
@@ -533,7 +585,7 @@ const Links = ({ history }) => {
         </IconButton>
       </div>
       <Grid container>
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <p style={{ fontSize: 15 }}>
             Name:
             <span style={{ fontSize: 17, fontWeight: 500 }}>
@@ -542,7 +594,7 @@ const Links = ({ history }) => {
             </span>
           </p>
         </Grid>
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <p style={{ fontSize: 14 }}>
             Type:{' '}
             <span style={{ fontSize: 17, fontWeight: 500 }}>
@@ -966,7 +1018,7 @@ const Links = ({ history }) => {
         </IconButton>
       </div>
 
-      <form onSubmit={submitHandler}>
+      <form onSubmit={importviewHandler}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <FormControl
@@ -996,19 +1048,30 @@ const Links = ({ history }) => {
                   id='outlined-basic'
                   size='small'
                   label='Author'
-                  value={author}
-                  onChange={(e) => setAuthor(e.target.value)}
+                  value={author_data}
+                  onChange={(e) => setAuthor_data(e.target.value)}
                   variant='outlined'
                 />
               </Grid>
+              {/* <Grid item xs={12}>
+                <TextField
+                  style={{ color: 'black', width: '100%', marginTop: 9 }}
+                  id='outlined-basic'
+                  size='small'
+                  label='Name'
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  variant='outlined'
+                />
+              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   style={{ color: 'black', width: '100%', marginTop: 9 }}
                   id='outlined-basic'
                   size='small'
                   label='Institution'
-                  value={institution}
-                  onChange={(e) => setInstitution(e.target.value)}
+                  value={institution_data}
+                  onChange={(e) => setInstitution_data(e.target.value)}
                   variant='outlined'
                 />
               </Grid>
@@ -1019,8 +1082,8 @@ const Links = ({ history }) => {
                   size='small'
                   label='Limit'
                   type='number'
-                  value={limit}
-                  onChange={(e) => setLimit(e.target.value)}
+                  value={limit_data}
+                  onChange={(e) => setLimit_data(e.target.value)}
                   variant='outlined'
                 />
               </Grid>
@@ -1029,10 +1092,10 @@ const Links = ({ history }) => {
                   style={{ color: 'black', width: '100%', marginTop: 9 }}
                   id='outlined-basic'
                   size='small'
-                  label='Number Publication'
+                  label='Publications'
                   type='number'
-                  value={numberpublication}
-                  onChange={(e) => setNumberpublication(e.target.value)}
+                  value={pubs_data}
+                  onChange={(e) => setPubs_data(e.target.value)}
                   variant='outlined'
                 />
               </Grid>
@@ -1041,12 +1104,20 @@ const Links = ({ history }) => {
                   style={{ color: 'black', width: '100%', marginTop: 9 }}
                   id='outlined-basic'
                   size='small'
-                  label='Number Coauthor'
+                  label='Coauthor'
                   type='number'
-                  value={numbercoauthor}
-                  onChange={(e) => setNumberpublication(e.target.value)}
+                  value={co_author_data}
+                  onChange={(e) => setCo_author_data(e.target.value)}
                   variant='outlined'
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type='submit'
+                  disabled={author_data === '' || institution_data === ''}
+                >
+                  <div>Submit</div>
+                </Button>
               </Grid>
             </>
           )}

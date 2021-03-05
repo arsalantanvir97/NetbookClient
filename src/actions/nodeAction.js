@@ -333,11 +333,11 @@ export const Searchnode = (text) => async (dispatch) => {
     console.log('error', error)
   }
 }
-export const Searchnodeedge = (text) => async (dispatch) => {
+export const Searchnodeedge = (text = '', texts = '') => async (dispatch) => {
   try {
     dispatch({
       type: SEARCH_NODE_EDGE,
-      payload: text,
+      payload: { text: text, texts: texts },
     })
   } catch (error) {
     console.log('error', error)
