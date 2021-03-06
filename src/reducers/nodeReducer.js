@@ -169,73 +169,88 @@ export const getNodeReducer = (state = {}, action) => {
         filterednode: filtersnode,
       }
     case SEARCH_NODE_EDGE:
+      let nodesdata = state.nodde.nodes
+      let edgesdata = state.nodde.links
       // console.log('filtered node', state.filterednode)
 
       // const old = state.nodde.nodes
       // console.log('filter node', filtered)
-      const filteredd = state.nodde.nodes.filter((xd) => {
-        const regex = new RegExp(`${action.payload.text}`, 'gi')
-        const abc = xd.id.match(regex)
-        if (abc) {
-          return abc
-        } else {
-          return null
-        }
-      })
-      console.log('actionpayload', action.payload)
-      console.log('filteredd', filteredd)
-      const filtersedgee = state.nodde.links.filter((xi, index) => {
-        let flag1 = false
-        let flag2 = false
-        let flag = false
-        for (let item of filteredd) {
-          if (xi.target === item.id) {
-            flag1 = true
-            // console.log('abc', xi.target, item.id)
+      if (action.payload.text !== '') {
+        console.log('first action')
+        const filteredd = state.nodde.nodes.filter((xd) => {
+          const regex = new RegExp(`${action.payload.text}`, 'gi')
+          const abc = xd.id.match(regex)
+          if (abc) {
+            return abc
+          } else {
+            return null
           }
-          if (xi.source === item.id) {
-            flag2 = true
-            // console.log('bcs', xi.source, item.id)
-          }
-          if (flag1 === true && flag2 === true) flag = true
-        }
-        return flag
-      })
-      let filterr = filtersedgee
-        ? filtersedgee
-        : state.nodde.links
-        ? state.nodde.links
-        : []
-      console.log('filter object', filterr)
-      filterr = filterr.filter((xxd, ind) => {
-        const regex = new RegExp(`${action.payload.texts}`, 'gi')
-        const abc = xxd.tags.map((s) => {
-          return s.match(regex)
         })
-        console.log('abc', abc)
-        return !abc.every((element) => element === null)
-      })
-      console.log('filtered result', filterr)
-      const cde = filteredd
-        ? filteredd
-        : state.nodde.nodes
-        ? state.nodde.nodes
-        : []
-      const filtersnodee = cde.filter((xi, index) => {
-        let flag = false
-        for (let item of filterr) {
-          if (item.source === xi.id || item.target === xi.id) {
-            flag = true
+        nodesdata = filteredd
+        console.log('actionpayload', action.payload)
+        console.log('filteredd', nodesdata)
+        const filtersedgee = state.nodde.links.filter((xi, index) => {
+          let flag1 = false
+          let flag2 = false
+          let flag = false
+          for (let item of filteredd) {
+            if (xi.target === item.id) {
+              flag1 = true
+              // console.log('abc', xi.target, item.id)
+            }
+            if (xi.source === item.id) {
+              flag2 = true
+              // console.log('bcs', xi.source, item.id)
+            }
+            if (flag1 === true && flag2 === true) flag = true
           }
-        }
-        return flag
-      })
-      console.log('filternode -- >', filtersnodee)
-      console.log('filtered -- >', filtersedgee)
+          return flag
+        })
+        edgesdata = filtersedgee
+        console.log('filtered edge', edgesdata)
+      }
+      if (action.payload.texts !== '') {
+        console.log('second action')
+        let filterr = edgesdata
+          ? edgesdata
+          : state.nodde.links
+          ? state.nodde.links
+          : []
+        console.log('filter object', filterr)
+        filterr = filterr.filter((xxd, ind) => {
+          const regex = new RegExp(`${action.payload.texts}`, 'gi')
+          const abc = xxd.tags.map((s) => {
+            return s.match(regex)
+          })
+          console.log('abc', abc)
+          return !abc.every((element) => element === null)
+        })
+        console.log('filtered result', filterr)
+        edgesdata = filterr
+        console.log('edgesdata', edgesdata)
+        console.log('actionpaaylaod2', action.payload)
+        const cde = nodesdata
+          ? nodesdata
+          : state.nodde.nodes
+          ? state.nodde.nodes
+          : []
+        const filtersnodee = cde.filter((xi, index) => {
+          let flag = false
+          for (let item of filterr) {
+            if (item.source === xi.id || item.target === xi.id) {
+              flag = true
+            }
+          }
+          return flag
+        })
+        console.log('filtered -- >', edgesdata)
+        nodesdata = filtersnodee
+        console.log('filternode -- >', nodesdata)
+      }
       return {
         ...state,
-        filterednode: filtersnodee,
-        filterededge: filterr,
+        filterednode: nodesdata,
+        filterededge: edgesdata,
       }
 
     case CLEAR_NODE:
