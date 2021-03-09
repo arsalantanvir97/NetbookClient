@@ -6,6 +6,8 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 import TuneIcon from '@material-ui/icons/Tune'
 import Checkbox from '@material-ui/core/Checkbox'
+import Alert from '@material-ui/lab/Alert'
+
 import { GoogleLogout } from 'react-google-login'
 import './../screens/home.css'
 import {
@@ -14,6 +16,8 @@ import {
   Searchedge,
   Clearedge,
   Searchnodeedge,
+  Searchedgeand,
+  Searchnodeand,
 } from '../actions/nodeAction'
 import { useDispatch, useSelector } from 'react-redux'
 const Navbar = (props) => {
@@ -34,7 +38,10 @@ const Navbar = (props) => {
   const [nodeval, setNodeval] = useState('')
   const [vissible, setVissiblity] = useState(false)
   const [searchedge, setSearchedge] = useState('')
+  const [msgg, setMsgg] = useState('')
+  const [msggg, setMsggg] = useState('')
   const [checked, setChecked] = useState(true)
+  const [checker, setChecker] = useState(false)
   const dispatch = useDispatch()
   useEffect(() => {
     if (filterednode === null) {
@@ -58,6 +65,15 @@ const Navbar = (props) => {
       maxHeight: 'calc(100vh - 200px)',
       overflow: 'auto !important',
       top: '50%',
+    },
+    alertroot: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      marginTop: theme.spacing(2),
+      position: 'fixed',
+      top: '20%',
+      left: '25%',
     },
     multilineColor: {
       color: 'white',
@@ -94,13 +110,35 @@ const Navbar = (props) => {
   const onChange = (e) => {
     nodesearch.current.value = e.target.value
     console.log('1', nodesearch.current.value, edgesearch.current.value)
+    let namess = nodesearch.current.value
+    let node1
+    let node2
+    let numnod
+    if (namess.includes('^')) {
+      var charRepeats = function (str) {
+        return (numnod = (str.match(/\^/g) || []).length)
+      }
+      charRepeats(namess)
+      console.log('numnod', numnod)
+      if (numnod > 1) {
+        setMsgg('You can only type ^ once')
 
-    if (e.nativeEvent.data === null) {
+        console.log('abbc')
+      }
+      node1 = namess.split('^')[0]
+      node2 = namess.split('^')[1]
+
+      dispatch(Searchnodeand(node1, node2))
+      console.log('names', node1, node2)
+    } else if (e.nativeEvent.data === null) {
       dispatch(
         Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
       )
       console.log('delete')
-    } else if (nodesearch.current.value !== '') {
+    } else if (
+      nodesearch.current.value !== '' &&
+      !nodesearch.current.value.includes('^')
+    ) {
       dispatch(Searchnode(e.target.value))
     } else {
       dispatch(Clearnode())
@@ -109,12 +147,36 @@ const Navbar = (props) => {
   const onedgeChange = (e) => {
     edgesearch.current.value = e.target.value
     console.log('2', nodesearch.current.value, edgesearch.current.value)
+    let names = edgesearch.current.value
+    let edge1
+    let edge2
+    let numedg
+    if (names.includes('^')) {
+      var charRepeats = function (str) {
+        return (numedg = (str.match(/\^/g) || []).length)
+      }
+      charRepeats(names)
+      console.log('numedg', numedg)
+      if (numedg > 1) {
+        setMsgg('You can only type ^ once')
+
+        console.log('abbc')
+      }
+      edge1 = names.split('^')[0]
+      edge2 = names.split('^')[1]
+
+      dispatch(Searchedgeand(edge1, edge2))
+      console.log('names', edge1, edge2)
+    }
     if (e.nativeEvent.data === null) {
       dispatch(
         Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
       )
       console.log('delete')
-    } else if (edgesearch.current.value !== '') {
+    } else if (
+      edgesearch.current.value !== '' &&
+      !edgesearch.current.value.includes('^')
+    ) {
       dispatch(Searchedge(e.target.value))
     } else {
       dispatch(Clearedge())
@@ -212,6 +274,9 @@ const Navbar = (props) => {
           ></GoogleLogout>
         </div>
       </nav>
+      <div className={classes.alertroot}>
+        {msgg ? <Alert severity='error'>{msgg}</Alert> : null}
+      </div>
       <div className={vissible ? 'showsearchbars' : 'hidesearchbars'}>
         {' '}
         <TextField
@@ -253,6 +318,7 @@ const Navbar = (props) => {
           margin='normal'
           ref={edgesearch}
           onChange={onedgeChange}
+          disabled={checker}
           // onKeyDown={onkeydownEdge}
           // onChange={}
           size='small'

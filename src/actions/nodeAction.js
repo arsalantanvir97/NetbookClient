@@ -9,6 +9,7 @@ import {
   GET_EDGE_FAIL,
   SEARCH_EDGE_SUCCESS,
   GET_EDGE_REQUEST,
+  SEARCH_NODE_AND,
   SEARCH_NODE_EDGE,
   GET_EDGE_SUCCESS,
   CLEAR_EDGE,
@@ -21,6 +22,7 @@ import {
   GET_AIQUERIES_FAIL,
   SEARCH_NODE_SUCCESS,
   UPDATE_EDGE_SUCCESS,
+  SEARCH_EDGE_AND,
   UPDATE_EDGE_REQUEST,
   UPDATE_EDGE_FAIL,
   UPDATE_NODE_SUCCESS,
@@ -339,6 +341,7 @@ export const Searchnodeedge = (text = '', texts = '') => async (dispatch) => {
       type: SEARCH_NODE_EDGE,
       payload: { text: text, texts: texts },
     })
+    console.log('heeeel')
   } catch (error) {
     console.log('error', error)
   }
@@ -355,6 +358,39 @@ export const Searchedge = (text) => async (dispatch) => {
     console.log('error', error)
   }
 }
+export const Searchedgeand = (edgeand1 = '', edgeand2 = '') => async (
+  dispatch
+) => {
+  try {
+    dispatch({
+      type: SEARCH_EDGE_AND,
+      payload: {
+        edgeand1: edgeand1,
+        edgeand2: edgeand2,
+      },
+    })
+    console.log('payloaddd', edgeand1, edgeand2)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+export const Searchnodeand = (nodeand1 = '', nodeand2 = '') => async (
+  dispatch
+) => {
+  try {
+    dispatch({
+      type: SEARCH_NODE_AND,
+      payload: {
+        nodeand1: nodeand1,
+        nodeand2: nodeand2,
+      },
+    })
+    console.log('payloaddd', nodeand1, nodeand2)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
 export const Clearnode = () => async (dispatch) => {
   dispatch({
     type: CLEAR_NODE,

@@ -1,3 +1,4 @@
+import { indigo } from '@material-ui/core/colors'
 import {
   GET_NODE_FAIL,
   GET_NODE_REQUEST,
@@ -16,6 +17,8 @@ import {
   SEARCH_EDGE_SUCCESS,
   SEARCH_NODE_FAIL,
   SEARCH_NODE_REQUEST,
+  SEARCH_EDGE_AND,
+  SEARCH_NODE_AND,
   SEARCH_NODE_SUCCESS,
   SEARCH_EDGE_FAIL,
   HAVE_EDGE_REQUEST,
@@ -167,6 +170,111 @@ export const getNodeReducer = (state = {}, action) => {
         ...state,
         filterededge: filter,
         filterednode: filtersnode,
+      }
+    case SEARCH_NODE_AND:
+      // console.log('filtered node', state.filterednode)
+      let filternodeee = state.filterednode
+        ? state.filterednode
+        : state.nodde.nodes
+        ? state.nodde.nodes
+        : []
+
+      // const old = state.nodde.nodes
+      // console.log('filter node', filtered)
+      if (action.payload.nodeand1 !== '') {
+        filternodeee = filternodeee.filter((xd) => {
+          const regex = new RegExp(`${action.payload.nodeand1}`, 'gi')
+          const abc = xd.id.match(regex)
+          if (abc) {
+            return abc
+          } else {
+            return null
+          }
+        })
+      }
+      if (action.payload.nodeand2 !== '') {
+        filternodeee = filternodeee.filter((xd) => {
+          const regex = new RegExp(`${action.payload.nodeand2}`, 'gi')
+          const abc = xd.id.match(regex)
+          if (abc) {
+            return abc
+          } else {
+            return null
+          }
+        })
+      }
+      const filtersssedge = state.nodde.links.filter((xi, index) => {
+        let flag1 = false
+        let flag2 = false
+        let flag = false
+        for (let item of filternodeee) {
+          if (xi.target === item.id) {
+            flag1 = true
+            // console.log('abc', xi.target, item.id)
+          }
+          if (xi.source === item.id) {
+            flag2 = true
+            // console.log('bcs', xi.source, item.id)
+          }
+          if (flag1 === true && flag2 === true) flag = true
+        }
+        return flag
+      })
+      console.log('filtered -- >', filtersssedge)
+      return {
+        ...state,
+        filterednode: filternodeee,
+        filterededge: filtersssedge,
+      }
+
+    case SEARCH_EDGE_AND:
+      console.log('filter edge', state.filterededge)
+      let filterss = state.filterededge
+        ? state.filterededge
+        : state.nodde.links
+        ? state.nodde.links
+        : []
+      console.log('filter object', filterss)
+      if (action.payload.edgeand1 !== '') {
+        filterss = filterss.filter((xxd, ind) => {
+          const regex = new RegExp(`${action.payload.edgeand1}`, 'gi')
+          const abc = xxd.tags.map((s) => {
+            return s.match(regex)
+          })
+          console.log('actionpayloaddd', action.payload)
+          console.log('abc', abc)
+          return !abc.every((element) => element === null)
+        })
+        console.log('filtered resultt', filterss)
+      }
+      if (action.payload.edgeand2 !== '') {
+        filterss = filterss.filter((xxd, ind) => {
+          const regex = new RegExp(`${action.payload.edgeand2}`, 'gi')
+          const abc = xxd.tags.map((s) => {
+            return s.match(regex)
+          })
+          console.log('abc', abc)
+          return !abc.every((element) => element === null)
+        })
+        console.log('actionpayloaddd2', action.payload)
+      }
+      console.log('filtered result2', filterss)
+      const filtersnodee = state.nodde.nodes.filter((xi, index) => {
+        let flag = false
+        for (let item of filterss) {
+          if (item.source === xi.id || item.target === xi.id) {
+            flag = true
+          }
+        }
+        return flag
+      })
+      console.log('filternode -- >', filtersnodee)
+      console.log('filteredddd', filterss, filtersnodee)
+
+      return {
+        ...state,
+        filterededge: filterss,
+        filterednode: filtersnodee,
       }
     case SEARCH_NODE_EDGE:
       let nodesdata = state.nodde.nodes
