@@ -826,7 +826,10 @@ const Links = ({ history }) => {
           value={edgetags}
           onChange={handleChanges}
         />
-        <Button type='submit' disabled={source === '' || target === ''}>
+        <Button
+          type='submit'
+          disabled={source === '' || target === '' || edgetags?.length <= 0}
+        >
           <div>Add Edge</div>
         </Button>
       </form>
@@ -891,7 +894,11 @@ const Links = ({ history }) => {
         />
         <Button
           type='submit'
-          disabled={updatesource === '' || updatetarget === ''}
+          disabled={
+            updatesource === '' ||
+            updatetarget === '' ||
+            updateedgetags?.length <= 0
+          }
         >
           <div>Edit Edge</div>
         </Button>

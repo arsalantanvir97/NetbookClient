@@ -5,6 +5,7 @@ import {
   GET_NODE_SUCCESS,
   HAVE_NODE_FAIL,
   HAVE_NODE_SUCCESS,
+  SEARCH_EDGE_OR,
   HAVE_NODE_REQUEST,
   GET_EDGE_FAIL,
   SEARCH_EDGE_SUCCESS,
@@ -370,6 +371,22 @@ export const Searchedgeand = (edgeand1 = '', edgeand2 = '') => async (
       },
     })
     console.log('payloaddd', edgeand1, edgeand2)
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+export const Searchedgeor = (edgeor1 = '', edgeor2 = '') => async (
+  dispatch
+) => {
+  try {
+    dispatch({
+      type: SEARCH_EDGE_OR,
+      payload: {
+        edgeor1: edgeor1,
+        edgeor2: edgeor2,
+      },
+    })
+    console.log('payloaddd', edgeor1, edgeor2)
   } catch (error) {
     console.log('error', error)
   }

@@ -18,6 +18,7 @@ import {
   Searchnodeedge,
   Searchedgeand,
   Searchnodeand,
+  Searchedgeor,
 } from '../actions/nodeAction'
 import { useDispatch, useSelector } from 'react-redux'
 const Navbar = (props) => {
@@ -39,6 +40,7 @@ const Navbar = (props) => {
   const [vissible, setVissiblity] = useState(false)
   const [searchedge, setSearchedge] = useState('')
   const [msgg, setMsgg] = useState('')
+
   const [msggg, setMsggg] = useState('')
   const [checked, setChecked] = useState(true)
   const [checker, setChecker] = useState(false)
@@ -168,6 +170,26 @@ const Navbar = (props) => {
       dispatch(Searchedgeand(edge1, edge2))
       console.log('names', edge1, edge2)
     }
+    if (names.includes('|')) {
+      var charRepeats = function (str) {
+        return (numedg = (str.match(/\|/g) || []).length)
+      }
+      charRepeats(names)
+      console.log('numedg', numedg)
+      if (numedg > 1) {
+        setMsggg('You can only type | once')
+
+        console.log('abbbc')
+      }
+      edge1 = names.split('|')[0]
+      edge2 = names.split('|')[1]
+
+      if (!!edge1 && !!edge2) {
+        dispatch(Searchedgeor(edge1, edge2))
+      }
+      console.log('namesss', edge1, edge2)
+    }
+
     if (e.nativeEvent.data === null) {
       dispatch(
         Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
@@ -175,11 +197,12 @@ const Navbar = (props) => {
       console.log('delete')
     } else if (
       edgesearch.current.value !== '' &&
-      !edgesearch.current.value.includes('^')
+      !edgesearch.current.value.includes('^') &&
+      !edgesearch.current.value.includes('|')
     ) {
       dispatch(Searchedge(e.target.value))
     } else {
-      dispatch(Clearedge())
+      // dispatch(Clearedge())
     }
   }
 

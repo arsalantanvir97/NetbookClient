@@ -10,6 +10,7 @@ import {
   SEARCH_NODE_EDGE,
   GET_EDGE_FAIL,
   GET_EDGE_REQUEST,
+  SEARCH_EDGE_OR,
   CLEAR_NODE,
   GET_EDGE_SUCCESS,
   HAVE_EDGE_FAIL,
@@ -276,6 +277,81 @@ export const getNodeReducer = (state = {}, action) => {
         filterededge: filterss,
         filterednode: filtersnodee,
       }
+    case SEARCH_EDGE_OR:
+      console.log('filterss edges', state.filterededge)
+      let edgesorof1 = null
+      let edgesorof2 = null
+      let nodesoforedges = null
+      let ornewedges = null
+      let filtereds = state.filterededge
+        ? state.filterededge
+        : state.nodde.links
+        ? state.nodde.links
+        : []
+      console.log('filterss objects', filtereds)
+      if (action.payload.edgeor1 !== '') {
+        edgesorof1 = state.nodde.links.filter((xxd, ind) => {
+          const regex = new RegExp(`${action.payload.edgeor1}`, 'gi')
+          const abc = xxd.tags.map((s) => {
+            return s.match(regex)
+          })
+          console.log('actionpayload of edge or', action.payload)
+          console.log('abc', abc)
+          return !abc.every((element) => element === null)
+        })
+        console.log('filterd result of edgeor1', edgesorof1)
+      }
+      if (action.payload.edgeor2 !== '') {
+        edgesorof2 = state.nodde.links.filter((xxd, ind) => {
+          const regex = new RegExp(`${action.payload.edgeor2}`, 'gi')
+          const abc = xxd.tags.map((s) => {
+            return s.match(regex)
+          })
+          console.log('abc', abc)
+          return !abc.every((element) => element === null)
+        })
+        console.log('actionpayloaddd2', action.payload)
+      }
+      console.log('filtered result2', edgesorof2)
+      if (action.payload.edgeor1 !== '' && action.payload.edgeor2 !== '') {
+        ornewedges = [...edgesorof1, ...edgesorof2]
+        console.log('ornewedges', ornewedges)
+      }
+
+      // if (ornewedges !== null && edgesorof1 !== null && edgesorof2 !== null) {
+      //   console.log('first')
+      //   nodesoforedges = [...ornewedges]
+      //   return nodesoforedges
+      // }
+      // if (ornewedges === null && edgesorof1 === null && edgesorof2 !== null) {
+      //   console.log('second')
+      //   nodesoforedges = [...edgesorof2]
+      //   return nodesoforedges
+      // }
+      // if (ornewedges === null && edgesorof2 === null && edgesorof1 !== null) {
+      //   console.log('third')
+      //   nodesoforedges = [...edgesorof1]
+      //   return nodesoforedges
+      // }
+      console.log('ornewedges', ornewedges)
+      const filtersnodees = state.nodde.nodes.filter((xi, index) => {
+        let flag = false
+        for (let item of ornewedges) {
+          if (item.source === xi.id || item.target === xi.id) {
+            flag = true
+          }
+        }
+        return flag
+      })
+      console.log('filternode -- >', filtersnodees)
+      console.log('filteredddd', ornewedges, edgesorof2, edgesorof1)
+
+      return {
+        ...state,
+        filterededge: ornewedges,
+        filterednode: filtersnodees,
+      }
+
     case SEARCH_NODE_EDGE:
       let nodesdata = state.nodde.nodes
       let edgesdata = state.nodde.links
