@@ -4,6 +4,7 @@ import {
   GET_NODE_REQUEST,
   GET_NODE_SUCCESS,
   HAVE_NODE_REQUEST,
+  SEARCH_NODE_OR,
   CLEAR_EDGE,
   HAVE_NODE_SUCCESS,
   HAVE_NODE_FAIL,
@@ -276,6 +277,79 @@ export const getNodeReducer = (state = {}, action) => {
         ...state,
         filterededge: filterss,
         filterednode: filtersnodee,
+      }
+    case SEARCH_NODE_OR:
+      // console.log('filtered node', state.filterednode)
+      let filternodeees = state.filterednode
+        ? state.filterednode
+        : state.nodde.nodes
+        ? state.nodde.nodes
+        : []
+      let nodesorof1 = null
+      let nodesorof2 = null
+      let ornewnodes = null
+      // const old = state.nodde.nodes
+      // console.log('filter node', filtered)
+      if (action.payload.nodeor1 !== '') {
+        nodesorof1 = state.nodde.nodes.filter((xd) => {
+          const regex = new RegExp(`${action.payload.nodeor1}`, 'gi')
+          const abc = xd.id.match(regex)
+          console.log('actionpayload of node or', action.payload)
+          if (abc) {
+            return abc
+          } else {
+            return null
+          }
+        })
+        console.log('filterd result of edgeor1', nodesorof1)
+      }
+
+      if (action.payload.nodeor2 !== '') {
+        nodesorof2 = state.nodde.nodes.filter((xd) => {
+          const regex = new RegExp(`${action.payload.nodeor2}`, 'gi')
+          const abc = xd.id.match(regex)
+
+          console.log('actionpayload of nodeor2', action.payload)
+          if (abc) {
+            return abc
+          } else {
+            return null
+          }
+        })
+        console.log('filterd result of edgeor1', nodesorof2)
+      }
+      if (action.payload.nodeor1 !== '' && action.payload.nodeor2 !== '') {
+        ornewnodes = [...nodesorof1, ...nodesorof2]
+        console.log('ornewnodes', ornewnodes)
+      }
+      const filtersssedges = state.nodde.links.filter((xi, index) => {
+        let flag1 = false
+        let flag2 = false
+        let flag = false
+        for (let item of ornewnodes) {
+          if (xi.target === item.id) {
+            flag1 = true
+            // console.log('abc', xi.target, item.id)
+          }
+          if (xi.source === item.id) {
+            flag2 = true
+            // console.log('bcs', xi.source, item.id)
+          }
+          if (flag1 === true && flag2 === true) flag = true
+        }
+        return flag
+      })
+      console.log(
+        'filtered -- >',
+        filtersssedges,
+        ornewnodes,
+        nodesorof1,
+        nodesorof2
+      )
+      return {
+        ...state,
+        filterednode: ornewnodes,
+        filterededge: filtersssedges,
       }
     case SEARCH_EDGE_OR:
       console.log('filterss edges', state.filterededge)

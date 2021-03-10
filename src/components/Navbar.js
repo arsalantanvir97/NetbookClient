@@ -19,6 +19,7 @@ import {
   Searchedgeand,
   Searchnodeand,
   Searchedgeor,
+  Searchnodeor,
 } from '../actions/nodeAction'
 import { useDispatch, useSelector } from 'react-redux'
 const Navbar = (props) => {
@@ -132,6 +133,25 @@ const Navbar = (props) => {
 
       dispatch(Searchnodeand(node1, node2))
       console.log('names', node1, node2)
+    }
+    if (namess.includes('|')) {
+      var charRepeats = function (str) {
+        return (numnod = (str.match(/\|/g) || []).length)
+      }
+      charRepeats(namess)
+      console.log('numnod', numnod)
+      if (numnod > 1) {
+        setMsggg('You can only type | once')
+
+        console.log('abbbc')
+      }
+      node1 = namess.split('|')[0]
+      node2 = namess.split('|')[1]
+
+      if (!!node1 && !!node2) {
+        dispatch(Searchnodeor(node1, node2))
+      }
+      console.log('namesss', node1, node2)
     } else if (e.nativeEvent.data === null) {
       dispatch(
         Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
@@ -143,7 +163,7 @@ const Navbar = (props) => {
     ) {
       dispatch(Searchnode(e.target.value))
     } else {
-      dispatch(Clearnode())
+      // dispatch(Clearnode())
     }
   }
   const onedgeChange = (e) => {
