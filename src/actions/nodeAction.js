@@ -384,7 +384,7 @@ export const Searchedgeor = (edgeor1 = '', edgeor2 = '', checked) => async (
 ) => {
   try {
     dispatch({
-      type: SEARCH_NODE_OR,
+      type: SEARCH_EDGE_OR,
       payload: {
         edgeor1: edgeor1,
         edgeor2: edgeor2,

@@ -414,10 +414,19 @@ export const getNodeReducer = (state = {}, action) => {
         nodesorof1,
         nodesorof2
       )
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          ornewnodes
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+      }
       return {
         ...state,
-        filterednode: ornewnodes,
-        filterededge: filtersssedges,
+        filterednode: action.payload.checked ? checkedNodeData : ornewnodes,
+        filterededge: action.payload.checked ? checkedEdgeData : filtersssedges,
       }
     case SEARCH_EDGE_OR:
       console.log('filterss edges', state.filterededge)
@@ -487,11 +496,19 @@ export const getNodeReducer = (state = {}, action) => {
       })
       console.log('filternode -- >', filtersnodees)
       console.log('filteredddd', ornewedges, edgesorof2, edgesorof1)
-
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          filtersnodees
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+      }
       return {
         ...state,
-        filterededge: ornewedges,
-        filterednode: filtersnodees,
+        filterededge: action.payload.checked ? checkedEdgeData : ornewedges,
+        filterednode: action.payload.checked ? checkedNodeData : filtersnodees,
       }
 
     case SEARCH_NODE_EDGE:
@@ -573,10 +590,20 @@ export const getNodeReducer = (state = {}, action) => {
         nodesdata = filtersnodee
         console.log('filternode -- >', nodesdata)
       }
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          nodesdata
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+      }
+
       return {
         ...state,
-        filterednode: nodesdata,
-        filterededge: edgesdata,
+        filterednode: action.payload.checked ? checkedNodeData : nodesdata,
+        filterededge: action.payload.checked ? checkedEdgeData : edgesdata,
       }
 
     case CLEAR_NODE:
