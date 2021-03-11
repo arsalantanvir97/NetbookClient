@@ -43,7 +43,7 @@ const Navbar = (props) => {
   const [msgg, setMsgg] = useState('')
 
   const [msggg, setMsggg] = useState('')
-  const [checked, setChecked] = useState(true)
+  const [checked, setChecked] = useState(false)
   const [checker, setChecker] = useState(false)
   const dispatch = useDispatch()
   useEffect(() => {
@@ -56,6 +56,9 @@ const Navbar = (props) => {
       edgesearch.current.value = ''
     }
   })
+  useEffect(() => {
+    console.log('checked', checked)
+  }, [checked])
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
@@ -131,7 +134,7 @@ const Navbar = (props) => {
       node1 = namess.split('^')[0]
       node2 = namess.split('^')[1]
 
-      dispatch(Searchnodeand(node1, node2))
+      dispatch(Searchnodeand(node1, node2,checked))
       console.log('names', node1, node2)
     }
     if (namess.includes('|')) {
@@ -149,19 +152,19 @@ const Navbar = (props) => {
       node2 = namess.split('|')[1]
 
       if (!!node1 && !!node2) {
-        dispatch(Searchnodeor(node1, node2))
+        dispatch(Searchnodeor(node1, node2,checked))
       }
       console.log('namesss', node1, node2)
     } else if (e.nativeEvent.data === null) {
       dispatch(
-        Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
+        Searchnodeedge(nodesearch.current.value, edgesearch.current.value,checked)
       )
       console.log('delete')
     } else if (
       nodesearch.current.value !== '' &&
       !nodesearch.current.value.includes('^')
     ) {
-      dispatch(Searchnode(e.target.value))
+      dispatch(Searchnode(e.target.value,checked))
     } else {
       // dispatch(Clearnode())
     }
@@ -187,7 +190,7 @@ const Navbar = (props) => {
       edge1 = names.split('^')[0]
       edge2 = names.split('^')[1]
 
-      dispatch(Searchedgeand(edge1, edge2))
+      dispatch(Searchedgeand(edge1, edge2,checked))
       console.log('names', edge1, edge2)
     }
     if (names.includes('|')) {
@@ -205,14 +208,14 @@ const Navbar = (props) => {
       edge2 = names.split('|')[1]
 
       if (!!edge1 && !!edge2) {
-        dispatch(Searchedgeor(edge1, edge2))
+        dispatch(Searchedgeor(edge1, edge2,checked))
       }
       console.log('namesss', edge1, edge2)
     }
 
     if (e.nativeEvent.data === null) {
       dispatch(
-        Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
+        Searchnodeedge(nodesearch.current.value, edgesearch.current.value,checked)
       )
       console.log('delete')
     } else if (
@@ -220,7 +223,7 @@ const Navbar = (props) => {
       !edgesearch.current.value.includes('^') &&
       !edgesearch.current.value.includes('|')
     ) {
-      dispatch(Searchedge(e.target.value))
+      dispatch(Searchedge(e.target.value,checked))
     } else {
       // dispatch(Clearedge())
     }

@@ -327,21 +327,23 @@ export const Edgefetch = (edgeid) => async (dispatch) => {
     })
   }
 }
-export const Searchnode = (text) => async (dispatch) => {
+export const Searchnode = (text, checked) => async (dispatch) => {
   try {
     dispatch({
       type: SEARCH_NODE_SUCCESS,
-      payload: text,
+      payload: { text: text, checked: checked },
     })
   } catch (error) {
     console.log('error', error)
   }
 }
-export const Searchnodeedge = (text = '', texts = '') => async (dispatch) => {
+export const Searchnodeedge = (text = '', texts = '', checked) => async (
+  dispatch
+) => {
   try {
     dispatch({
       type: SEARCH_NODE_EDGE,
-      payload: { text: text, texts: texts },
+      payload: { text: text, texts: texts, checked: checked },
     })
     console.log('heeeel')
   } catch (error) {
@@ -349,18 +351,18 @@ export const Searchnodeedge = (text = '', texts = '') => async (dispatch) => {
   }
 }
 
-export const Searchedge = (text) => async (dispatch) => {
+export const Searchedge = (text, checked) => async (dispatch) => {
   try {
     dispatch({
       type: SEARCH_EDGE_SUCCESS,
-      payload: text,
+      payload: { text: text, checked: checked },
     })
     console.log('payload', text)
   } catch (error) {
     console.log('error', error)
   }
 }
-export const Searchedgeand = (edgeand1 = '', edgeand2 = '') => async (
+export const Searchedgeand = (edgeand1 = '', edgeand2 = '', checked) => async (
   dispatch
 ) => {
   try {
@@ -369,6 +371,7 @@ export const Searchedgeand = (edgeand1 = '', edgeand2 = '') => async (
       payload: {
         edgeand1: edgeand1,
         edgeand2: edgeand2,
+        checked: checked,
       },
     })
     console.log('payloaddd', edgeand1, edgeand2)
@@ -376,7 +379,7 @@ export const Searchedgeand = (edgeand1 = '', edgeand2 = '') => async (
     console.log('error', error)
   }
 }
-export const Searchedgeor = (edgeor1 = '', edgeor2 = '') => async (
+export const Searchedgeor = (edgeor1 = '', edgeor2 = '', checked) => async (
   dispatch
 ) => {
   try {
@@ -385,6 +388,7 @@ export const Searchedgeor = (edgeor1 = '', edgeor2 = '') => async (
       payload: {
         edgeor1: edgeor1,
         edgeor2: edgeor2,
+        checked: checked,
       },
     })
     console.log('payloaddd', edgeor1, edgeor2)
@@ -392,7 +396,7 @@ export const Searchedgeor = (edgeor1 = '', edgeor2 = '') => async (
     console.log('error', error)
   }
 }
-export const Searchnodeor = (nodeor1 = '', nodeor2 = '') => async (
+export const Searchnodeor = (nodeor1 = '', nodeor2 = '', checked) => async (
   dispatch
 ) => {
   try {
@@ -401,6 +405,7 @@ export const Searchnodeor = (nodeor1 = '', nodeor2 = '') => async (
       payload: {
         nodeor1: nodeor1,
         nodeor2: nodeor2,
+        checked: checked,
       },
     })
     console.log('payloaddd', nodeor1, nodeor2)
@@ -408,7 +413,7 @@ export const Searchnodeor = (nodeor1 = '', nodeor2 = '') => async (
     console.log('error', error)
   }
 }
-export const Searchnodeand = (nodeand1 = '', nodeand2 = '') => async (
+export const Searchnodeand = (nodeand1 = '', nodeand2 = '', checked) => async (
   dispatch
 ) => {
   try {
@@ -417,6 +422,7 @@ export const Searchnodeand = (nodeand1 = '', nodeand2 = '') => async (
       payload: {
         nodeand1: nodeand1,
         nodeand2: nodeand2,
+        checked: checked,
       },
     })
     console.log('payloaddd', nodeand1, nodeand2)

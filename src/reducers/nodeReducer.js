@@ -56,6 +56,8 @@ import {
 // }
 
 export const getNodeReducer = (state = {}, action) => {
+  let checkedEdgeData
+  let checkedNodeData
   switch (action.type) {
     case HAVE_NODE_REQUEST:
       return { ...state, loading: true }
@@ -100,6 +102,8 @@ export const getNodeReducer = (state = {}, action) => {
       return { ...state, loading: true }
 
     case SEARCH_NODE_SUCCESS:
+      let checkededge1
+      let checkednode1
       // console.log('filtered node', state.filterednode)
       const old = state.filterednode
         ? state.filterednode
@@ -109,7 +113,7 @@ export const getNodeReducer = (state = {}, action) => {
       // const old = state.nodde.nodes
       // console.log('filter node', filtered)
       const filtered = old.filter((xd) => {
-        const regex = new RegExp(`${action.payload}`, 'gi')
+        const regex = new RegExp(`${action.payload.text}`, 'gi')
         const abc = xd.id.match(regex)
         if (abc) {
           return abc
@@ -117,6 +121,7 @@ export const getNodeReducer = (state = {}, action) => {
           return null
         }
       })
+      console.log('actionpayloadnode', action.payload)
       const filtersedge = state.nodde.links.filter((xi, index) => {
         let flag1 = false
         let flag2 = false
@@ -135,10 +140,47 @@ export const getNodeReducer = (state = {}, action) => {
         return flag
       })
       console.log('filtered -- >', filtersedge)
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          filtered
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+        // checkededge1 = state.node.links.filter((si) => {
+        //   let flag1 = false
+        //   let flag2 = false
+        //   let flag = false
+        //   for (let item of filtered) {
+        //     if (xi.target === item.id) {
+        //       flag1 = true
+        //       // console.log('abc', xi.target, item.id)
+        //     }
+        //     if (xi.source === item.id) {
+        //       flag2 = true
+        //       // console.log('bcs', xi.source, item.id)
+        //     }
+        //     if (flag1 === true && flag2 === true) flag = true
+        //   }
+        //   return flag
+        // })
+        // console.log('checkededge', checkededge1)
+        // checkednode1 = state.nodde.nodes.filter((xi, index) => {
+        //   let flag = false
+        //   for (let item of checkededge1) {
+        //     if (item.source === xi.id || item.target === xi.id) {
+        //       flag = true
+        //     }
+        //   }
+        //   return flag
+        // })
+        // console.log('checkednode1', checkednode1)
+      }
       return {
         ...state,
-        filterednode: filtered,
-        filterededge: filtersedge,
+        filterednode: action.payload.checked ? checkedNodeData : filtered,
+        filterededge: action.payload.checked ? checkedEdgeData : filtersedge,
       }
 
     case SEARCH_EDGE_SUCCESS:
@@ -150,7 +192,7 @@ export const getNodeReducer = (state = {}, action) => {
         : []
       console.log('filter object', filter)
       filter = filter.filter((xxd, ind) => {
-        const regex = new RegExp(`${action.payload}`, 'gi')
+        const regex = new RegExp(`${action.payload.text}`, 'gi')
         const abc = xxd.tags.map((s) => {
           return s.match(regex)
         })
@@ -168,10 +210,19 @@ export const getNodeReducer = (state = {}, action) => {
         return flag
       })
       console.log('filternode -- >', filtersnode)
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          filtersnode
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+      }
       return {
         ...state,
-        filterededge: filter,
-        filterednode: filtersnode,
+        filterededge: action.payload.checked ? checkedEdgeData : filter,
+        filterednode: action.payload.checked ? checkedNodeData : filtersnode,
       }
     case SEARCH_NODE_AND:
       // console.log('filtered node', state.filterednode)
@@ -223,10 +274,19 @@ export const getNodeReducer = (state = {}, action) => {
         return flag
       })
       console.log('filtered -- >', filtersssedge)
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          filternodeee
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+      }
       return {
         ...state,
-        filterednode: filternodeee,
-        filterededge: filtersssedge,
+        filterednode: action.payload.checked ? checkedNodeData : filternodeee,
+        filterededge: action.payload.checked ? checkedEdgeData : filtersssedge,
       }
 
     case SEARCH_EDGE_AND:
@@ -272,11 +332,19 @@ export const getNodeReducer = (state = {}, action) => {
       })
       console.log('filternode -- >', filtersnodee)
       console.log('filteredddd', filterss, filtersnodee)
-
+      if (action.payload.checked === true) {
+        let checkedFilter = neighbourFilter(
+          state.nodde.nodes,
+          state.nodde.links,
+          filtersnodee
+        )
+        checkedEdgeData = checkedFilter.edgechecked
+        checkedNodeData = checkedFilter.nodechecked
+      }
       return {
         ...state,
-        filterededge: filterss,
-        filterednode: filtersnodee,
+        filterededge: action.payload.checked ? checkedEdgeData : filterss,
+        filterednode: action.payload.checked ? checkedNodeData : filtersnodee,
       }
     case SEARCH_NODE_OR:
       // console.log('filtered node', state.filterednode)
@@ -658,3 +726,34 @@ export const getNodeReducer = (state = {}, action) => {
 //       return state
 //   }
 // }
+const neighbourFilter = (nodesarg, edgesarg, nodesfilter) => {
+  let edgechecked
+  let nodechecked
+
+  edgechecked = edgesarg.filter((xi) => {
+    let flag = false
+    for (let item of nodesfilter) {
+      if (xi.target === item.id) {
+        flag = true
+        // console.log('abc', xi.target, item.id)
+      }
+      if (xi.source === item.id) {
+        flag = true
+        // console.log('bcs', xi.source, item.id)
+      }
+    }
+    return flag
+  })
+  console.log('lalalala checkededge', edgechecked)
+  nodechecked = nodesarg.filter((xi, index) => {
+    let flag = false
+    for (let item of edgechecked) {
+      if (item.source === xi.id || item.target === xi.id) {
+        flag = true
+      }
+    }
+    return flag
+  })
+  console.log('lalalala checkednode1', nodechecked)
+  return { nodechecked, edgechecked }
+}
