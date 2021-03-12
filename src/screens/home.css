@@ -132,6 +132,15 @@ h1 {
   height: calc(100vh - 74px) !important;
 }
 
+.graph1{
+  width: 60%;
+  height: calc(100vh - 70px) !important;
+}
+.graph1 svg {
+  width: 80% !important;
+  height: calc(100vh - 74px) !important;
+}
+
 .link {
   text-decoration: none;
   color: #2d2d2d;
