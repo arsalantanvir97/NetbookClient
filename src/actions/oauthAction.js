@@ -29,7 +29,7 @@ export const OauthLogin = (
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/items',
+      'https://netbook-server.herokuapp.com/items',
       {
         name,
         email,
@@ -74,7 +74,7 @@ export const AIQueriesfetch = (id, query) => async (dispatch) => {
     }
 
     const { data } = await axios.post(
-      `http://localhost:5000/items/${id}`,
+      `https://netbook-server.herokuapp.com/items/${id}`,
       { query },
       config
     )

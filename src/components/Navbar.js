@@ -36,9 +36,11 @@ const Navbar = (props) => {
 
   const nodesearch = useRef('')
   const edgesearch = useRef('')
+
+  const nodesimpsearch = useRef('')
+
   const [edgeval, setEdgeval] = useState('')
   const [nodeval, setNodeval] = useState('')
-  const [vissible, setVissiblity] = useState(false)
   const [searchedge, setSearchedge] = useState('')
   const [msgg, setMsgg] = useState('')
 
@@ -113,6 +115,18 @@ const Navbar = (props) => {
 
   const classes = useStyles()
 
+  const onnodeChange = (e) => {
+    nodesearch.current.value = e.target.value
+    if (e.nativeEvent.data === null) {
+      dispatch(
+        Searchnodeedge(nodesearch.current.value, edgesearch.current.value)
+      )
+      console.log('delete')
+    } else if (nodesearch.current.value !== '') {
+      dispatch(Searchnode(e.target.value))
+    }
+  }
+
   const onChange = (e) => {
     nodesearch.current.value = e.target.value
     console.log('1', nodesearch.current.value, edgesearch.current.value)
@@ -134,7 +148,7 @@ const Navbar = (props) => {
       node1 = namess.split('^')[0]
       node2 = namess.split('^')[1]
 
-      dispatch(Searchnodeand(node1, node2,checked))
+      dispatch(Searchnodeand(node1, node2, checked))
       console.log('names', node1, node2)
     }
     if (namess.includes('|')) {
@@ -152,19 +166,24 @@ const Navbar = (props) => {
       node2 = namess.split('|')[1]
 
       if (!!node1 && !!node2) {
-        dispatch(Searchnodeor(node1, node2,checked))
+        dispatch(Searchnodeor(node1, node2, checked))
       }
       console.log('namesss', node1, node2)
     } else if (e.nativeEvent.data === null) {
       dispatch(
-        Searchnodeedge(nodesearch.current.value, edgesearch.current.value,checked)
+        Searchnodeedge(
+          nodesearch.current.value,
+          edgesearch.current.value,
+          checked
+        )
       )
       console.log('delete')
     } else if (
       nodesearch.current.value !== '' &&
-      !nodesearch.current.value.includes('^')
+      !nodesearch.current.value.includes('^') &&
+      !nodesearch.current.value.includes('|')
     ) {
-      dispatch(Searchnode(e.target.value,checked))
+      dispatch(Searchnode(e.target.value, checked))
     } else {
       // dispatch(Clearnode())
     }
@@ -190,7 +209,7 @@ const Navbar = (props) => {
       edge1 = names.split('^')[0]
       edge2 = names.split('^')[1]
 
-      dispatch(Searchedgeand(edge1, edge2,checked))
+      dispatch(Searchedgeand(edge1, edge2, checked))
       console.log('names', edge1, edge2)
     }
     if (names.includes('|')) {
@@ -208,14 +227,18 @@ const Navbar = (props) => {
       edge2 = names.split('|')[1]
 
       if (!!edge1 && !!edge2) {
-        dispatch(Searchedgeor(edge1, edge2,checked))
+        dispatch(Searchedgeor(edge1, edge2, checked))
       }
       console.log('namesss', edge1, edge2)
     }
 
     if (e.nativeEvent.data === null) {
       dispatch(
-        Searchnodeedge(nodesearch.current.value, edgesearch.current.value,checked)
+        Searchnodeedge(
+          nodesearch.current.value,
+          edgesearch.current.value,
+          checked
+        )
       )
       console.log('delete')
     } else if (
@@ -223,7 +246,7 @@ const Navbar = (props) => {
       !edgesearch.current.value.includes('^') &&
       !edgesearch.current.value.includes('|')
     ) {
-      dispatch(Searchedge(e.target.value,checked))
+      dispatch(Searchedge(e.target.value, checked))
     } else {
       // dispatch(Clearedge())
     }
@@ -276,38 +299,44 @@ const Navbar = (props) => {
             Netbook
           </h3>
         </div>
-        <div style={{ display: 'flex' }} className='filterfield'>
-          <TextField
-            style={{
-              color: 'white',
-              backgroundColor: 'rgb(18,18,18)',
-              display: 'flex',
-            }}
-            label='Filter'
-            fullWidth
-            margin='normal'
-            // onChange={}
-            size='small'
-            variant='outlined'
-            InputProps={{
-              className: classes.multilineColor,
+        {(props.page === 'Links' || props.page === 'Feed') && (
+          <div style={{ display: 'flex' }} className='filterfield'>
+            <TextField
+              style={{
+                color: 'white',
+                backgroundColor: 'rgb(18,18,18)',
+                display: 'flex',
+              }}
+              label='Node Filter'
+              fullWidth
+              margin='normal'
+              ref={nodesimpsearch}
+              onChange={onnodeChange}
+              // onChange={}
+              size='small'
+              variant='outlined'
+              InputProps={{
+                className: classes.multilineColor,
 
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <IconButton
-            className='menuicon'
-            onClick={() => setVissiblity((vissiblity) => !vissiblity)}
-            color='inherit'
-            aria-label='open drawer'
-          >
-            <TuneIcon style={{ color: 'grey' }} />
-          </IconButton>
-        </div>
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {props.page === 'Links' && (
+              <IconButton
+                className='menuicon'
+                onClick={() => props.setVissiblity((vissiblity) => !vissiblity)}
+                color='inherit'
+                aria-label='open drawer'
+              >
+                <TuneIcon style={{ color: 'grey' }} />
+              </IconButton>
+            )}
+          </div>
+        )}
 
         <div className='gbtn' style={{ display: 'flex', alignItems: 'center' }}>
           <GoogleLogout
@@ -323,68 +352,63 @@ const Navbar = (props) => {
       <div className={classes.alertroot}>
         {msgg ? <Alert severity='error'>{msgg}</Alert> : null}
       </div>
-      <div className={vissible ? 'showsearchbars' : 'hidesearchbars'}>
-        {' '}
-        <TextField
-          className='filterr'
-          style={{
-            color: 'white',
-            width: 300,
-            backgroundColor: 'rgb(18,18,18)',
-            display: 'flex',
-          }}
-          label='Search Node'
-          margin='normal'
-          type='text'
-          ref={nodesearch}
-          onChange={onChange}
-          // onKeyDown={onkeydownNode}
-          // onChange={}
-          size='small'
-          variant='outlined'
-          InputProps={{
-            className: classes.multilineColor,
+      <div
+        className={props.vissible ? 'searchbars' : 'searchbars hidesearchbars'}
+      >
+        <div style={{ flex: 1 }}>
+          <TextField
+            style={{ width: 'calc(100% - 16px)' }}
+            label='Filter Node'
+            margin='normal'
+            type='text'
+            ref={nodesearch}
+            onChange={onChange}
+            // onKeyDown={onkeydownNode}
+            // onChange={}
+            size='small'
+            variant='outlined'
+            InputProps={{
+              className: classes.multilineColor,
 
-            endAdornment: (
-              <InputAdornment position='end'>
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <TextField
-          className='filterr'
-          style={{
-            color: 'white',
-            width: 300,
-            backgroundColor: 'rgb(18,18,18)',
-            display: 'flex',
-          }}
-          label='Search Edge'
-          margin='normal'
-          ref={edgesearch}
-          onChange={onedgeChange}
-          disabled={checker}
-          // onKeyDown={onkeydownEdge}
-          // onChange={}
-          size='small'
-          variant='outlined'
-          InputProps={{
-            className: classes.multilineColor,
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+        <div style={{ flex: 1 }}>
+          <TextField
+            style={{ width: 'calc(100% - 16px)' }}
+            label='Filter Edge'
+            margin='normal'
+            ref={edgesearch}
+            onChange={onedgeChange}
+            disabled={checker}
+            // onKeyDown={onkeydownEdge}
+            // onChange={}
+            size='small'
+            variant='outlined'
+            InputProps={{
+              className: classes.multilineColor,
 
-            endAdornment: (
-              <InputAdornment position='end'>
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <Checkbox
-          checked={checked}
-          onChange={handleChange}
-          color='default'
-          inputProps={{ 'aria-label': 'checkbox with default color' }}
-        />
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+        <div>
+          <Checkbox
+            checked={checked}
+            onChange={handleChange}
+            color='default'
+            inputProps={{ 'aria-label': 'checkbox with default color' }}
+          />
+        </div>
       </div>
     </>
   )

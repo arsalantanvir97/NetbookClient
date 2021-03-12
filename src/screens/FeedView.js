@@ -11,9 +11,7 @@ import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
 import { NodeUpdate, NodeDeletion, Nodefetch } from '../actions/nodeAction'
 import './home.css'
-import {
-  makeStyles,
-} from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 
@@ -397,7 +395,7 @@ const FeedView = ({ history }) => {
 
   return (
     <>
-      <Navbar setVisiblity={setVisiblity} logout={logout} />
+      <Navbar setVisiblity={setVisiblity} logout={logout} page={'Feed'} />
 
       <div
         className='feedviewside'
@@ -415,38 +413,39 @@ const FeedView = ({ history }) => {
             <CircularProgress />
           </div>
         ) : (
-            <div style={{ marginTop: 15, marginLeft: 16 }}>
-              {nodde?.nodes?.map((node, id) => (
-                <div key={id} onClick={() => showdetails(node._id)}>
+          <div style={{ marginTop: 15, marginLeft: 16 }}>
+            {nodde?.nodes?.map((node, id) => (
+              <div key={id} onClick={() => showdetails(node._id)}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginBottom: 10,
+                    cursor: 'pointer',
+                  }}
+                >
                   <div
                     style={{
+                      backgroundColor: 'black',
+                      borderRadius: 20,
+                      height: 40,
+                      width: 40,
                       display: 'flex',
+                      justifyContent: 'center',
                       alignItems: 'center',
-                      marginBottom: 10,
-                      cursor: 'pointer'
+                      color: 'white',
                     }}
                   >
-                    <div
-                      style={{
-                        backgroundColor: 'black',
-                        borderRadius: 20,
-                        height: 40,
-                        width: 40,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        color: 'white',
-
-                      }}
-                    >
-                      <p style={{ fontWeight: 500, fontSize: 18 }} >{node.id[0]}</p>
-                    </div>
-                    <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
+                    <p style={{ fontWeight: 500, fontSize: 18 }}>
+                      {node.id[0]}
+                    </p>
                   </div>
+                  <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        )}
         <Modal
           open={openViewNode}
           onClose={handleClose}

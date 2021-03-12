@@ -13,14 +13,13 @@ const Sidebar = (props) => {
     <div
       className={props.visible ? 'showsidebar' : 'hidesidebar'}
       style={{
-        marginTop: 15,
+        marginTop: props.vissible ? 102 : 15,
         marginLeft: 12,
         borderRadius: 8,
-
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'start',
-        height: 'calc(100vh - 100px)',
+        height: props.vissible ? 'calc(100vh - 186px)' : 'calc(100vh - 100px)',
         transition: '0.3s',
         backgroundColor: 'white',
       }}

@@ -113,14 +113,23 @@ h1 {
   width: 500px;
 }
 
-.showsearchbars {
+.searchbars {
+  position: absolute;
   display: flex;
+  overflow: hidden !important;
   align-items: center;
   justify-content: space-around;
+  background-color: rgb(255, 255, 255);
+  margin: 15px 12px;
+  width: calc(100% - 24px);
+  border-radius: 8px;
+  height: 74px;
+  transition: all 0.3s;
+  padding: 0 16px;
 }
 
 .hidesearchbars {
-  display: none;
+  height: 0;
 }
 .graph {
   width: 100%;
@@ -139,10 +148,13 @@ h1 {
 
 .graph-actions {
   position: fixed;
-  right: 16px;
-  margin-top: 16px;
+  right: 12px;
+  margin-top: 15px;
+  transition: all 0.3s;
 }
-
+.graph-actions-expanded {
+  margin-top: 102px;
+}
 .graph-actions .mobile {
   display: none;
 }

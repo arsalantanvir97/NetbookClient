@@ -49,9 +49,12 @@ function HomePage({ history, packageid }) {
       return
     }
 
-    const res = await axios.post('http://localhost:5000/packages', {
-      email: email,
-    })
+    const res = await axios.post(
+      'https://netbook-server.herokuapp.com/packages',
+      {
+        email: email,
+      }
+    )
 
     const clientSecret = res.data['client_secret']
 
@@ -119,7 +122,6 @@ function HomePage({ history, packageid }) {
         })
       } else {
         console.log('You got the money!', res.data)
-       
 
         // No additional information was needed
         // Show a success message to your customer

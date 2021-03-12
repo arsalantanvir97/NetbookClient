@@ -76,6 +76,7 @@ const Links = ({ history }) => {
   const [selectimport, setSelectimport] = useState([])
   const [updateinputfields, setUpdateinputfields] = useState([])
 
+  const [vissible, setVissiblity] = useState(false)
   const [haveedgedetails, setHaveedgedetails] = useState([])
   const [type, setType] = useState('')
   const [inputfields, setInputfields] = useState([])
@@ -106,7 +107,7 @@ const Links = ({ history }) => {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
   const dispatch = useDispatch()
-
+  let nodefilt
   const getOauth = useSelector((state) => state.getOauth)
   const { loading: oauthloading, oauth, error: oautherror } = getOauth
 
@@ -129,6 +130,12 @@ const Links = ({ history }) => {
       console.log('oauth', oauth)
     }
   }, [])
+  useEffect(() => {
+    if (source !== '') {
+      nodefilt = nodde?.nodes?.filter((item) => item._id !== source)
+      console.log('nodefilt', nodefilt, source, nodde?.nodes)
+    }
+  }, [source])
   // useEffect(() => {
   //   const apires = async () => {
   //     const { data } = await axios.get(
@@ -813,9 +820,11 @@ const Links = ({ history }) => {
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
-                {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                ))}
+                {nodefilt
+                  ? nodefilt
+                  : nodde.nodes.map((xdd) => (
+                      <MenuItem value={xdd._id}>{xdd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1249,8 +1258,18 @@ const Links = ({ history }) => {
 
   return (
     <>
-      <Navbar setVisiblity={setVisiblity} logout={logout} />
-      <div className='graph-actions'>
+      <Navbar
+        setVisiblity={setVisiblity}
+        logout={logout}
+        vissible={vissible}
+        setVissiblity={setVissiblity}
+        page={'Links'}
+      />
+      <div
+        className={
+          vissible ? 'graph-actions-expanded graph-actions' : 'graph-actions'
+        }
+      >
         <div className='web'>
           <Button onClick={handleOpen} variant='contained' color='primary'>
             Add Node
@@ -1295,7 +1314,11 @@ const Links = ({ history }) => {
           backgroundColor: 'rgba(230, 230, 230,1)',
         }}
       >
-        <Sidebar visible={visible} showimportview={showimportview} />
+        <Sidebar
+          visible={visible}
+          showimportview={showimportview}
+          vissible={vissible}
+        />
         <Modal
           open={open}
           onClose={handleClose}
