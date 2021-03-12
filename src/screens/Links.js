@@ -77,6 +77,7 @@ const Links = ({ history }) => {
   const [updateinputfields, setUpdateinputfields] = useState([])
 
   const [vissible, setVissiblity] = useState(false)
+  const [apigraph, setApigraph] = useState([])
   const [haveedgedetails, setHaveedgedetails] = useState([])
   const [type, setType] = useState('')
   const [inputfields, setInputfields] = useState([])
@@ -152,6 +153,9 @@ const Links = ({ history }) => {
   useEffect(() => {
     console.log('searchednode:', filterednode)
   }, [filterednode])
+  useEffect(() => {
+    console.log('apigraph', apigraph)
+  }, [apigraph])
 
   useEffect(() => {
     setUpdatenodeid(nodepopup?.id)
@@ -430,11 +434,11 @@ const Links = ({ history }) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        // 'Access-Control-Allow-Origin': '*',
       },
     }
     const { data } = await axios.post(
-      'https://ancient-cobra-61.loca.lt/api/gs_search',
+      'http://localhost:8000/api/gs_search',
       {
         author_data,
         institution_data,
@@ -444,11 +448,33 @@ const Links = ({ history }) => {
       },
       config
     )
+    setApigraph(data)
     console.log('importview api res', data, limit_data)
     // const {
     //   data,
     // } = await axios.post('https://yellow-termite-80.loca.lt/api/none', { name })
     // console.log('apireps', data)
+  }
+  const mydata = {
+    nodes: apigraph ? apigraph.nodes : [],
+
+    links: apigraph ? apigraph.edges : [],
+  }
+  const myConfigs = {
+    nodeHighlightBehavior: true,
+    directed: true,
+    node: {
+      color: '#3A4A57',
+      size: 550,
+      highlightStrokeColor: 'blue',
+      fontSize: 18,
+    },
+    link: {
+      highlightColor: 'lightblue',
+      size: 1500,
+      strokeWidth: 2.4,
+      color: '#6F93B0',
+    },
   }
 
   const submitupdateedgehandler = (e) => {
@@ -1139,18 +1165,20 @@ const Links = ({ history }) => {
           )}
         </Grid>
         <div style={{ height: 9 }}></div>
-        <div className='graph'>
-          {/* <Graph
-            id='graph-id' // id is mandatory
-            data={data}
-            config={myConfig}
-            onClickNode={onClickNode}
-            onClickLink={onClickLink}
-          /> */}
-        </div>
 
         <div style={{ height: 9 }}></div>
       </form>
+      <div className='graph1'>
+        {apigraph?.nodes?.length > 0 && (
+          <Graph
+            id='graph-id' // id is mandatory
+            data={mydata}
+            config={myConfigs}
+            // onClickNode={onClickNode}
+            // onClickLink={onClickLink}
+          />
+        )}
+      </div>
     </div>
   )
   const paymentbody = (
