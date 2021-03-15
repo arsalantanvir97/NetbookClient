@@ -4,6 +4,9 @@ import {
   GET_OAUTH_SUCCESS,
   GET_OAUTH_LOGOUT,
   GET_AIQUERIES_FAIL,
+  GET_OAUTHUPDATE_REQUEST,
+  GET_OAUTHUPDATE_SUCCESS,
+  GET_OAUTHUPDATE_FAIL,
   GET_AIQUERIES_SUCCESS,
   GET_AIQUERIES_REQUEST,
 } from '../constants/oauthConstant'
@@ -13,6 +16,9 @@ export const getOauthReducer = (state = {}, action) => {
       return { loading: true }
     case GET_OAUTH_SUCCESS:
       console.log('response', action.payload)
+      return { loading: false, oauth: action.payload }
+    case GET_OAUTHUPDATE_SUCCESS:
+      console.log('responsees', action.payload)
       return { loading: false, oauth: action.payload }
     case GET_OAUTH_FAIL:
       return { loading: false, error: action.payload }

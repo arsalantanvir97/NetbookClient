@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import IconButton from '@material-ui/core/IconButton'
 import ClearIcon from '@material-ui/icons/Clear'
@@ -32,7 +32,7 @@ const FeedView = ({ history }) => {
   const dispatch = useDispatch()
 
   const getNode = useSelector((state) => state.getNode)
-  const { loading: nodeloading, nodde, error: errror } = getNode
+  const { loading: nodeloading, nodde, error: errror, filterednode } = getNode
 
   const getOauth = useSelector((state) => state.getOauth)
   const { loading: oauthloading, oauth, error: oautherror } = getOauth
@@ -40,6 +40,10 @@ const FeedView = ({ history }) => {
     return Math.round(Math.random() * 20) - 10
   }
   const { innerWidth, innerHeight } = window
+
+  useEffect(() => {
+    console.log('filterednode', filterednode)
+  }, [filterednode])
 
   function getModalStyle() {
     const { innerWidth, innerHeight } = window
@@ -85,12 +89,10 @@ const FeedView = ({ history }) => {
       },
     },
     rooot: {
-      display: 'flex',
-      '& > * + *': {
-        marginLeft: theme.spacing(2),
-
-        justifyContent: 'center !important',
-      },
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
     },
   }))
   const handleOpenViewNode = () => {
@@ -132,9 +134,9 @@ const FeedView = ({ history }) => {
     ])
   }
   const showdetails = (nodeid) => {
-    const filterednode = nodde?.nodes.filter((node) => node._id === nodeid)[0]
-    console.log('ho', filterednode)
-    setNodepopup(filterednode)
+    const filterednodes = nodde?.nodes.filter((node) => node._id === nodeid)[0]
+    console.log('ho', filterednodes)
+    setNodepopup(filterednodes)
     console.log('hiii', nodepopup)
     handleOpenViewNode()
   }
@@ -171,7 +173,7 @@ const FeedView = ({ history }) => {
         </IconButton>
       </div>
       <Grid container>
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <p style={{ fontSize: 15 }}>
             Name:
             <span style={{ fontSize: 17, fontWeight: 500 }}>
@@ -180,7 +182,7 @@ const FeedView = ({ history }) => {
             </span>
           </p>
         </Grid>
-        <Grid xs={6}>
+        <Grid item xs={6}>
           <p style={{ fontSize: 14 }}>
             Type:{' '}
             <span style={{ fontSize: 17, fontWeight: 500 }}>
@@ -414,36 +416,67 @@ const FeedView = ({ history }) => {
           </div>
         ) : (
           <div style={{ marginTop: 15, marginLeft: 16 }}>
-            {nodde?.nodes?.map((node, id) => (
-              <div key={id} onClick={() => showdetails(node._id)}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginBottom: 10,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <div
-                    style={{
-                      backgroundColor: 'black',
-                      borderRadius: 20,
-                      height: 40,
-                      width: 40,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      color: 'white',
-                    }}
-                  >
-                    <p style={{ fontWeight: 500, fontSize: 18 }}>
-                      {node.id[0]}
-                    </p>
+            {filterednode?.length > 0
+              ? filterednode?.map((node, id) => (
+                  <div key={id} onClick={() => showdetails(node._id)}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: 10,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: 'black',
+                          borderRadius: 20,
+                          height: 40,
+                          width: 40,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          color: 'white',
+                        }}
+                      >
+                        <p style={{ fontWeight: 500, fontSize: 18 }}>
+                          {node.id[0]}
+                        </p>
+                      </div>
+                      <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
+                    </div>
                   </div>
-                  <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
-                </div>
-              </div>
-            ))}
+                ))
+              : nodde?.nodes?.map((node, id) => (
+                  <div key={id} onClick={() => showdetails(node._id)}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: 10,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: 'black',
+                          borderRadius: 20,
+                          height: 40,
+                          width: 40,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          color: 'white',
+                        }}
+                      >
+                        <p style={{ fontWeight: 500, fontSize: 18 }}>
+                          {node.id[0]}
+                        </p>
+                      </div>
+                      <h5 style={{ marginLeft: 8 }}>{node.id}</h5>
+                    </div>
+                  </div>
+                ))}
           </div>
         )}
         <Modal

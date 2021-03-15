@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 // MUI Components
+import { useDispatch, useSelector } from 'react-redux'
+
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import TextField from '@material-ui/core/TextField'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { OauthUpdatePackageid } from '../actions/oauthAction'
 // stripe
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
 // Util imports
@@ -32,16 +36,24 @@ const useStyles = makeStyles({
   button: {
     margin: '2em auto 1em',
   },
+  rooot: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
 })
 
 function HomePage({ history, packageid }) {
   const classes = useStyles()
   // State
   const [email, setEmail] = useState('')
-
+  const [resloading, setResloading] = useState(false)
   const stripe = useStripe()
   const elements = useElements()
-
+  const dispatch = useDispatch()
+  const getOauth = useSelector((state) => state.getOauth)
+  const { loading, oauth, error } = getOauth
   const handleSubmitPay = async (event) => {
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
@@ -84,6 +96,7 @@ function HomePage({ history, packageid }) {
   }
 
   const handleSubmitSub = async (event) => {
+    let abc
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
@@ -101,6 +114,7 @@ function HomePage({ history, packageid }) {
     if (result.error) {
       console.log(result.error.message)
     } else {
+      setResloading(true)
       const res = await axios.post(
         'https://netbook-server.herokuapp.com/packages/subscription',
         { payment_method: result.paymentMethod.id, email: email, packageid }
@@ -108,6 +122,34 @@ function HomePage({ history, packageid }) {
       // eslint-disable-next-line camelcase
       const { client_secret, status } = res.data
 
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Origin': '*',
+        },
+      }
+
+      if (packageid === 'price_1IMpnpLSi7LM2Y4Gj69OcvqC') {
+        abc = '602f98ff8be78a84324eeb1c'
+      } else if (packageid === 'price_1IMazjLSi7LM2Y4Gg8zEo3FY') {
+        abc = '602f98868be78a84324eeb1b'
+      }
+      if (res) {
+        setResloading(false)
+      }
+      packageid = abc
+      console.log('packageid', packageid)
+      // const { data } = await axios.put(
+      //   `http://localhost:5000/items/up/${oauth._id}`,
+      //   { packageid },
+      //   config
+      // )
+
+      dispatch(OauthUpdatePackageid(oauth._id, packageid))
+      // console.log('updatedpackagedata', data)
+      if (res) {
+        history.push('/profile')
+      }
       if (status === 'requires_action') {
         stripe.confirmCardPayment(client_secret).then(function (result) {
           if (result.error) {
@@ -130,23 +172,24 @@ function HomePage({ history, packageid }) {
   }
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <TextField
-          label='Email'
-          id='outlined-email-input'
-          helperText={`Email you'll recive updates and receipts on`}
-          margin='normal'
-          variant='outlined'
-          type='email'
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
-        <CardInput />
-        <div className={classes.div}>
-          {/* <Button
+    <>
+      <Card className={classes.root}>
+        <CardContent className={classes.content}>
+          <TextField
+            label='Email'
+            id='outlined-email-input'
+            helperText={`Email you'll recive updates and receipts on`}
+            margin='normal'
+            variant='outlined'
+            type='email'
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+          />
+          <CardInput />
+          <div className={classes.div}>
+            {/* <Button
             variant='contained'
             color='primary'
             className={classes.button}
@@ -154,17 +197,23 @@ function HomePage({ history, packageid }) {
           >
             Pay
           </Button> */}
-          <Button
-            variant='contained'
-            color='primary'
-            className={classes.button}
-            onClick={handleSubmitSub}
-          >
-            Subscribe
-          </Button>
+            <Button
+              variant='contained'
+              color='primary'
+              className={classes.button}
+              onClick={handleSubmitSub}
+            >
+              Subscribe
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      {resloading ? (
+        <div className={classes.rooot}>
+          <CircularProgress />
         </div>
-      </CardContent>
-    </Card>
+      ) : null}
+    </>
   )
 }
 

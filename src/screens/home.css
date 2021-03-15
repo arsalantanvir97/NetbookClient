@@ -141,7 +141,7 @@ h1 {
   height: calc(100vh - 74px) !important;
 }
 
-.graph1{
+.graph1 {
   width: 60%;
   height: calc(100vh - 70px) !important;
 }
@@ -202,12 +202,14 @@ h1 {
   border: 5px solid rgb(133, 176, 229);
   opacity: 1px;
 }
-
+.gbtnn {
+  display: none !important;
+}
 @media screen and (max-width: 500px) {
   .hhh {
     width: 100%;
   }
-  .menuicon {
+  .menuicons {
     /* visibility: hidden; */
     display: none !important;
   }
@@ -220,6 +222,10 @@ h1 {
     justify-content: space-around;
     width: 94vw;
     /* align-self: center; */
+  }
+
+  .gbtnn {
+    display: flex !important;
   }
   .showsidebar {
     display: flex;
@@ -303,7 +309,7 @@ h1 {
     padding: 32px;
     border-radius: 10px;
     background-color: white;
-    width: 390px;
+    width: 94vw;
     box-shadow: 0 0 20px #00000010;
   }
   .pmtresp {

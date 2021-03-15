@@ -8,9 +8,13 @@ import { Link as Links } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
+import { GoogleLogout } from 'react-google-login'
 
 const Profile = ({ props, history }) => {
   const [visible, setVisiblity] = useState(false)
+  const { innerWidth, innerHeight } = window
+  console.log('innerwidth', innerWidth)
+
   const dispatch = useDispatch()
   const getOauth = useSelector((state) => state.getOauth)
   const { loading, oauth, error } = getOauth
@@ -50,37 +54,87 @@ const Profile = ({ props, history }) => {
         <Sidebar visible={visible} />
         <div
           style={{
-            marginTop: 15,
-            marginLeft: 16,
             display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
           }}
         >
-          <div style={{}}>
-            <img
-              src={oauth?.imageUrl}
-              alt='my-img'
-              style={{ marginBottom: 8, borderRadius: 48 }}
-            />
-            <h5 style={{ marginBottom: 8, fontSize: 16 }}>
-              Name: <span style={{ fontWeight: 'normal' }}>{oauth.name}</span>
-            </h5>
-            <h5 style={{ marginBottom: 8, fontSize: 16 }}>
-              Email: <span style={{ fontWeight: 'normal' }}>{oauth.email}</span>
-            </h5>
+          <div className='queryform'>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                src={oauth?.imageUrl}
+                alt='my-img'
+                style={{ marginBottom: 22, borderRadius: 48 }}
+              />
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <h5 style={{ marginBottom: 8, fontSize: 16 }}>
+                Name: <span style={{ fontWeight: 'normal' }}>{oauth.name}</span>
+              </h5>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <h5 style={{ marginBottom: 8, fontSize: 16 }}>
+                Email:{' '}
+                <span style={{ fontWeight: 'normal' }}>{oauth.email}</span>
+              </h5>
+            </div>
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'row !important',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <h5 style={{ fontSize: 16 }}>
-                Status: <span style={{ fontWeight: 'normal' }}>free</span>
+                Status:{' '}
+                <span style={{ fontWeight: 'normal' }}>
+                  {oauth?.packageid?.type}
+                </span>
               </h5>
               <span style={{ marginLeft: 7 }}>
                 <Typography className={classes.linkroot}>
-                  <Links to='/payment'>Link</Links>
+                  <Links to='/payment'>Change</Links>
                 </Typography>
               </span>
+            </div>
+
+            <div
+              className='gbtnn'
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}
+            >
+              <GoogleLogout
+                className='gg'
+                color='white'
+                theme='dark'
+                clientId='542443202716-1162el1e1nqk02h64h08frl40vsl5hgp.apps.googleusercontent.com'
+                buttonText='Logout'
+                onLogoutSuccess={logout}
+              ></GoogleLogout>
             </div>
           </div>
         </div>

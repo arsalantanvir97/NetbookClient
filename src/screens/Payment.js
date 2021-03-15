@@ -6,6 +6,7 @@ import ClearIcon from '@material-ui/icons/Clear'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+import { Route } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import CheckIcon from '@material-ui/icons/Check'
 import StripeCheckout from 'react-stripe-checkout'
@@ -151,7 +152,11 @@ const Payment = () => {
       </div>
       <div style={{ marginTop: '-215px' }}>
         <Elements stripe={stripePromise}>
-          <HomePage packageid={paymentone} />
+          <Route
+            render={({ history }) => (
+              <HomePage packageid={paymentone} history={history} />
+            )}
+          />
         </Elements>
       </div>
     </div>

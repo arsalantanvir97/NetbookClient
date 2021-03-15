@@ -7,6 +7,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import TuneIcon from '@material-ui/icons/Tune'
 import Checkbox from '@material-ui/core/Checkbox'
 import Alert from '@material-ui/lab/Alert'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { GoogleLogout } from 'react-google-login'
 import './../screens/home.css'
@@ -80,11 +82,14 @@ const Navbar = (props) => {
       alignItems: 'center',
       marginTop: theme.spacing(2),
       position: 'fixed',
-      top: '20%',
-      left: '25%',
+      top: innerWidth > 600 ? '23%' : '19%',
+      left: innerWidth > 600 ? '29%' : '19%',
     },
     multilineColor: {
       color: 'white',
+    },
+    multilineColors: {
+      color: 'black',
     },
     formControl: {
       margin: theme.spacing(1),
@@ -141,7 +146,17 @@ const Navbar = (props) => {
       charRepeats(namess)
       console.log('numnod', numnod)
       if (numnod > 1) {
-        setMsgg('You can only type ^ once')
+        toast.error('You can only type ^ once', {
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+
+        // setMsgg('You can only type ^ once')
 
         console.log('abbc')
       }
@@ -158,7 +173,15 @@ const Navbar = (props) => {
       charRepeats(namess)
       console.log('numnod', numnod)
       if (numnod > 1) {
-        setMsggg('You can only type | once')
+        toast.error('You can only type | once', {
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
 
         console.log('abbbc')
       }
@@ -202,8 +225,15 @@ const Navbar = (props) => {
       charRepeats(names)
       console.log('numedg', numedg)
       if (numedg > 1) {
-        setMsgg('You can only type ^ once')
-
+        toast.error('You can only type ^ once', {
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
         console.log('abbc')
       }
       edge1 = names.split('^')[0]
@@ -219,7 +249,15 @@ const Navbar = (props) => {
       charRepeats(names)
       console.log('numedg', numedg)
       if (numedg > 1) {
-        setMsggg('You can only type | once')
+        toast.error('You can only type | once', {
+          position: 'bottom-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
 
         console.log('abbbc')
       }
@@ -285,7 +323,7 @@ const Navbar = (props) => {
       >
         <div style={{ display: 'flex' }}>
           <IconButton
-            className='menuicon'
+            className='menuicons'
             onClick={() => props.setVisiblity((visiblity) => !visiblity)}
             color='inherit'
             aria-label='open drawer'
@@ -349,15 +387,31 @@ const Navbar = (props) => {
           ></GoogleLogout>
         </div>
       </nav>
-      <div className={classes.alertroot}>
-        {msgg ? <Alert severity='error'>{msgg}</Alert> : null}
-      </div>
+      {/* <div className={classes.alertroot}>
+        {msgg ? (
+          <Alert severity='error'>{msgg}</Alert>
+        ) : msggg ? (
+          <Alert severity='error'>{msggg}</Alert>
+        ) : null}
+      </div> */}
+      <ToastContainer
+        position='bottom-center'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <div
         className={props.vissible ? 'searchbars' : 'searchbars hidesearchbars'}
       >
         <div style={{ flex: 1 }}>
           <TextField
-            style={{ width: 'calc(100% - 16px)' }}
+            style={{ width: 'calc(100% - 7px)' }}
             label='Filter Node'
             margin='normal'
             type='text'
@@ -368,7 +422,7 @@ const Navbar = (props) => {
             size='small'
             variant='outlined'
             InputProps={{
-              className: classes.multilineColor,
+              className: classes.multilineColors,
 
               endAdornment: (
                 <InputAdornment position='end'>
@@ -380,7 +434,7 @@ const Navbar = (props) => {
         </div>
         <div style={{ flex: 1 }}>
           <TextField
-            style={{ width: 'calc(100% - 16px)' }}
+            style={{ width: 'calc(100% - 7px)' }}
             label='Filter Edge'
             margin='normal'
             ref={edgesearch}
@@ -391,7 +445,7 @@ const Navbar = (props) => {
             size='small'
             variant='outlined'
             InputProps={{
-              className: classes.multilineColor,
+              className: classes.multilineColors,
 
               endAdornment: (
                 <InputAdornment position='end'>

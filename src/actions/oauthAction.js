@@ -4,6 +4,9 @@ import {
   GET_OAUTH_LOGOUT,
   GET_OAUTH_REQUEST,
   GET_OAUTH_SUCCESS,
+  GET_OAUTHUPDATE_REQUEST,
+  GET_OAUTHUPDATE_SUCCESS,
+  GET_OAUTHUPDATE_FAIL,
   GET_AIQUERIES_REQUEST,
   GET_AIQUERIES_SUCCESS,
   GET_AIQUERIES_FAIL,
@@ -54,6 +57,39 @@ export const OauthLogin = (
     })
   }
 }
+export const OauthUpdatePackageid = (id, packageid) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_OAUTHUPDATE_REQUEST,
+    })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.put(
+      `http://localhost:5000/items/up/${id}`,
+      {
+        packageid,
+      },
+      config
+    )
+    console.log('data', data)
+    dispatch({
+      type: GET_OAUTHUPDATE_SUCCESS,
+      payload: data,
+    })
+    localStorage.setItem('useroauth', JSON.stringify(data))
+  } catch (error) {
+    dispatch({
+      type: GET_OAUTHUPDATE_FAIL,
+      payload: error,
+    })
+  }
+}
+
 export const OauthLogout = () => async (dispatch) => {
   localStorage.removeItem('useroauth')
   localStorage.removeItem('nodehave')

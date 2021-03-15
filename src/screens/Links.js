@@ -134,7 +134,7 @@ const Links = ({ history }) => {
   useEffect(() => {
     if (source !== '') {
       nodefilt = nodde?.nodes?.filter((item) => item._id !== source)
-      console.log('nodefilt', nodefilt, source, nodde?.nodes)
+      console.log('nodefilt', nodefilt, source)
     }
   }, [source])
   // useEffect(() => {
@@ -642,9 +642,10 @@ const Links = ({ history }) => {
           <div style={{ height: 17 }}></div>
           <p>
             <span style={{ fontSize: 15 }}>Tags:</span>{' '}
-            {nodepopup?.tags?.map((tagg) => (
+            {nodepopup?.tags?.map((tagg, index) => (
               <>
                 <span
+                  key={index}
                   style={{
                     display: 'inline !important',
                     backgroundColor: 'black',
@@ -846,11 +847,9 @@ const Links = ({ history }) => {
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
-                {nodefilt
-                  ? nodefilt
-                  : nodde.nodes.map((xdd) => (
-                      <MenuItem value={xdd._id}>{xdd.id}</MenuItem>
-                    ))}
+                {nodde?.nodes?.map((idd) => (
+                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
