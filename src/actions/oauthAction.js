@@ -70,7 +70,7 @@ export const OauthUpdatePackageid = (id, packageid) => async (dispatch) => {
     }
 
     const { data } = await axios.put(
-      `http://localhost:5000/items/up/${id}`,
+      `https://netbook-server.herokuapp.com/items/up/${id}`,
       {
         packageid,
       },
