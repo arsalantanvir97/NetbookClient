@@ -101,14 +101,47 @@ const Links = ({ history }) => {
     'Twitter',
     'Facebook',
   ])
+  let colorarr = [
+    '#1ABC9C',
+    '#2ECC71',
+    '#3498DB',
+    '#9B59B6',
+    '#34495E',
+    '#16A085',
+    '#27AE60',
+    '#2980B9',
+    '#8E44AD',
+    '#2C3E50',
+    '#F1C40F',
+    '#E67E22',
+    '#E74C3C',
+    '#ECF0F1',
+    '#95A5A6',
+    '#F39C12',
+    '#D35400',
+    '#C0392B',
+    '#BDC3C7',
+    '#7F8C8D',
+  ]
+  const [randomcolor, setRandomcolor] = useState([])
+
   const [updatesource, setUpdatesource] = useState('')
   const [updatetarget, setUpdatetarget] = useState('')
   const [updateedgetags, setUpdateedgetags] = useState([])
   const [nodepopup, setNodepopup] = useState([])
+  const [nodefilterss, setNodefilterss] = useState([])
+  const [nodefiltersss, setNodefiltersss] = useState([])
+  const [nodefilterssss, setNodefilterssss] = useState([])
+  const [nodefiltersssss, setNodefiltersssss] = useState([])
+
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
   const dispatch = useDispatch()
   let nodefilt
+  let nodefilts
+  let nodefiltss
+  let nodefiltsss
+
   const getOauth = useSelector((state) => state.getOauth)
   const { loading: oauthloading, oauth, error: oautherror } = getOauth
 
@@ -132,11 +165,37 @@ const Links = ({ history }) => {
     }
   }, [])
   useEffect(() => {
+    console.log('source updated')
     if (source !== '') {
       nodefilt = nodde?.nodes?.filter((item) => item._id !== source)
-      console.log('nodefilt', nodefilt, source)
+      setNodefilterss(nodefilt)
+      console.log('nodefilt', nodefilt, nodefilterss)
     }
   }, [source])
+  useEffect(() => {
+    console.log('source updated')
+    if (target !== '') {
+      nodefilts = nodde?.nodes?.filter((item) => item._id !== target)
+      setNodefiltersss(nodefilts)
+      console.log('nodefilt', nodefilts, nodefiltersss)
+    }
+  }, [target])
+  useEffect(() => {
+    console.log('source updated')
+    if (updatesource !== '') {
+      nodefiltss = nodde?.nodes?.filter((item) => item._id !== updatesource)
+      setNodefilterssss(nodefiltss)
+      console.log('nodefilt', nodefiltss, nodefilterssss)
+    }
+  }, [updatesource])
+  useEffect(() => {
+    console.log('source updated')
+    if (updatetarget !== '') {
+      nodefiltsss = nodde?.nodes?.filter((item) => item._id !== updatetarget)
+      setNodefiltersssss(nodefiltsss)
+      console.log('nodefilt', nodefiltsss, nodefiltersssss)
+    }
+  }, [updatetarget])
   // useEffect(() => {
   //   const apires = async () => {
   //     const { data } = await axios.get(
@@ -149,6 +208,11 @@ const Links = ({ history }) => {
   useEffect(() => {
     console.log('selectimport:', selectimport)
   }, [selectimport])
+  useEffect(() => {
+    const arr = colorarr.sort(() => Math.random() - 0.5)[0]
+    console.log('arr', arr)
+    setRandomcolor(arr)
+  }, [])
 
   useEffect(() => {
     console.log('searchednode:', filterednode)
@@ -358,7 +422,7 @@ const Links = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      dispatch(NodeAdd(oauth?._id, id, type, tags, attributes))
+      dispatch(NodeAdd(oauth?._id, id, type, tags, attributes, randomcolor))
 
       // dispatch(Nodefetch(oauth?._id))
 
@@ -829,9 +893,13 @@ const Links = ({ history }) => {
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
               >
-                {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                ))}
+                {nodefiltersss?.length > 0
+                  ? nodefiltersss.map((iddd) => (
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
+                  : nodde?.nodes?.map((idd) => (
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -847,9 +915,13 @@ const Links = ({ history }) => {
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
-                {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                ))}
+                {nodefilterss?.length > 0
+                  ? nodefilterss.map((iddd) => (
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
+                  : nodde?.nodes?.map((idd) => (
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -895,9 +967,13 @@ const Links = ({ history }) => {
                 value={updatesource}
                 onChange={(e) => setUpdatesource(e.target.value)}
               >
-                {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                ))}
+                {nodefiltersssss?.length > 0
+                  ? nodefiltersssss.map((iddd) => (
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
+                  : nodde?.nodes?.map((idd) => (
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -913,9 +989,13 @@ const Links = ({ history }) => {
                 value={updatetarget}
                 onChange={(e) => setUpdatetarget(e.target.value)}
               >
-                {nodde?.nodes?.map((idd) => (
-                  <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                ))}
+                {nodefilterssss?.length > 0
+                  ? nodefilterssss.map((iddd) => (
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
+                  : nodde?.nodes?.map((idd) => (
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>

@@ -38,7 +38,7 @@ import {
   REMOVE_EDGE_FAIL,
 } from '../constants/nodeConstant'
 
-export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
+export const NodeAdd = (nodeid, id, type, tags, attributes, color) => async (
   dispatch
 ) => {
   try {
@@ -54,7 +54,7 @@ export const NodeAdd = (nodeid, id, type, tags, attributes) => async (
 
     const { data } = await axios.post(
       'https://netbook-server.herokuapp.com/nodes',
-      { nodeid, id, type, tags, attributes },
+      { nodeid, id, type, tags, attributes, color },
       config
     )
 
