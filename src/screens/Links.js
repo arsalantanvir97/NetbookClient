@@ -102,26 +102,19 @@ const Links = ({ history }) => {
     'Facebook',
   ])
   let colorarr = [
-    '#1ABC9C',
-    '#2ECC71',
-    '#3498DB',
-    '#9B59B6',
-    '#34495E',
     '#16A085',
     '#27AE60',
     '#2980B9',
     '#8E44AD',
     '#2C3E50',
-    '#F1C40F',
-    '#E67E22',
-    '#E74C3C',
-    '#ECF0F1',
-    '#95A5A6',
+    '#FFBF00',
     '#F39C12',
     '#D35400',
     '#C0392B',
     '#BDC3C7',
     '#7F8C8D',
+    '#43A047',
+    '#7B1FA2',
   ]
   const [randomcolor, setRandomcolor] = useState([])
 
@@ -208,12 +201,18 @@ const Links = ({ history }) => {
   useEffect(() => {
     console.log('selectimport:', selectimport)
   }, [selectimport])
-  useEffect(() => {
-    const arr = colorarr.sort(() => Math.random() - 0.5)[0]
-    console.log('arr', arr)
-    setRandomcolor(arr)
-  }, [])
+  // useEffect(() => {
+  //   const arr = colorarr.sort(() => Math.random() - 0.5)[0]
+  //   console.log('arr', arr)
+  //   setRandomcolor(arr)
+  // }, [])
 
+  // useEffect(() => {
+  //  const abc=nodde?.nodes.filter(xi=>(
+
+  //   ))
+  //   filterednodes(nodde?.nodes)
+  // }, [])
   useEffect(() => {
     console.log('searchednode:', filterednode)
   }, [filterednode])
@@ -422,7 +421,13 @@ const Links = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      dispatch(NodeAdd(oauth?._id, id, type, tags, attributes, randomcolor))
+      let color = colorarr.sort(() => Math.random() - 0.5)[0]
+      nodde.nodes.filter((node) => {
+        if (node.type === type && node.color) {
+          return (color = node.color)
+        }
+      })
+      dispatch(NodeAdd(oauth?._id, id, type, tags, attributes, color))
 
       // dispatch(Nodefetch(oauth?._id))
 
@@ -470,6 +475,8 @@ const Links = ({ history }) => {
       setSource('')
       setTarget('')
       setEdgetags([])
+      setNodefilterss([])
+      setNodefiltersss([])
     } else {
       handlepayvisi()
       // handleClose()
@@ -554,6 +561,8 @@ const Links = ({ history }) => {
     )
     // dispatch(Nodefetch(oauth._id))
     handleClose()
+    setNodefilterssss([])
+    setNodefiltersssss([])
   }
 
   const blackTheme = createMuiTheme({
