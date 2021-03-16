@@ -179,7 +179,7 @@ const Payment = () => {
         <Container>
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
-              <Card onClick={handleOpen} className='rooot'>
+              <Card onClick={handleOpen} className='roooot'>
                 <Container>
                   <CardContent>
                     <Typography
@@ -280,7 +280,7 @@ const Payment = () => {
                   console.log('one', paymentone)
                   handleOpen()
                 }}
-                className='rooot'
+                className='roooot'
               >
                 <Container>
                   <CardContent>
@@ -381,7 +381,7 @@ const Payment = () => {
                   console.log('second', paymentone)
                   handleOpen()
                 }}
-                className='rooot'
+                className='roo0ot'
               >
                 <Container>
                   <CardContent>

@@ -168,7 +168,8 @@ h1 {
   display: none;
 }
 .pmtresp {
-  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
   display: flex !important;
   align-items: center !important;
   background-color: rgb(230, 230, 230) !important;
@@ -182,10 +183,10 @@ h1 {
 }
 .euros {
   font-size: 20px;
-
-  position: absolute;
+margin-right: 2px;
+  /* position: absolute;
   left: 29%;
-  top: -2%;
+  top: -2%; */
 }
 .month {
   /* position: absolute;
@@ -193,12 +194,13 @@ h1 {
   top: 45%; */
   font-size: 17px !important;
 }
-.rooot {
+.roooot {
+
   min-width: 275px;
   box-shadow: 0 0 20px #00000010 !important;
 }
 
-.rooot:focus {
+.roooot:focus {
   border: 5px solid rgb(133, 176, 229);
   opacity: 1px;
 }
@@ -316,10 +318,17 @@ h1 {
     display: flex !important;
     flex-direction: column;
     width: 100vw;
-    height: 100vh !important;
+    min-height: 100vh !important;
   }
-  .rooot {
-    min-width: 200px;
-    min-height: 280px;
+  .roooot {
+    min-width: 100px;
+    min-height: 100px !important;
+    overflow: hidden;
+   
+
   }
+  .roooot:nth-of-type(1){
+    margin-top: 10px;
+  }
+  
 }
