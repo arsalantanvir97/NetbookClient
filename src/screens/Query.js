@@ -81,7 +81,7 @@ const Query = ({ props, history }) => {
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
-      width: innerWidth > 600 ? 600 : '100%',
+      width: innerWidth > 600 ? 400 : '100%',
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
@@ -134,14 +134,6 @@ const Query = ({ props, history }) => {
         <h2 style={{ textAlign: 'center' }} id='simple-modal-title'>
           Upgrade payment subscription
         </h2>
-        <IconButton
-          onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
-          style={{ marginTop: -10, marginBottom: 10 }}
-        >
-          <ClearIcon style={{ color: 'grey' }} />
-        </IconButton>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Link to='/payment'>
