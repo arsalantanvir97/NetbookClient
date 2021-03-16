@@ -195,14 +195,18 @@ margin-right: 2px;
   font-size: 17px !important;
 }
 .roooot {
-
+transition: .3s !important;
   min-width: 275px;
   box-shadow: 0 0 20px #00000010 !important;
+  cursor: pointer;
 }
 
 .roooot:focus {
   border: 5px solid rgb(133, 176, 229);
   opacity: 1px;
+}
+.roooot:hover {
+  transform: scale(1.1);
 }
 .gbtnn {
   display: none !important;
@@ -329,6 +333,9 @@ margin-right: 2px;
   }
   .roooot:nth-of-type(1){
     margin-top: 10px;
+  }
+  .roooot:nth-of-type(3){
+    margin-bottom: 20px;
   }
   
 }

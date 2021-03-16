@@ -381,7 +381,7 @@ const Payment = () => {
                   console.log('second', paymentone)
                   handleOpen()
                 }}
-                className='roo0ot'
+                className='roooot'
               >
                 <Container>
                   <CardContent>
