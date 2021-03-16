@@ -49,6 +49,7 @@ import { Graph } from 'react-d3-graph'
 import Navbar from '../components/Navbar'
 import axios from 'axios'
 import Sidebar from '../components/Sidebar'
+import { NewReleases } from '@material-ui/icons'
 
 const Links = ({ history }) => {
   // const [hid, setHid] = useState(false)
@@ -64,6 +65,7 @@ const Links = ({ history }) => {
   const [visible, setVisiblity] = useState(false)
   const [payvisi, setPayvisi] = useState(false)
   const [id, setId] = useState('')
+  let abcd
   const [updatenodeid, setUpdatenodeid] = useState('')
   const [author_data, setAuthor_data] = useState('')
   const [institution_data, setInstitution_data] = useState('')
@@ -88,6 +90,8 @@ const Links = ({ history }) => {
   const [attributes, setAttributes] = useState([])
   const [updateattributes, setUpdateattributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [apiloader, setApiloader] = useState(false)
+
   const [source, setSource] = useState('')
   const [target, setTarget] = useState('')
   const [edgetags, setEdgetags] = useState([])
@@ -118,14 +122,18 @@ const Links = ({ history }) => {
   ]
   const [randomcolor, setRandomcolor] = useState([])
 
+
   const [updatesource, setUpdatesource] = useState('')
   const [updatetarget, setUpdatetarget] = useState('')
   const [updateedgetags, setUpdateedgetags] = useState([])
+  const [sendinggraphdata, setSendinggraphdata] = useState([])
+
   const [nodepopup, setNodepopup] = useState([])
   const [nodefilterss, setNodefilterss] = useState([])
   const [nodefiltersss, setNodefiltersss] = useState([])
   const [nodefilterssss, setNodefilterssss] = useState([])
   const [nodefiltersssss, setNodefiltersssss] = useState([])
+  // const [mydata, setMydata] = useState({ nodes: [], links: [] })
 
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
@@ -151,6 +159,7 @@ const Links = ({ history }) => {
   // const deleteNode = useSelector((state) => state.deleteNode)
   // const { loading: deletenodeloading, nodedelete, error: errrror } = deleteNode
 
+  
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
@@ -201,6 +210,7 @@ const Links = ({ history }) => {
   useEffect(() => {
     console.log('selectimport:', selectimport)
   }, [selectimport])
+ 
   // useEffect(() => {
   //   const arr = colorarr.sort(() => Math.random() - 0.5)[0]
   //   console.log('arr', arr)
@@ -248,6 +258,7 @@ const Links = ({ history }) => {
   }
   const showimportview = () => {
     setOpenimportview(true)
+    setOpen(false)
   }
   const updatethenode = () => {
     setHaveupdatenode(true)
@@ -465,7 +476,23 @@ const Links = ({ history }) => {
     setUpdatenodetags([])
     setUpdateinputfields([])
   }
+  const sendingapidata=()=>{
+   
+//     if (nodde?.links?.length < oauth?.packageid?.Edges) {
+//       for(let edge of apigraph?.edges){
+//         let id=oauth._id
 
+//         dispatch(EdgeAdd(id, edge.source, edge.target, edge.tags))
+//       }}
+//       if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
+//         for(let node of apigraph?.nodes){
+//           let id=oauth._id
+// let tags=[]
+//           dispatch(NodeAdd(id, node.id, node.type, tags, node.attributes, node.color))
+//         }  }
+    }
+
+  
   const submitedgehandler = (e) => {
     e.preventDefault()
     if (nodde?.links?.length < oauth?.packageid?.Edges) {
@@ -487,7 +514,7 @@ const Links = ({ history }) => {
   }
   const importviewHandler = async (e) => {
     e.preventDefault()
-
+    setApiloader(true)
     console.log(
       'respone',
       author_data,
@@ -519,18 +546,47 @@ const Links = ({ history }) => {
       },
       config
     )
-    setApigraph(data)
-    console.log('importview api res', data, limit_data)
+    if (data) {
+      setApiloader(false)
+      setApigraph(data)
+    }
+
+    console.log("api graph nodes", data.nodes)
+    let newArr = data?.nodes?.map((importedNode) => {
+      let color = colorarr.sort(() => Math.random() - 0.5)[0]
+      for (let node of nodde?.nodes) {
+        if (node.type === importedNode.type && node.color) {
+          color = node.color
+        }
+      }
+      importedNode.color = color;
+      console.log("new node", importedNode)
+      return importedNode
+    })
+    // // console.log('importview api res', data, limit_data, apigraph)
+    // // console.log('new array ==>', data.edges)
+     abcd = { edges: data?.edges, nodes: newArr }
+    // setSendinggraphdata(abcd)
+
+    // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
+    // console.log('abcd', abcd)
+    setApigraph(abcd)
     // const {
     //   data,
     // } = await axios.post('https://yellow-termite-80.loca.lt/api/none', { name })
     // console.log('apireps', data)
   }
+useEffect(() => {
+ console.log('abcd',abcd)
+}, [abcd])
+
+
   const mydata = {
     nodes: apigraph ? apigraph.nodes : [],
 
     links: apigraph ? apigraph.edges : [],
   }
+  
   const myConfigs = {
     nodeHighlightBehavior: true,
     directed: true,
@@ -904,11 +960,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersss?.length > 0
                   ? nodefiltersss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -926,11 +982,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterss?.length > 0
                   ? nodefilterss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -978,11 +1034,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersssss?.length > 0
                   ? nodefiltersssss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1000,11 +1056,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterssss?.length > 0
                   ? nodefilterssss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1136,6 +1192,7 @@ const Links = ({ history }) => {
 
   const boddddddddy = (
     <div style={modalStyle} className={classes.paper}>
+
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h2 id='simple-modal-title'>Import View</h2>
         <IconButton
@@ -1147,43 +1204,49 @@ const Links = ({ history }) => {
           <ClearIcon style={{ color: 'grey' }} />
         </IconButton>
       </div>
-
-      <form onSubmit={importviewHandler}>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <FormControl
-              className={classes.formControl}
-              variant='outlined'
-              size='small'
-            >
-              <InputLabel id='demo-simple-select-label'>
-                Select import
+      {apiloader ? (
+        <div className={classes.rooot}>
+          <CircularProgress />
+        </div>
+      ) : (
+          <>
+            {!apigraph?.nodes?.length > 0 &&
+              <form onSubmit={importviewHandler}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <FormControl
+                      className={classes.formControl}
+                      variant='outlined'
+                      size='small'
+                    >
+                      <InputLabel id='demo-simple-select-label'>
+                        Select import
               </InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                value={selectimport}
-                onChange={(e) => setSelectimport(e.target.value)}
-              >
-                {apilabel.map((apilab) => (
-                  <MenuItem value={apilab}>{apilab}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          {selectimport === 'Google Scholar' && (
-            <>
-              <Grid item xs={12}>
-                <TextField
-                  style={{ color: 'black', width: '100%', marginTop: 9 }}
-                  id='outlined-basic'
-                  size='small'
-                  label='Author'
-                  value={author_data}
-                  onChange={(e) => setAuthor_data(e.target.value)}
-                  variant='outlined'
-                />
-              </Grid>
-              {/* <Grid item xs={12}>
+                      <Select
+                        labelId='demo-simple-select-label'
+                        value={selectimport}
+                        onChange={(e) => setSelectimport(e.target.value)}
+                      >
+                        {apilabel.map((apilab) => (
+                          <MenuItem value={apilab}>{apilab}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  {selectimport === 'Google Scholar' && (
+                    <>
+                      <Grid item xs={12}>
+                        <TextField
+                          style={{ color: 'black', width: '100%', marginTop: 9 }}
+                          id='outlined-basic'
+                          size='small'
+                          label='Author'
+                          value={author_data}
+                          onChange={(e) => setAuthor_data(e.target.value)}
+                          variant='outlined'
+                        />
+                      </Grid>
+                      {/* <Grid item xs={12}>
                 <TextField
                   style={{ color: 'black', width: '100%', marginTop: 9 }}
                   id='outlined-basic'
@@ -1194,79 +1257,89 @@ const Links = ({ history }) => {
                   variant='outlined'
                 />
               </Grid> */}
-              <Grid item xs={12}>
-                <TextField
-                  style={{ color: 'black', width: '100%', marginTop: 9 }}
-                  id='outlined-basic'
-                  size='small'
-                  label='Institution'
-                  value={institution_data}
-                  onChange={(e) => setInstitution_data(e.target.value)}
-                  variant='outlined'
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  style={{ color: 'black', width: '100%', marginTop: 9 }}
-                  id='outlined-basic'
-                  size='small'
-                  label='Limit'
-                  type='number'
-                  value={limit_data}
-                  onChange={(e) => setLimit_data(e.target.value)}
-                  variant='outlined'
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  style={{ color: 'black', width: '100%', marginTop: 9 }}
-                  id='outlined-basic'
-                  size='small'
-                  label='Publications'
-                  type='number'
-                  value={pubs_data}
-                  onChange={(e) => setPubs_data(e.target.value)}
-                  variant='outlined'
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  style={{ color: 'black', width: '100%', marginTop: 9 }}
-                  id='outlined-basic'
-                  size='small'
-                  label='Coauthor'
-                  type='number'
-                  value={co_author_data}
-                  onChange={(e) => setCo_author_data(e.target.value)}
-                  variant='outlined'
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type='submit'
-                  disabled={author_data === '' || institution_data === ''}
-                >
-                  <div>Submit</div>
-                </Button>
-              </Grid>
-            </>
-          )}
-        </Grid>
-        <div style={{ height: 9 }}></div>
+                      <Grid item xs={12}>
+                        <TextField
+                          style={{ color: 'black', width: '100%', marginTop: 9 }}
+                          id='outlined-basic'
+                          size='small'
+                          label='Institution'
+                          value={institution_data}
+                          onChange={(e) => setInstitution_data(e.target.value)}
+                          variant='outlined'
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          style={{ color: 'black', width: '100%', marginTop: 9 }}
+                          id='outlined-basic'
+                          size='small'
+                          label='Limit'
+                          type='number'
+                          value={limit_data}
+                          onChange={(e) => setLimit_data(e.target.value)}
+                          variant='outlined'
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          style={{ color: 'black', width: '100%', marginTop: 9 }}
+                          id='outlined-basic'
+                          size='small'
+                          label='Publications'
+                          type='number'
+                          value={pubs_data}
+                          onChange={(e) => setPubs_data(e.target.value)}
+                          variant='outlined'
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          style={{ color: 'black', width: '100%', marginTop: 9 }}
+                          id='outlined-basic'
+                          size='small'
+                          label='Coauthor'
+                          type='number'
+                          value={co_author_data}
+                          onChange={(e) => setCo_author_data(e.target.value)}
+                          variant='outlined'
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          type='submit'
+                          variant='contained'
+                          color='primary'
+                          disabled={author_data === '' || institution_data === ''}
+                        >
+                          <div>Submit</div>
+                        </Button>
+                      </Grid>
+                    </>
+                  )}
+                </Grid>
+                <div style={{ height: 9 }}></div>
 
-        <div style={{ height: 9 }}></div>
-      </form>
-      <div className='graph1'>
-        {apigraph?.nodes?.length > 0 && (
-          <Graph
-            id='graph-id' // id is mandatory
-            data={mydata}
-            config={myConfigs}
-            // onClickNode={onClickNode}
-            // onClickLink={onClickLink}
-          />
+                <div style={{ height: 9 }}></div>
+              </form>}
+            <div className='graph1'>
+              {apigraph?.nodes?.length > 0 && (
+                <>
+                <Graph
+                  id='graph-id' // id is mandatory
+                  data={mydata}
+                  config={myConfigs}
+                // onClickNode={onClickNode}
+                // onClickLink={onClickLink}
+                />
+
+            <Button onClick={sendingapidata} variant='contained' color='primary'>
+            Save Graph
+          </Button>
+          </>
+              )}
+            </div>
+          </>
         )}
-      </div>
     </div>
   )
   const paymentbody = (
@@ -1497,16 +1570,16 @@ const Links = ({ history }) => {
             <CircularProgress />
           </div>
         ) : (
-          <div className='graph'>
-            <Graph
-              id='graph-id' // id is mandatory
-              data={data}
-              config={myConfig}
-              onClickNode={onClickNode}
-              onClickLink={onClickLink}
-            />
-          </div>
-        )}
+            <div className='graph'>
+              <Graph
+                id='graph-id' // id is mandatory
+                data={data}
+                config={myConfig}
+                onClickNode={onClickNode}
+                onClickLink={onClickLink}
+              />
+            </div>
+          )}
       </div>
     </>
   )

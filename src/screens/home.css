@@ -142,12 +142,15 @@ h1 {
 }
 
 .graph1 {
-  width: 60%;
-  height: calc(100vh - 70px) !important;
+  width: 100%;
+  /* height: calc(100vh - 70px) !important; */
 }
 .graph1 svg {
-  width: 80% !important;
-  height: calc(100vh - 74px) !important;
+  width: 100% !important;
+  /* height: calc(100vh - 74px) !important; */
+}
+.graph1 #graph-id-graph-container-zoomable{
+  left: 20%;
 }
 
 .link {
