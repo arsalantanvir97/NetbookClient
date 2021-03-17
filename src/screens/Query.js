@@ -81,13 +81,13 @@ const Query = ({ props, history }) => {
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
-      width: innerWidth > 600 ? 400 : '100%',
+      width: innerWidth > 600 ? 500 : '100%',
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
-      maxHeight: 'calc(100vh - 200px)',
+      maxHeight: 'calc(100vh - 100px)',
       overflow: 'auto !important',
       top: '50%',
     },
@@ -132,10 +132,22 @@ const Query = ({ props, history }) => {
     <div style={modalStyle} className={classes.paper}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h2 style={{ textAlign: 'center' }} id='simple-modal-title'>
-          Upgrade payment subscription
+          Limit Reached
         </h2>
+        <IconButton
+          onClick={handleClose}
+          color='inherit'
+          aria-label='open drawer'
+          style={{ marginTop: -10, marginBottom: 10 }}
+        >
+          <ClearIcon style={{ color: 'grey' }} />
+        </IconButton>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <p style={{ fontWeight: 400, fontSize: 19 }}>
+        Please upgrade your subsciption limit has been reached,please upgrade or
+        wait for your quota limit to be refreshed
+      </p>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
         <Link to='/payment'>
           <Button
             style={{ backgroundColor: 'rgb(32, 32, 32)', color: 'white' }}
@@ -145,7 +157,11 @@ const Query = ({ props, history }) => {
         </Link>
         <Button
           onClick={handleClose}
-          style={{ backgroundColor: 'rgb(32, 32, 32)', color: 'white' }}
+          style={{
+            backgroundColor: 'rgb(32, 32, 32)',
+            color: 'white',
+            marginLeft: '18px',
+          }}
         >
           Close
         </Button>
