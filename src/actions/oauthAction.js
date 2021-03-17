@@ -123,7 +123,7 @@ export const AIQueriesfetch = (id, query) => async (dispatch) => {
       type: GET_AIQUERIES_SUCCESS,
       payload: data,
     })
-    localStorage.setItem('useroauth', JSON.stringify(data))
+    // localStorage.setItem('useroauth', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: GET_AIQUERIES_FAIL,
