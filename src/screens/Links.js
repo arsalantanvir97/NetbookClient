@@ -44,6 +44,8 @@ import {
   NodeUpdate,
   NodeDeletion,
   EdgeDeletion,
+  NodeAdded,
+  EdgeAdded
 } from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
 import Navbar from '../components/Navbar'
@@ -228,6 +230,9 @@ const Links = ({ history }) => {
   }, [filterednode])
   useEffect(() => {
     console.log('apigraph', apigraph)
+  }, [apigraph])
+  useEffect(() => {
+    console.log('apigraphs', apigraph?.nodes,apigraph?.edges,)
   }, [apigraph])
 
   useEffect(() => {
@@ -476,21 +481,7 @@ const Links = ({ history }) => {
     setUpdatenodetags([])
     setUpdateinputfields([])
   }
-  const sendingapidata=()=>{
-   
-//     if (nodde?.links?.length < oauth?.packageid?.Edges) {
-//       for(let edge of apigraph?.edges){
-//         let id=oauth._id
-
-//         dispatch(EdgeAdd(id, edge.source, edge.target, edge.tags))
-//       }}
-//       if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-//         for(let node of apigraph?.nodes){
-//           let id=oauth._id
-// let tags=[]
-//           dispatch(NodeAdd(id, node.id, node.type, tags, node.attributes, node.color))
-//         }  }
-    }
+ 
 
   
   const submitedgehandler = (e) => {
@@ -560,12 +551,25 @@ const Links = ({ history }) => {
         }
       }
       importedNode.color = color;
+      let nodeid=oauth?._id
+      importedNode.nodeid=nodeid
+      let tags=[]
+      importedNode.tags=tags
+
       console.log("new node", importedNode)
       return importedNode
     })
+
+    let newedd=data?.edges?.map((importededge)=>{
+      let edgeid=oauth?._id
+      importededge.edgeid=edgeid
+      console.log("new edge", importededge)
+      return importededge
+
+    })
     // // console.log('importview api res', data, limit_data, apigraph)
     // // console.log('new array ==>', data.edges)
-     abcd = { edges: data?.edges, nodes: newArr }
+     abcd = { edges: newedd, nodes: newArr }
     // setSendinggraphdata(abcd)
 
     // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
@@ -603,6 +607,21 @@ useEffect(() => {
       color: '#6F93B0',
     },
   }
+
+  const sendingapidata=()=>{
+   
+        if (nodde?.links?.length < oauth?.packageid?.Edges) {
+          function func(callback){
+
+            dispatch(EdgeAdded(apigraph?.edges))
+          callback()
+          }
+          }
+          if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
+            function secondfunc(){
+              dispatch(NodeAdded(apigraph?.nodes))
+              }}
+        }
 
   const submitupdateedgehandler = (e) => {
     e.preventDefault()

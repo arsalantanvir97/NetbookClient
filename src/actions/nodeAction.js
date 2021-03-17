@@ -11,6 +11,7 @@ import {
   GET_EDGE_FAIL,
   SEARCH_EDGE_SUCCESS,
   GET_EDGE_REQUEST,
+  GET_EDGE_SUCCESSES,
   SEARCH_NODE_AND,
   SEARCH_NODE_EDGE,
   GET_EDGE_SUCCESS,
@@ -22,6 +23,8 @@ import {
   GET_AIQUERIES_REQUEST,
   GET_AIQUERIES_SUCCESS,
   GET_AIQUERIES_FAIL,
+  GET_NODE_SUCCESSES
+,
   SEARCH_NODE_SUCCESS,
   UPDATE_EDGE_SUCCESS,
   SEARCH_EDGE_AND,
@@ -60,6 +63,42 @@ export const NodeAdd = (nodeid, id, type, tags, attributes, color) => async (
 
     dispatch({
       type: GET_NODE_SUCCESS,
+      payload: data,
+    })
+    localStorage.setItem('nodehave', JSON.stringify(data))
+  } catch (error) {
+    console.log('error', error)
+    dispatch({
+      type: GET_NODE_FAIL,
+      payload: error,
+    })
+  }
+}
+
+export const NodeAdded = (node) => async (
+  dispatch
+) => {
+  console.log('nodesaction',node)
+
+  try {
+    dispatch({
+      type: HAVE_NODE_REQUEST,
+    })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.post(
+      'https://netbook-server.herokuapp.com/nodes/many',
+      node,
+      config
+    )
+    console.log('dataofnodes',data)
+    dispatch({
+      type: GET_NODE_SUCCESSES,
       payload: data,
     })
     localStorage.setItem('nodehave', JSON.stringify(data))
@@ -154,6 +193,43 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
         target: data.target.id,
         _id: data._id,
       })
+    )
+  } catch (error) {
+    dispatch({
+      type: GET_EDGE_FAIL,
+      payload: error,
+    })
+  }
+}
+export const EdgeAdded = (edge) => async (dispatch) => {
+  console.log('edgesaction',edge)
+  try {
+    dispatch({
+      type: GET_EDGE_REQUEST,
+    })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.post(
+      'http://localhost:5000/edges/many',
+      // 'https://netbook-server.herokuapp.com/edges/many',
+      [...edge],
+      config
+    )
+    console.log('dataofedges',data)
+    dispatch({
+      type: GET_EDGE_SUCCESSES,
+      payload: data,
+    })
+    localStorage.setItem(
+      'edgeadded',
+      JSON.stringify(
+        data
+      )
     )
   } catch (error) {
     dispatch({

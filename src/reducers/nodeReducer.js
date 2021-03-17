@@ -3,6 +3,8 @@ import {
   GET_NODE_FAIL,
   GET_NODE_REQUEST,
   GET_NODE_SUCCESS,
+  GET_NODE_SUCCESSES,
+  GET_EDGE_SUCCESSES,
   HAVE_NODE_REQUEST,
   SEARCH_NODE_OR,
   CLEAR_EDGE,
@@ -74,6 +76,15 @@ export const getNodeReducer = (state = {}, action) => {
         },
         loading: false,
       }
+      case GET_NODE_SUCCESSES:
+        return {
+          ...state,
+          nodde: {
+            ...state.nodde,
+            nodes: [...state.nodde.nodes, ...action.payload],
+          },
+          loading: false,
+        }
 
     case HAVE_NODE_FAIL:
       return { loading: false, error: action.payload }
@@ -659,6 +670,17 @@ export const getNodeReducer = (state = {}, action) => {
         nodde: {
           ...state.nodde,
           links: [...state.nodde.links, action.payload],
+        },
+        loading: false,
+      }
+      case GET_EDGE_SUCCESSES:
+      console.log('state.nodde -->', state.nodde)
+      console.log('action.payload -->', action.payload)
+      return {
+        ...state,
+        nodde: {
+          ...state.nodde,
+          links: [...state.nodde.links, ...action.payload],
         },
         loading: false,
       }
