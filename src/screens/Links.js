@@ -46,6 +46,7 @@ import {
   EdgeDeletion,
   NodeAdded,
   EdgeAdded,
+  NodeEdgefetch,
 } from '../actions/nodeAction'
 import { Graph } from 'react-d3-graph'
 import Navbar from '../components/Navbar'
@@ -89,6 +90,8 @@ const Links = ({ history }) => {
   const [popup, setPopup] = useState(false)
   // const [update, setUpdate] = useState(false)
   const [popdown, setPopdown] = useState(false)
+  const [newnode, setNewnode] = useState([])
+  const [newedge, setNewedge] = useState([])
   const [attributes, setAttributes] = useState([])
   const [updateattributes, setUpdateattributes] = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -163,7 +166,7 @@ const Links = ({ history }) => {
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
-      console.log('oauth', oauth)
+      console.log('oauth', oauth, nodde)
     }
   }, [])
   useEffect(() => {
@@ -174,6 +177,12 @@ const Links = ({ history }) => {
       console.log('nodefilt', nodefilt, nodefilterss)
     }
   }, [source])
+  useEffect(() => {
+    console.log('newnodessss', newnode)
+  }, [newnode])
+  useEffect(() => {
+    console.log('newedgessss', newedge)
+  }, [newedge])
   useEffect(() => {
     console.log('source updated')
     if (target !== '') {
@@ -615,17 +624,118 @@ const Links = ({ history }) => {
   }
 
   const sendingapidata = () => {
-    if (nodde?.links?.length < oauth?.packageid?.Edges) {
-      function func(callback) {
-        dispatch(EdgeAdded(apigraph?.edges))
-        callback()
-      }
-    }
+    let newernodes
+    let neweredges
+    let edgges
+    const nodess = [
+      {
+        attributes: [],
+        color: '#2980B9',
+        id: 'Asnsaqg',
+        nodeid: '603525f87e1b0e01b4358d16',
+        tags: ['asdzxc'],
+        type: 'person',
+      },
+      {
+        attributes: [],
+        color: '#2980B9',
+        id: 'Asnfaqg',
+        nodeid: '603525f87e1b0e01b4358d16',
+        tags: ['asdzxc'],
+        type: 'person',
+      },
+      {
+        attributes: [],
+        color: '#2980B9',
+        id: 'Asnjaqg',
+        nodeid: '603525f87e1b0e01b4358d16',
+        tags: ['asdzxc'],
+        type: 'person',
+      },
+      {
+        attributes: [],
+        color: '#2980B9',
+        id: 'Asnlaqg',
+        nodeid: '603525f87e1b0e01b4358d16',
+        tags: ['asdzxc'],
+        type: 'person',
+      },
+    ]
+    const eddgess = [
+      {
+        edgeid: '603525f87e1b0e01b4358d16',
+        source: 'Asnsaqg',
+        tags: ['sw'],
+        target: 'Asnlaqg',
+      },
+      {
+        edgeid: '603525f87e1b0e01b4358d16',
+        source: 'Asnjaqg',
+        tags: ['sw'],
+        target: 'Asnfaqg',
+      },
+      {
+        edgeid: '603525f87e1b0e01b4358d16',
+        source: 'Asnlaqg',
+        tags: ['sw'],
+        target: 'Asnjaqg',
+      },
+    ]
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      function secondfunc() {
-        dispatch(NodeAdded(apigraph?.nodes))
+      const funcs = async () => {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Access-Control-Allow-Origin': '*',
+          },
+        }
+        const { data } = await axios.post(
+          'https://netbook-server.herokuapp.com/nodes/many',
+          nodess,
+          config
+        )
+        newernodes = data
+        console.log('data', data, newernodes)
+        setNewnode(data)
+        edgges = eddgess.map((edge) => {
+          console.log('newnodees', newnode)
+          for (let node of data) {
+            if (edge.source === node.id) {
+              console.log('nodeid', edge?.source, node?.id)
+              edge.source = node._id
+            }
+            if (edge.target === node.id) {
+              edge.target = node._id
+            }
+          }
+          console.log('edgggge', edge)
+          return edge
+        })
+
+        if (nodde?.links?.length < oauth?.packageid?.Edges) {
+          console.log('eddge', edgges)
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Access-Control-Allow-Origin': '*',
+            },
+          }
+          const { data } = await axios.post(
+            'http://localhost:5000/edges/many',
+            edgges,
+            config
+          )
+          neweredges = data
+          console.log('data2', data, neweredges)
+          setNewedge(data)
+        }
+        dispatch(NodeEdgefetch(newernodes, neweredges))
       }
+
+      funcs()
     }
+
+    console.log('newedges', edgges)
   }
 
   const submitupdateedgehandler = (e) => {
@@ -1355,19 +1465,14 @@ const Links = ({ history }) => {
                   // onClickNode={onClickNode}
                   // onClickLink={onClickLink}
                 />
-
-                <Button
-                  onClick={sendingapidata}
-                  variant='contained'
-                  color='primary'
-                >
-                  Save Graph
-                </Button>
               </>
             )}
           </div>
         </>
       )}
+      <Button onClick={sendingapidata} variant='contained' color='primary'>
+        Save Graph
+      </Button>
     </div>
   )
   const paymentbody = (

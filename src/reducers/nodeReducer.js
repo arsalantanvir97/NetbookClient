@@ -27,6 +27,7 @@ import {
   SEARCH_EDGE_FAIL,
   HAVE_EDGE_REQUEST,
   HAVE_EDGE_SUCCESS,
+  HAVE_NODE_SUCCESESS,
   UPDATE_EDGE_FAIL,
   UPDATE_EDGE_REQUEST,
   UPDATE_EDGE_SUCCESS,
@@ -65,8 +66,19 @@ export const getNodeReducer = (state = {}, action) => {
       return { ...state, loading: true }
 
     case HAVE_NODE_SUCCESS:
+      console.log('action.payload', action.payload)
       return { ...state, loading: false, nodde: action.payload }
 
+    case HAVE_NODE_SUCCESESS:
+      console.log('action.payload', action.payload.nodes, action.payload.links)
+      return {
+        ...state,
+        loading: false,
+        nodde: {
+          nodes: [...state.nodde.nodes, ...action.payload.nodes],
+          links: [...state.nodde.links, ...action.payload.links],
+        },
+      }
     case GET_NODE_SUCCESS:
       return {
         ...state,
@@ -76,15 +88,15 @@ export const getNodeReducer = (state = {}, action) => {
         },
         loading: false,
       }
-      case GET_NODE_SUCCESSES:
-        return {
-          ...state,
-          nodde: {
-            ...state.nodde,
-            nodes: [...state.nodde.nodes, ...action.payload],
-          },
-          loading: false,
-        }
+    // case GET_NODE_SUCCESSES:
+    //   return {
+    //     ...state,
+    //     nodde: {
+    //       ...state.nodde,
+    //       nodes: [...state.nodde.nodes, ...action.payload],
+    //     },
+    //     loading: false,
+    //   }
 
     case HAVE_NODE_FAIL:
       return { loading: false, error: action.payload }
@@ -673,7 +685,7 @@ export const getNodeReducer = (state = {}, action) => {
         },
         loading: false,
       }
-      case GET_EDGE_SUCCESSES:
+    case GET_EDGE_SUCCESSES:
       console.log('state.nodde -->', state.nodde)
       console.log('action.payload -->', action.payload)
       return {

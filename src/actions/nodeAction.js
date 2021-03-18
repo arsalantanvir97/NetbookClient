@@ -16,6 +16,7 @@ import {
   SEARCH_NODE_EDGE,
   GET_EDGE_SUCCESS,
   CLEAR_EDGE,
+  HAVE_NODE_SUCCESESS,
   CLEAR_NODE,
   HAVE_EDGE_FAIL,
   HAVE_EDGE_REQUEST,
@@ -23,8 +24,7 @@ import {
   GET_AIQUERIES_REQUEST,
   GET_AIQUERIES_SUCCESS,
   GET_AIQUERIES_FAIL,
-  GET_NODE_SUCCESSES
-,
+  GET_NODE_SUCCESSES,
   SEARCH_NODE_SUCCESS,
   UPDATE_EDGE_SUCCESS,
   SEARCH_EDGE_AND,
@@ -75,10 +75,8 @@ export const NodeAdd = (nodeid, id, type, tags, attributes, color) => async (
   }
 }
 
-export const NodeAdded = (node) => async (
-  dispatch
-) => {
-  console.log('nodesaction',node)
+export const NodeAdded = (node) => async (dispatch) => {
+  console.log('nodesaction', node)
 
   try {
     dispatch({
@@ -96,7 +94,7 @@ export const NodeAdded = (node) => async (
       node,
       config
     )
-    console.log('dataofnodes',data)
+    console.log('dataofnodes', data)
     dispatch({
       type: GET_NODE_SUCCESSES,
       payload: data,
@@ -128,7 +126,7 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
       { nodeid },
       config
     )
-
+    console.log('dataaa', data)
     const links = []
 
     if (data.links?.length > 0) {
@@ -153,6 +151,38 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
       type: HAVE_NODE_FAIL,
       payload: error,
     })
+  }
+}
+export const NodeEdgefetch = (nodes, newedge) => async (dispatch) => {
+  try {
+    dispatch({
+      type: HAVE_NODE_REQUEST,
+    })
+    console.log('actionpayload12', nodes, newedge)
+    const links = []
+
+    if (newedge?.length > 0) {
+      newedge.map((link) => {
+        links.push({
+          edgeid: link.edgeid,
+          tags: link.tags,
+          source: link.source.id,
+          target: link.target.id,
+          _id: link._id,
+        })
+      })
+    }
+    console.log('newedge', newedge, links)
+    dispatch({
+      type: HAVE_NODE_SUCCESESS,
+      payload: { nodes, links },
+    })
+    localStorage.setItem('nodehave', JSON.stringify({ nodes, links }))
+  } catch (error) {
+    // dispatch({
+    //   type: HAVE_NODE_FAIL,
+    //   payload: error,
+    // })
   }
 }
 
@@ -202,7 +232,7 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
   }
 }
 export const EdgeAdded = (edge) => async (dispatch) => {
-  console.log('edgesaction',edge)
+  console.log('edgesaction', edge)
   try {
     dispatch({
       type: GET_EDGE_REQUEST,
@@ -220,17 +250,12 @@ export const EdgeAdded = (edge) => async (dispatch) => {
       [...edge],
       config
     )
-    console.log('dataofedges',data)
+    console.log('dataofedges', data)
     dispatch({
       type: GET_EDGE_SUCCESSES,
       payload: data,
     })
-    localStorage.setItem(
-      'edgeadded',
-      JSON.stringify(
-        data
-      )
-    )
+    localStorage.setItem('edgeadded', JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: GET_EDGE_FAIL,
