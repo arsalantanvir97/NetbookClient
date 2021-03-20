@@ -54,7 +54,7 @@ import Navbar from '../components/Navbar'
 import axios from 'axios'
 import Sidebar from '../components/Sidebar'
 import { NewReleases } from '@material-ui/icons'
-
+let apidata = []
 const Links = ({ history }) => {
   // const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
@@ -68,6 +68,8 @@ const Links = ({ history }) => {
   // const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
   const [payvisi, setPayvisi] = useState(false)
+  const [showgraph, setShowgraph] = useState(false)
+
   const [id, setId] = useState('')
   let abcd
   const [updatenodeid, setUpdatenodeid] = useState('')
@@ -540,7 +542,7 @@ const Links = ({ history }) => {
       },
     }
     const { data } = await axios.post(
-      'http://localhost:8000/api/gs_search',
+      'http://192.168.1.178:8000/api/gs_search',
       {
         author_data,
         institution_data,
@@ -550,11 +552,12 @@ const Links = ({ history }) => {
       },
       config
     )
-    if (data) {
-      setApiloader(false)
-      console.log("setting data in graph 1", data)
-      setApigraph(data)
-    }
+
+    setApiloader(false)
+    setShowgraph(true)
+    console.log('setting data in graph 1', data, apiloader)
+    // setApigraph(data)
+    apidata = data
 
     console.log('api graph nodes', data.nodes)
     let newArr = data?.nodes?.map((importedNode) => {
@@ -587,10 +590,12 @@ const Links = ({ history }) => {
 
     // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
     // console.log('abcd', abcd)
-    console.log("setting data in graph 2", abcd)
+    console.log('setting data in graph 2', abcd)
 
+    // setApigraph(abcd)
+    apidata = abcd
     setApigraph(abcd)
-    console.log('view', apigraph)
+    console.log('view', apigraph, apidata?.nodes, apidata?.edges)
     // const {
     //   data,
     // } = await axios.post('https://yellow-termite-80.loca.lt/api/none', { name })
@@ -600,11 +605,10 @@ const Links = ({ history }) => {
     console.log('abcd', abcd)
   }, [abcd])
 
-
   const mydata = {
-    nodes: apigraph ? apigraph.nodes : [],
+    nodes: apidata ? apidata.nodes : [],
 
-    links: apigraph ? apigraph.edges : [],
+    links: apidata ? apidata.edges : [],
   }
 
   const myConfigs = {
@@ -624,15 +628,15 @@ const Links = ({ history }) => {
     },
   }
 
-
   const sendingapidata = () => {
+    setShowgraph(false)
     let newernodes
     let neweredges
     let edgges
-
+    console.log('newdatas', apidata?.nodes, apidata?.edges)
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      (async () => {
-        console.log('newdata', apigraph?.nodes, apigraph?.edges)
+      ;(async () => {
+        console.log('newdata', apidata?.nodes, apidata?.edges)
         const config = {
           headers: {
             'Content-Type': 'application/json',
@@ -641,13 +645,13 @@ const Links = ({ history }) => {
         }
         const { data } = await axios.post(
           'https://netbook-server.herokuapp.com/nodes/many',
-          apigraph?.nodes,
+          apidata?.nodes,
           config
         )
         newernodes = data
         console.log('data', data, newernodes)
         // setNewnode(data)
-        edgges = apigraph?.edges.map((edge) => {
+        edgges = apidata?.edges?.map((edge) => {
           console.log('newnodees', newnode)
           for (let node of data) {
             if (edge.source === node.id) {
@@ -685,8 +689,6 @@ const Links = ({ history }) => {
     }
     console.log('newedges', edgges)
   }
-
-
 
   const submitupdateedgehandler = (e) => {
     e.preventDefault()
@@ -811,7 +813,6 @@ const Links = ({ history }) => {
         <Button type='submit' disabled={id === '' || type === ''}>
           <div>Add Node</div>
         </Button>
-
       </form>
     </div>
   )
@@ -1042,11 +1043,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersss?.length > 0
                   ? nodefiltersss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1064,11 +1065,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterss?.length > 0
                   ? nodefilterss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1116,11 +1117,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersssss?.length > 0
                   ? nodefiltersssss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1138,11 +1139,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterssss?.length > 0
                   ? nodefilterssss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1308,7 +1309,7 @@ const Links = ({ history }) => {
                       value={selectimport}
                       onChange={(e) => setSelectimport(e.target.value)}
                     >
-                      {apilabel.map((apilab) => (
+                      {apilabel?.map((apilab) => (
                         <MenuItem value={apilab}>{apilab}</MenuItem>
                       ))}
                     </Select>
@@ -1404,24 +1405,28 @@ const Links = ({ history }) => {
             </form>
           )}
           <div className='graph1'>
-            {apigraph?.nodes?.length > 0 && (
+            {showgraph && (
               <>
                 <Graph
                   id='graph-id'
                   data={mydata}
                   config={myConfigs}
-                // onClickNode={onClickNode}
-                // onClickLink={onClickLink}
+                  // onClickNode={onClickNode}
+                  // onClickLink={onClickLink}
                 />
-                <Button onClick={sendingapidata} variant='contained' color='primary'>
+                <Button
+                  type='button'
+                  onClick={sendingapidata}
+                  variant='contained'
+                  color='primary'
+                >
                   Save Graph
-      </Button>
+                </Button>
               </>
             )}
           </div>
         </>
       )}
-
     </div>
   )
   const paymentbody = (
@@ -1563,9 +1568,14 @@ const Links = ({ history }) => {
               Add Edge
             </Button>
           ) : null}
-          <Button onClick={showimportview} color='primary' variant='contained' style={{ marginLeft: 10 }}>
+          <Button
+            onClick={showimportview}
+            color='primary'
+            variant='contained'
+            style={{ marginLeft: 10 }}
+          >
             Import View
-        </Button>
+          </Button>
         </div>
         <div className='mobile'>
           <div>
