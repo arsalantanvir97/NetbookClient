@@ -154,36 +154,33 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
   }
 }
 export const NodeEdgefetch = (nodes, newedge) => async (dispatch) => {
-  try {
-    dispatch({
-      type: HAVE_NODE_REQUEST,
-    })
-    console.log('actionpayload12', nodes, newedge)
-    const links = []
+  console.log("nodes and newedge", nodes, newedge)
 
-    if (newedge?.length > 0) {
-      newedge.map((link) => {
-        links.push({
-          edgeid: link.edgeid,
-          tags: link.tags,
-          source: link.source.id,
-          target: link.target.id,
-          _id: link._id,
-        })
+  dispatch({
+    type: HAVE_NODE_REQUEST,
+  })
+  // console.log('actionpayload12', nodes, newedge)
+  const links = []
+
+  if (newedge?.length > 0) {
+    newedge.map((link) => {
+      links.push({
+        edgeid: link.edgeid,
+        tags: link.tags,
+        source: link.source.id,
+        target: link.target.id,
+        _id: link._id,
       })
-    }
-    console.log('newedge', newedge, links)
-    dispatch({
-      type: HAVE_NODE_SUCCESESS,
-      payload: { nodes, links },
     })
-    localStorage.setItem('nodehave', JSON.stringify({ nodes, links }))
-  } catch (error) {
-    // dispatch({
-    //   type: HAVE_NODE_FAIL,
-    //   payload: error,
-    // })
   }
+  console.log('newedge', newedge, links)
+  dispatch({
+    type: HAVE_NODE_SUCCESESS,
+    payload: { nodes, links },
+  })
+  localStorage.setItem('nodehave', JSON.stringify({ nodes, links }))
+
+
 }
 
 export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {

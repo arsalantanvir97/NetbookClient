@@ -11,6 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 import AddIcon from '@material-ui/icons/Add'
 import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
+import ImportExport from '@material-ui/icons/ImportExport'
 
 import Select from '@material-ui/core/Select'
 
@@ -177,12 +178,7 @@ const Links = ({ history }) => {
       console.log('nodefilt', nodefilt, nodefilterss)
     }
   }, [source])
-  useEffect(() => {
-    console.log('newnodessss', newnode)
-  }, [newnode])
-  useEffect(() => {
-    console.log('newedgessss', newedge)
-  }, [newedge])
+
   useEffect(() => {
     console.log('source updated')
     if (target !== '') {
@@ -556,6 +552,7 @@ const Links = ({ history }) => {
     )
     if (data) {
       setApiloader(false)
+      console.log("setting data in graph 1", data)
       setApigraph(data)
     }
 
@@ -590,7 +587,10 @@ const Links = ({ history }) => {
 
     // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
     // console.log('abcd', abcd)
+    console.log("setting data in graph 2", abcd)
+
     setApigraph(abcd)
+    console.log('view', apigraph)
     // const {
     //   data,
     // } = await axios.post('https://yellow-termite-80.loca.lt/api/none', { name })
@@ -599,6 +599,7 @@ const Links = ({ history }) => {
   useEffect(() => {
     console.log('abcd', abcd)
   }, [abcd])
+
 
   const mydata = {
     nodes: apigraph ? apigraph.nodes : [],
@@ -623,66 +624,15 @@ const Links = ({ history }) => {
     },
   }
 
+
   const sendingapidata = () => {
     let newernodes
     let neweredges
     let edgges
-    const nodess = [
-      {
-        attributes: [],
-        color: '#2980B9',
-        id: 'Asnsaqg',
-        nodeid: '603525f87e1b0e01b4358d16',
-        tags: ['asdzxc'],
-        type: 'person',
-      },
-      {
-        attributes: [],
-        color: '#2980B9',
-        id: 'Asnfaqg',
-        nodeid: '603525f87e1b0e01b4358d16',
-        tags: ['asdzxc'],
-        type: 'person',
-      },
-      {
-        attributes: [],
-        color: '#2980B9',
-        id: 'Asnjaqg',
-        nodeid: '603525f87e1b0e01b4358d16',
-        tags: ['asdzxc'],
-        type: 'person',
-      },
-      {
-        attributes: [],
-        color: '#2980B9',
-        id: 'Asnlaqg',
-        nodeid: '603525f87e1b0e01b4358d16',
-        tags: ['asdzxc'],
-        type: 'person',
-      },
-    ]
-    const eddgess = [
-      {
-        edgeid: '603525f87e1b0e01b4358d16',
-        source: 'Asnsaqg',
-        tags: ['sw'],
-        target: 'Asnlaqg',
-      },
-      {
-        edgeid: '603525f87e1b0e01b4358d16',
-        source: 'Asnjaqg',
-        tags: ['sw'],
-        target: 'Asnfaqg',
-      },
-      {
-        edgeid: '603525f87e1b0e01b4358d16',
-        source: 'Asnlaqg',
-        tags: ['sw'],
-        target: 'Asnjaqg',
-      },
-    ]
+
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      const funcs = async () => {
+      (async () => {
+        console.log('newdata', apigraph?.nodes, apigraph?.edges)
         const config = {
           headers: {
             'Content-Type': 'application/json',
@@ -691,13 +641,13 @@ const Links = ({ history }) => {
         }
         const { data } = await axios.post(
           'https://netbook-server.herokuapp.com/nodes/many',
-          nodess,
+          apigraph?.nodes,
           config
         )
         newernodes = data
         console.log('data', data, newernodes)
-        setNewnode(data)
-        edgges = eddgess.map((edge) => {
+        // setNewnode(data)
+        edgges = apigraph?.edges.map((edge) => {
           console.log('newnodees', newnode)
           for (let node of data) {
             if (edge.source === node.id) {
@@ -721,22 +671,22 @@ const Links = ({ history }) => {
             },
           }
           const { data } = await axios.post(
-            'http://localhost:5000/edges/many',
+            'https://netbook-server.herokuapp.com/edges/many',
             edgges,
             config
           )
           neweredges = data
           console.log('data2', data, neweredges)
-          setNewedge(data)
+          // setNewedge(data)
         }
+        console.log('abbbc')
         dispatch(NodeEdgefetch(newernodes, neweredges))
-      }
-
-      funcs()
+      })()
     }
-
     console.log('newedges', edgges)
   }
+
+
 
   const submitupdateedgehandler = (e) => {
     e.preventDefault()
@@ -861,9 +811,7 @@ const Links = ({ history }) => {
         <Button type='submit' disabled={id === '' || type === ''}>
           <div>Add Node</div>
         </Button>
-        <Button type='button' onClick={showimportview} color='primary'>
-          Import View
-        </Button>
+
       </form>
     </div>
   )
@@ -1094,11 +1042,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersss?.length > 0
                   ? nodefiltersss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1116,11 +1064,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterss?.length > 0
                   ? nodefilterss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1168,11 +1116,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersssss?.length > 0
                   ? nodefiltersssss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1190,11 +1138,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterssss?.length > 0
                   ? nodefilterssss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1459,20 +1407,21 @@ const Links = ({ history }) => {
             {apigraph?.nodes?.length > 0 && (
               <>
                 <Graph
-                  id='graph-id' // id is mandatory
+                  id='graph-id'
                   data={mydata}
                   config={myConfigs}
-                  // onClickNode={onClickNode}
-                  // onClickLink={onClickLink}
+                // onClickNode={onClickNode}
+                // onClickLink={onClickLink}
                 />
+                <Button onClick={sendingapidata} variant='contained' color='primary'>
+                  Save Graph
+      </Button>
               </>
             )}
           </div>
         </>
       )}
-      <Button onClick={sendingapidata} variant='contained' color='primary'>
-        Save Graph
-      </Button>
+
     </div>
   )
   const paymentbody = (
@@ -1614,6 +1563,9 @@ const Links = ({ history }) => {
               Add Edge
             </Button>
           ) : null}
+          <Button onClick={showimportview} color='primary' variant='contained' style={{ marginLeft: 10 }}>
+            Import View
+        </Button>
         </div>
         <div className='mobile'>
           <div>
@@ -1633,6 +1585,16 @@ const Links = ({ history }) => {
               </Fab>
             </div>
           ) : null}
+          <div>
+            <Fab
+              onClick={showimportview}
+              style={{ marginTop: 10 }}
+              color='primary'
+              aria-label='add'
+            >
+              <ImportExport />
+            </Fab>
+          </div>
         </div>
       </div>
       <div
@@ -1713,7 +1675,7 @@ const Links = ({ history }) => {
         ) : (
           <div className='graph'>
             <Graph
-              id='graph-id' // id is mandatory
+              id='graph-id1'
               data={data}
               config={myConfig}
               onClickNode={onClickNode}
