@@ -270,6 +270,8 @@ const Links = ({ history }) => {
     setHaveupdateedge(true)
   }
   const showimportview = () => {
+    apidata = []
+    setApigraph([])
     setOpenimportview(true)
     setOpen(false)
   }
@@ -523,6 +525,7 @@ const Links = ({ history }) => {
   }
   const importviewHandler = async (e) => {
     e.preventDefault()
+
     setApiloader(true)
 
     let limit_data
@@ -663,6 +666,7 @@ const Links = ({ history }) => {
     let newernodes
     let neweredges
     let edgges
+    setApiloader(true)
 
     console.log('newdatas', apidata?.nodes, apidata?.edges)
     if (
@@ -721,6 +725,13 @@ const Links = ({ history }) => {
         dispatch(NodeEdgefetch(newernodes, neweredges))
       })()
     }
+    setApiloader(false)
+
+    setSelectimport([])
+    setAuthor_data('')
+    setInstitution_data('')
+    handleClose()
+
     console.log('newedges', edgges)
   }
 
@@ -843,10 +854,16 @@ const Links = ({ history }) => {
         <Button type='button' onClick={handleclickfields} color='primary'>
           Add Attribute
         </Button>
-
-        <Button type='submit' disabled={id === '' || type === ''}>
-          <div>Add Node</div>
-        </Button>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <Button
+            variant='contained'
+            color='primary'
+            type='submit'
+            disabled={id === '' || type === ''}
+          >
+            <div>Add Node</div>
+          </Button>
+        </div>
       </form>
     </div>
   )
@@ -1114,12 +1131,22 @@ const Links = ({ history }) => {
           value={edgetags}
           onChange={handleChanges}
         />
-        <Button
-          type='submit'
-          disabled={source === '' || target === '' || edgetags?.length <= 0}
+        <div
+          style={{
+            display: 'flex',
+            marginTop: 13,
+            justifyContent: 'space-around',
+          }}
         >
-          <div>Add Edge</div>
-        </Button>
+          <Button
+            variant='contained'
+            color='primary'
+            type='submit'
+            disabled={source === '' || target === '' || edgetags?.length <= 0}
+          >
+            <div>Add Edge</div>
+          </Button>
+        </div>
       </form>
     </div>
   )
@@ -1420,7 +1447,14 @@ const Links = ({ history }) => {
                         variant='outlined'
                       />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-around',
+                      }}
+                      item
+                      xs={12}
+                    >
                       <Button
                         type='submit'
                         variant='contained'

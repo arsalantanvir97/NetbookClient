@@ -235,12 +235,14 @@ const Query = ({ props, history }) => {
                   color: 'black',
                   width: '100%',
                   marginTop: 9,
+
                   pointerEvents: 'none',
                 }}
                 className={classes.fieldroot}
                 id='outlined-multiline-static'
                 multiline
                 rows={4}
+                label='Waiting for response'
                 value={oauth.msg ? oauth?.msg?.message : null}
                 // defaultValue='Default Value'
                 variant='outlined'

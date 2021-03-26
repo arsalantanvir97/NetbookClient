@@ -415,7 +415,7 @@ const FeedView = ({ history }) => {
             <CircularProgress />
           </div>
         ) : (
-          <div style={{ marginTop: 15, marginLeft: 16 }}>
+          <div className='vertics' style={{ marginTop: 15, marginLeft: 16 }}>
             {filterednode?.length > 0
               ? filterednode?.map((node, id) => (
                   <div key={id} onClick={() => showdetails(node._id)}>
@@ -429,7 +429,7 @@ const FeedView = ({ history }) => {
                     >
                       <div
                         style={{
-                          backgroundColor: 'black',
+                          backgroundColor: node?.color,
                           borderRadius: 20,
                           height: 40,
                           width: 40,
@@ -459,10 +459,10 @@ const FeedView = ({ history }) => {
                     >
                       <div
                         style={{
-                          backgroundColor: 'black',
+                          backgroundColor: node?.color,
                           borderRadius: 20,
-                          height: 40,
-                          width: 40,
+                          minHeight: 40,
+                          minWidth: 40,
                           display: 'flex',
                           justifyContent: 'center',
                           alignItems: 'center',

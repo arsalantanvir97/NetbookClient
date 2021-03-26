@@ -27,7 +27,7 @@ export const getOauthReducer = (state = {}, action) => {
     case GET_AIQUERIES_REQUEST:
       return { ...state, loading: true }
     case GET_AIQUERIES_SUCCESS:
-      console.log('state in AI Queries success', state)
+      console.log('state in AI Queries success', state, action.payload)
       return {
         ...state,
         loading: false,

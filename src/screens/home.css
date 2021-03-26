@@ -7,7 +7,10 @@
 h1 {
   line-height: 3.5rem;
 }
-
+.vertics {
+  overflow-y: auto;
+  width: 100vw;
+}
 .img {
   background-image: url('../images/abc.jpg');
   height: 100%;
@@ -149,7 +152,7 @@ h1 {
   width: 100% !important;
   /* height: calc(100vh - 74px) !important; */
 }
-.graph1 #graph-id-graph-container-zoomable{
+.graph1 #graph-id-graph-container-zoomable {
   left: 20%;
 }
 
@@ -186,7 +189,7 @@ h1 {
 }
 .euros {
   font-size: 20px;
-margin-right: 2px;
+  margin-right: 2px;
   /* position: absolute;
   left: 29%;
   top: -2%; */
@@ -198,7 +201,7 @@ margin-right: 2px;
   font-size: 17px !important;
 }
 .roooot {
-transition: .3s !important;
+  transition: 0.3s !important;
   min-width: 275px;
   box-shadow: 0 0 20px #00000010 !important;
   cursor: pointer;
@@ -235,6 +238,9 @@ transition: .3s !important;
 
   .gbtnn {
     display: flex !important;
+  }
+  .vertics {
+    margin-bottom: 64px;
   }
   .showsidebar {
     display: flex;
@@ -331,14 +337,11 @@ transition: .3s !important;
     min-width: 100px;
     min-height: 100px !important;
     overflow: hidden;
-   
-
   }
-  .roooot:nth-of-type(1){
+  .roooot:nth-of-type(1) {
     margin-top: 10px;
   }
-  .roooot:nth-of-type(3){
+  .roooot:nth-of-type(3) {
     margin-bottom: 20px;
   }
-  
 }

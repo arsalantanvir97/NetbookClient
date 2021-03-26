@@ -98,6 +98,7 @@ export const OauthLogout = () => async (dispatch) => {
   })
 }
 export const AIQueriesfetch = (id, query) => async (dispatch) => {
+  let ars
   try {
     dispatch({
       type: GET_AIQUERIES_REQUEST,
@@ -114,16 +115,14 @@ export const AIQueriesfetch = (id, query) => async (dispatch) => {
       { query },
       config
     )
-
-    console.log('aiqueries', data)
-
-    // localStorage.setItem('useroauth', JSON.stringify(data))
+    ars = data.userupdated
+    console.log('aiqueries', data, ars)
 
     dispatch({
       type: GET_AIQUERIES_SUCCESS,
       payload: data,
     })
-    // localStorage.setItem('useroauth', JSON.stringify(data))
+    localStorage.setItem('useroauth', JSON.stringify(ars))
   } catch (error) {
     dispatch({
       type: GET_AIQUERIES_FAIL,
