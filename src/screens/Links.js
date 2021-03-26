@@ -12,8 +12,10 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import AddIcon from '@material-ui/icons/Add'
 import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
 import ImportExport from '@material-ui/icons/ImportExport'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Select from '@material-ui/core/Select'
+import { ToastContainer, toast } from 'react-toastify'
 
 import {
   Grid,
@@ -75,9 +77,9 @@ const Links = ({ history }) => {
   const [updatenodeid, setUpdatenodeid] = useState('')
   const [author_data, setAuthor_data] = useState('')
   const [institution_data, setInstitution_data] = useState('')
-  const [limit_data, setLimit_data] = useState(-1)
-  const [pubs_data, setPubs_data] = useState(-1)
-  const [co_author_data, setCo_author_data] = useState(-1)
+  const [limit_dataa, setLimit_dataa] = useState(-1)
+  const [pubs_dataa, setPubs_dataa] = useState(-1)
+  const [co_author_dataa, setCo_author_dataa] = useState(-1)
 
   const [updatenodetype, setUpdatenodetype] = useState('')
   const [updatenodetags, setUpdatenodetags] = useState([])
@@ -521,6 +523,13 @@ const Links = ({ history }) => {
   const importviewHandler = async (e) => {
     e.preventDefault()
     setApiloader(true)
+
+    let limit_data
+    let co_author_data
+    let pubs_data
+    limit_data = Number(limit_dataa)
+    pubs_data = Number(pubs_dataa)
+    co_author_data = Number(co_author_dataa)
     console.log(
       'respone',
       author_data,
@@ -534,7 +543,6 @@ const Links = ({ history }) => {
       typeof pubs_data,
       typeof co_author_data
     )
-
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -542,7 +550,7 @@ const Links = ({ history }) => {
       },
     }
     const { data } = await axios.post(
-      'http://192.168.1.178:8000/api/gs_search',
+      'http://localhost:8000/api/gs_search',
       {
         author_data,
         institution_data,
@@ -552,50 +560,61 @@ const Links = ({ history }) => {
       },
       config
     )
+    if (data?.msg === 'faliure' || data?.nodes?.length <= 0) {
+      setApiloader(false)
+      toast.error('You typed wrong information', {
+        position: 'bottom-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } if (data?.nodes) {
+      setApiloader(false)
+    }
+    if (data?.nodes?.length > 0) {
 
-    setApiloader(false)
-    setShowgraph(true)
-    console.log('setting data in graph 1', data, apiloader)
-    // setApigraph(data)
-    apidata = data
+      setShowgraph(true)
 
-    console.log('api graph nodes', data.nodes)
-    let newArr = data?.nodes?.map((importedNode) => {
-      let color = colorarr.sort(() => Math.random() - 0.5)[0]
-      for (let node of nodde?.nodes) {
-        if (node.type === importedNode.type && node.color) {
-          color = node.color
+      console.log('setting data in graph 1', data, apiloader)
+      // setApigraph(data)
+      apidata = data
+      console.log('api graph nodes', data.nodes)
+      let newArr = data?.nodes?.map((importedNode) => {
+        let color = colorarr.sort(() => Math.random() - 0.5)[0]
+        for (let node of nodde?.nodes) {
+          if (node.type === importedNode.type && node.color) {
+            color = node.color
+          }
         }
-      }
-      importedNode.color = color
-      let nodeid = oauth?._id
-      importedNode.nodeid = nodeid
-      let tags = []
-      importedNode.tags = tags
-
-      console.log('new node', importedNode)
-      return importedNode
-    })
-
-    let newedd = data?.edges?.map((importededge) => {
-      let edgeid = oauth?._id
-      importededge.edgeid = edgeid
-      console.log('new edge', importededge)
-      return importededge
-    })
-    // // console.log('importview api res', data, limit_data, apigraph)
-    // // console.log('new array ==>', data.edges)
-    abcd = { edges: newedd, nodes: newArr }
-    // setSendinggraphdata(abcd)
-
-    // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
-    // console.log('abcd', abcd)
-    console.log('setting data in graph 2', abcd)
-
-    // setApigraph(abcd)
-    apidata = abcd
-    setApigraph(abcd)
-    console.log('view', apigraph, apidata?.nodes, apidata?.edges)
+        importedNode.color = color
+        let nodeid = oauth?._id
+        importedNode.nodeid = nodeid
+        let tags = []
+        importedNode.tags = tags
+        console.log('new node', importedNode)
+        return importedNode
+      })
+      let newedd = data?.edges?.map((importededge) => {
+        let edgeid = oauth?._id
+        importededge.edgeid = edgeid
+        console.log('new edge', importededge)
+        return importededge
+      })
+      // // console.log('importview api res', data, limit_data, apigraph)
+      // // console.log('new array ==>', data.edges)
+      abcd = { edges: newedd, nodes: newArr }
+      // setSendinggraphdata(abcd)
+      // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
+      // console.log('abcd', abcd)
+      console.log('setting data in graph 2', abcd)
+      // setApigraph(abcd)
+      apidata = abcd
+      setApigraph(abcd)
+      console.log('view', apigraph, apidata?.nodes, apidata?.edges)
+    }
     // const {
     //   data,
     // } = await axios.post('https://yellow-termite-80.loca.lt/api/none', { name })
@@ -635,7 +654,7 @@ const Links = ({ history }) => {
     let edgges
     console.log('newdatas', apidata?.nodes, apidata?.edges)
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      ;(async () => {
+      ; (async () => {
         console.log('newdata', apidata?.nodes, apidata?.edges)
         const config = {
           headers: {
@@ -1043,11 +1062,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersss?.length > 0
                   ? nodefiltersss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1065,11 +1084,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterss?.length > 0
                   ? nodefilterss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1117,11 +1136,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersssss?.length > 0
                   ? nodefiltersssss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1139,11 +1158,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterssss?.length > 0
                   ? nodefilterssss.map((iddd) => (
-                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                    ))
+                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                  ))
                   : nodde?.nodes?.map((idd) => (
-                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                    ))}
+                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1357,8 +1376,8 @@ const Links = ({ history }) => {
                         size='small'
                         label='Limit'
                         type='number'
-                        value={limit_data}
-                        onChange={(e) => setLimit_data(e.target.value)}
+                        value={limit_dataa}
+                        onChange={(e) => setLimit_dataa(e.target.value)}
                         variant='outlined'
                       />
                     </Grid>
@@ -1369,8 +1388,8 @@ const Links = ({ history }) => {
                         size='small'
                         label='Publications'
                         type='number'
-                        value={pubs_data}
-                        onChange={(e) => setPubs_data(e.target.value)}
+                        value={pubs_dataa}
+                        onChange={(e) => setPubs_dataa(e.target.value)}
                         variant='outlined'
                       />
                     </Grid>
@@ -1381,8 +1400,8 @@ const Links = ({ history }) => {
                         size='small'
                         label='Coauthor'
                         type='number'
-                        value={co_author_data}
-                        onChange={(e) => setCo_author_data(e.target.value)}
+                        value={co_author_dataa}
+                        onChange={(e) => setCo_author_dataa(e.target.value)}
                         variant='outlined'
                       />
                     </Grid>
@@ -1411,8 +1430,8 @@ const Links = ({ history }) => {
                   id='graph-id'
                   data={mydata}
                   config={myConfigs}
-                  // onClickNode={onClickNode}
-                  // onClickLink={onClickLink}
+                // onClickNode={onClickNode}
+                // onClickLink={onClickLink}
                 />
                 <Button
                   type='button'

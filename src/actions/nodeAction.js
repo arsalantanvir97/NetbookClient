@@ -178,7 +178,7 @@ export const NodeEdgefetch = (nodes, newedge) => async (dispatch) => {
       type: HAVE_NODE_SUCCESESS,
       payload: { nodes, links },
     })
-    localStorage.setItem('nodehave', JSON.stringify({ nodes, links }))
+    // localStorage.setItem('nodehave', JSON.stringify({ nodes, links }))
   } catch (error) {
     dispatch({
       type: HAVE_NODE_FAIL,
