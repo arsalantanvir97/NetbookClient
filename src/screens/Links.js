@@ -57,6 +57,7 @@ import axios from 'axios'
 import Sidebar from '../components/Sidebar'
 import { NewReleases } from '@material-ui/icons'
 let apidata = []
+let checkingnodes
 const Links = ({ history }) => {
   // const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
@@ -550,7 +551,7 @@ const Links = ({ history }) => {
       },
     }
     const { data } = await axios.post(
-      'http://localhost:8000/api/gs_search',
+      'http://192.168.1.178:5000/api/gs_search',
       {
         author_data,
         institution_data,
@@ -571,13 +572,12 @@ const Links = ({ history }) => {
         draggable: true,
         progress: undefined,
       })
-    } if (data?.nodes) {
+    }
+    if (data?.nodes) {
       setApiloader(false)
     }
     if (data?.nodes?.length > 0) {
-
       setShowgraph(true)
-
       console.log('setting data in graph 1', data, apiloader)
       // setApigraph(data)
       apidata = data
@@ -614,6 +614,17 @@ const Links = ({ history }) => {
       apidata = abcd
       setApigraph(abcd)
       console.log('view', apigraph, apidata?.nodes, apidata?.edges)
+      checkingnodes = apidata?.nodes?.filter((xd) => {
+        let flag = true
+        for (let node of nodde?.nodes) {
+          if (node.id === xd.id) {
+            // console.log('newdatsa', node.id, xd.id)
+            flag = false
+          }
+        }
+        return flag
+      })
+      console.log('newdata', checkingnodes)
     }
     // const {
     //   data,
@@ -652,9 +663,13 @@ const Links = ({ history }) => {
     let newernodes
     let neweredges
     let edgges
+
     console.log('newdatas', apidata?.nodes, apidata?.edges)
-    if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
-      ; (async () => {
+    if (
+      nodde?.nodes?.length < oauth?.packageid?.Nodes &&
+      checkingnodes?.length > 0
+    ) {
+      ;(async () => {
         console.log('newdata', apidata?.nodes, apidata?.edges)
         const config = {
           headers: {
@@ -1062,11 +1077,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersss?.length > 0
                   ? nodefiltersss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1084,11 +1099,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterss?.length > 0
                   ? nodefilterss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1136,11 +1151,11 @@ const Links = ({ history }) => {
               >
                 {nodefiltersssss?.length > 0
                   ? nodefiltersssss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1158,11 +1173,11 @@ const Links = ({ history }) => {
               >
                 {nodefilterssss?.length > 0
                   ? nodefilterssss.map((iddd) => (
-                    <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
-                  ))
+                      <MenuItem value={iddd._id}>{iddd.id}</MenuItem>
+                    ))
                   : nodde?.nodes?.map((idd) => (
-                    <MenuItem value={idd._id}>{idd.id}</MenuItem>
-                  ))}
+                      <MenuItem value={idd._id}>{idd.id}</MenuItem>
+                    ))}
               </Select>
             </FormControl>
           </Grid>
@@ -1430,8 +1445,8 @@ const Links = ({ history }) => {
                   id='graph-id'
                   data={mydata}
                   config={myConfigs}
-                // onClickNode={onClickNode}
-                // onClickLink={onClickLink}
+                  // onClickNode={onClickNode}
+                  // onClickLink={onClickLink}
                 />
                 <Button
                   type='button'
