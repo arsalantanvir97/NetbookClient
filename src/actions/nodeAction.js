@@ -35,6 +35,7 @@ import {
   UPDATE_NODE_FAIL,
   REMOVE_NODE_SUCCESS,
   REMOVE_NODE_REQUEST,
+  GET_NODE_MESSAGE,
   REMOVE_NODE_FAIL,
   REMOVE_EDGE_SUCCESS,
   REMOVE_EDGE_REQUEST,
@@ -61,11 +62,19 @@ export const NodeAdd = (nodeid, id, type, tags, attributes, color) => async (
       config
     )
 
-    dispatch({
-      type: GET_NODE_SUCCESS,
-      payload: data,
-    })
-    localStorage.setItem('nodehave', JSON.stringify(data))
+    if (!data.message) {
+      dispatch({
+        type: GET_NODE_SUCCESS,
+        payload: data,
+      })
+      localStorage.setItem('nodehave', JSON.stringify(data))
+    }
+    if (data.message) {
+      dispatch({
+        type: GET_NODE_MESSAGE,
+        payload: data.message,
+      })
+    }
   } catch (error) {
     console.log('error', error)
     dispatch({

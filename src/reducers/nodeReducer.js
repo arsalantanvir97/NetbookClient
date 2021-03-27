@@ -28,6 +28,7 @@ import {
   HAVE_EDGE_REQUEST,
   HAVE_EDGE_SUCCESS,
   HAVE_NODE_SUCCESESS,
+  GET_NODE_MESSAGE,
   UPDATE_EDGE_FAIL,
   UPDATE_EDGE_REQUEST,
   UPDATE_EDGE_SUCCESS,
@@ -65,10 +66,13 @@ export const getNodeReducer = (state = {}, action) => {
     case HAVE_NODE_REQUEST:
       return { ...state, loading: true }
 
+    case GET_NODE_MESSAGE:
+      console.log('action.payload', action.payload)
+      return { ...state, loading: false, messssage: action.payload }
+
     case HAVE_NODE_SUCCESS:
       console.log('action.payload', action.payload)
       return { ...state, loading: false, nodde: action.payload }
-
     case HAVE_NODE_SUCCESESS:
       console.log('action.payload', action.payload.nodes, action.payload.links)
       return {

@@ -242,7 +242,7 @@ const Query = ({ props, history }) => {
                 id='outlined-multiline-static'
                 multiline
                 rows={4}
-                label='Waiting for response'
+                label={oauth.msg ? null : 'Waiting for response'}
                 value={oauth.msg ? oauth?.msg?.message : null}
                 // defaultValue='Default Value'
                 variant='outlined'

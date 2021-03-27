@@ -68,6 +68,8 @@ const Links = ({ history }) => {
   const [haveupdatenode, setHaveupdatenode] = useState(false)
   const [openimportview, setOpenimportview] = useState(false)
   const [tags, setTags] = useState([])
+  const [msggggg, setMsggggg] = useState('')
+
   // const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
   const [payvisi, setPayvisi] = useState(false)
@@ -163,6 +165,7 @@ const Links = ({ history }) => {
     loading: nodeloading,
     filterednode,
     filterededge,
+    messssage,
     nodde,
     error: errror,
   } = getNode
@@ -175,6 +178,7 @@ const Links = ({ history }) => {
       console.log('oauth', oauth, nodde)
     }
   }, [])
+
   useEffect(() => {
     console.log('source updated')
     if (source !== '') {
@@ -426,6 +430,20 @@ const Links = ({ history }) => {
     setUpdateattributes(updateinputfields)
   }
 
+  // if (msggggg) {
+  //   toast.error('You entered the same node name', {
+  //     position: 'bottom-center',
+  //     autoClose: 5000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //   })
+  //   setMsggggg('')
+  //   console.log('messssage', messssage)
+  // }
+
   const handleclickfields = () => {
     setInputfields([
       ...inputfields,
@@ -458,6 +476,7 @@ const Links = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
+    console.log('ab', nodde?.nodes?.length, oauth?.packageid?.Nodes)
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
       let color = colorarr.sort(() => Math.random() - 0.5)[0]
       nodde.nodes.filter((node) => {
