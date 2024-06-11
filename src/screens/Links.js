@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react"
 // import Sidebar from 'react-sidebar'
 // import SlidingPanel from 'react-sliding-side-panel'
-import IconButton from '@material-ui/core/IconButton'
-import ClearIcon from '@material-ui/icons/Clear'
-import DeleteIcon from '@material-ui/icons/Delete'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import IconButton from "@material-ui/core/IconButton"
+import ClearIcon from "@material-ui/icons/Clear"
+import DeleteIcon from "@material-ui/icons/Delete"
+import InputLabel from "@material-ui/core/InputLabel"
+import MenuItem from "@material-ui/core/MenuItem"
+import FormControl from "@material-ui/core/FormControl"
+import CircularProgress from "@material-ui/core/CircularProgress"
 
-import AddIcon from '@material-ui/icons/Add'
-import TrendingFlatIcon from '@material-ui/icons/TrendingFlat'
-import ImportExport from '@material-ui/icons/ImportExport'
-import 'react-toastify/dist/ReactToastify.css'
-
-import Select from '@material-ui/core/Select'
-import { ToastContainer, toast } from 'react-toastify'
+import AddIcon from "@material-ui/icons/Add"
+import TrendingFlatIcon from "@material-ui/icons/TrendingFlat"
+import ImportExport from "@material-ui/icons/ImportExport"
+import "react-toastify/dist/ReactToastify.css"
+import Select from "@material-ui/core/Select"
+import { ToastContainer, toast } from "react-toastify"
 
 import {
   Grid,
@@ -24,20 +23,20 @@ import {
   TextField,
   Button,
   Fab,
-} from '@material-ui/core'
+} from "@material-ui/core"
 import {
   ThemeProvider,
   createMuiTheme,
   makeStyles,
-} from '@material-ui/core/styles'
+} from "@material-ui/core/styles"
 
 // import DeleteIcon from '@material-ui/icons/Delete'
-import { useDispatch, useSelector } from 'react-redux'
-import { OauthLogout } from '../actions/oauthAction'
-import { Link } from 'react-router-dom'
-import TagsInput from 'react-tagsinput'
-import './home.css'
-import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
+import { useDispatch, useSelector } from "react-redux"
+import { OauthLogout } from "../actions/oauthAction"
+import { Link } from "react-router-dom"
+import TagsInput from "react-tagsinput"
+import "./home.css"
+import "react-tagsinput/react-tagsinput.css" // If using WebPack and style-loader.
 import {
   NodeAdd,
   Nodefetch,
@@ -50,14 +49,16 @@ import {
   NodeAdded,
   EdgeAdded,
   NodeEdgefetch,
-} from '../actions/nodeAction'
-import { Graph } from 'react-d3-graph'
-import Navbar from '../components/Navbar'
-import axios from 'axios'
-import Sidebar from '../components/Sidebar'
-import { NewReleases } from '@material-ui/icons'
+} from "../actions/nodeAction"
+import { Graph } from "react-d3-graph"
+import Navbar from "../components/Navbar"
+import axios from "axios"
+import Sidebar from "../components/Sidebar"
+import { NewReleases } from "@material-ui/icons"
+import { baseURL } from "../utils/api"
 let apidata = []
 let checkingnodes
+let meetingid
 const Links = ({ history }) => {
   // const [hid, setHid] = useState(false)
   const [open, setOpen] = useState(false)
@@ -68,23 +69,23 @@ const Links = ({ history }) => {
   const [haveupdatenode, setHaveupdatenode] = useState(false)
   const [openimportview, setOpenimportview] = useState(false)
   const [tags, setTags] = useState([])
-  const [msggggg, setMsggggg] = useState('')
+  const [msggggg, setMsggggg] = useState("")
 
   // const [visi, setVisi] = useState(false)
   const [visible, setVisiblity] = useState(false)
   const [payvisi, setPayvisi] = useState(false)
   const [showgraph, setShowgraph] = useState(false)
 
-  const [id, setId] = useState('')
+  const [id, setId] = useState("")
   let abcd
-  const [updatenodeid, setUpdatenodeid] = useState('')
-  const [author_data, setAuthor_data] = useState('')
-  const [institution_data, setInstitution_data] = useState('')
+  const [updatenodeid, setUpdatenodeid] = useState("")
+  const [author_data, setAuthor_data] = useState("")
+  const [institution_data, setInstitution_data] = useState("")
   const [limit_dataa, setLimit_dataa] = useState(-1)
   const [pubs_dataa, setPubs_dataa] = useState(-1)
   const [co_author_dataa, setCo_author_dataa] = useState(-1)
 
-  const [updatenodetype, setUpdatenodetype] = useState('')
+  const [updatenodetype, setUpdatenodetype] = useState("")
   const [updatenodetags, setUpdatenodetags] = useState([])
   const [selectimport, setSelectimport] = useState([])
   const [updateinputfields, setUpdateinputfields] = useState([])
@@ -92,7 +93,7 @@ const Links = ({ history }) => {
   const [vissible, setVissiblity] = useState(false)
   const [apigraph, setApigraph] = useState([])
   const [haveedgedetails, setHaveedgedetails] = useState([])
-  const [type, setType] = useState('')
+  const [type, setType] = useState("")
   const [inputfields, setInputfields] = useState([])
   // const [openPanel, setOpenPanel] = useState(false)
   const [popup, setPopup] = useState(false)
@@ -105,38 +106,38 @@ const Links = ({ history }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [apiloader, setApiloader] = useState(false)
 
-  const [source, setSource] = useState('')
-  const [target, setTarget] = useState('')
+  const [source, setSource] = useState("")
+  const [target, setTarget] = useState("")
   const [edgetags, setEdgetags] = useState([])
   const [searchdata, setSearchdata] = useState([])
-  const [searchvalue, setSearchvalue] = useState('')
+  const [searchvalue, setSearchvalue] = useState("")
   // const [name, setName] = useState('')
   const [filtereddata, setFiltereddata] = useState([])
   const [apilabel, setApilabel] = useState([
-    'Google Scholar',
-    'Imdb',
-    'Twitter',
-    'Facebook',
+    "Google Scholar",
+    "Imdb",
+    "Twitter",
+    "Facebook",
   ])
   let colorarr = [
-    '#16A085',
-    '#27AE60',
-    '#2980B9',
-    '#8E44AD',
-    '#2C3E50',
-    '#FFBF00',
-    '#F39C12',
-    '#D35400',
-    '#C0392B',
-    '#BDC3C7',
-    '#7F8C8D',
-    '#43A047',
-    '#7B1FA2',
+    "#16A085",
+    "#27AE60",
+    "#2980B9",
+    "#8E44AD",
+    "#2C3E50",
+    "#FFBF00",
+    "#F39C12",
+    "#D35400",
+    "#C0392B",
+    "#BDC3C7",
+    "#7F8C8D",
+    "#43A047",
+    "#7B1FA2",
   ]
   const [randomcolor, setRandomcolor] = useState([])
 
-  const [updatesource, setUpdatesource] = useState('')
-  const [updatetarget, setUpdatetarget] = useState('')
+  const [updatesource, setUpdatesource] = useState("")
+  const [updatetarget, setUpdatetarget] = useState("")
   const [updateedgetags, setUpdateedgetags] = useState([])
   const [sendinggraphdata, setSendinggraphdata] = useState([])
 
@@ -175,41 +176,41 @@ const Links = ({ history }) => {
   useEffect(() => {
     if (oauth?._id) {
       dispatch(Nodefetch(oauth._id))
-      console.log('oauth', oauth, nodde)
+      console.log("oauth", oauth, nodde)
     }
   }, [])
 
   useEffect(() => {
-    console.log('source updated')
-    if (source !== '') {
+    console.log("source updated")
+    if (source !== "") {
       nodefilt = nodde?.nodes?.filter((item) => item._id !== source)
       setNodefilterss(nodefilt)
-      console.log('nodefilt', nodefilt, nodefilterss)
+      console.log("nodefilt", nodefilt, nodefilterss)
     }
   }, [source])
 
   useEffect(() => {
-    console.log('source updated')
-    if (target !== '') {
+    console.log("source updated")
+    if (target !== "") {
       nodefilts = nodde?.nodes?.filter((item) => item._id !== target)
       setNodefiltersss(nodefilts)
-      console.log('nodefilt', nodefilts, nodefiltersss)
+      console.log("nodefilt", nodefilts, nodefiltersss)
     }
   }, [target])
   useEffect(() => {
-    console.log('source updated')
-    if (updatesource !== '') {
+    console.log("source updated")
+    if (updatesource !== "") {
       nodefiltss = nodde?.nodes?.filter((item) => item._id !== updatesource)
       setNodefilterssss(nodefiltss)
-      console.log('nodefilt', nodefiltss, nodefilterssss)
+      console.log("nodefilt", nodefiltss, nodefilterssss)
     }
   }, [updatesource])
   useEffect(() => {
-    console.log('source updated')
-    if (updatetarget !== '') {
+    console.log("source updated")
+    if (updatetarget !== "") {
       nodefiltsss = nodde?.nodes?.filter((item) => item._id !== updatetarget)
       setNodefiltersssss(nodefiltsss)
-      console.log('nodefilt', nodefiltsss, nodefiltersssss)
+      console.log("nodefilt", nodefiltsss, nodefiltersssss)
     }
   }, [updatetarget])
   // useEffect(() => {
@@ -222,7 +223,7 @@ const Links = ({ history }) => {
   //   apires()
   // })
   useEffect(() => {
-    console.log('selectimport:', selectimport)
+    console.log("selectimport:", selectimport)
   }, [selectimport])
 
   // useEffect(() => {
@@ -238,13 +239,13 @@ const Links = ({ history }) => {
   //   filterednodes(nodde?.nodes)
   // }, [])
   useEffect(() => {
-    console.log('searchednode:', filterednode)
+    console.log("searchednode:", filterednode)
   }, [filterednode])
   useEffect(() => {
-    console.log('apigraph', apigraph)
+    console.log("apigraph", apigraph)
   }, [apigraph])
   useEffect(() => {
-    console.log('apigraphs', apigraph?.nodes, apigraph?.edges)
+    console.log("apigraphs", apigraph?.nodes, apigraph?.edges)
   }, [apigraph])
 
   useEffect(() => {
@@ -325,63 +326,63 @@ const Links = ({ history }) => {
 
   const useStyles = makeStyles((theme) => ({
     paper: {
-      position: 'absolute',
-      width: innerWidth > 600 ? 600 : '100%',
+      position: "absolute",
+      width: innerWidth > 600 ? 600 : "100%",
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
-      maxHeight: 'calc(100vh - 200px)',
-      overflow: 'auto !important',
-      top: '50%',
+      maxHeight: "calc(100vh - 200px)",
+      overflow: "auto !important",
+      top: "50%",
     },
     paperss: {
-      position: 'absolute',
-      width: innerWidth > 600 ? 500 : '100%',
+      position: "absolute",
+      width: innerWidth > 600 ? 500 : "100%",
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
-      maxHeight: 'calc(100vh - 100px)',
-      overflow: 'auto !important',
-      top: '50%',
+      maxHeight: "calc(100vh - 100px)",
+      overflow: "auto !important",
+      top: "50%",
     },
     papper: {
-      position: 'absolute',
-      width: innerWidth > 600 ? 450 : '100%',
+      position: "absolute",
+      width: innerWidth > 600 ? 450 : "100%",
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
-      maxHeight: 'calc(100vh - 200px)',
-      overflow: 'auto !important',
-      top: '50%',
+      maxHeight: "calc(100vh - 200px)",
+      overflow: "auto !important",
+      top: "50%",
     },
     multilineColor: {
-      color: 'white',
+      color: "white",
     },
     formControl: {
       // margin: theme.spacing(1),
       minWidth: 120,
-      width: '100%',
+      width: "100%",
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
     root: {
-      width: '100%',
-      '& > * + *': {
+      width: "100%",
+      "& > * + *": {
         marginTop: theme.spacing(2),
       },
     },
     rooot: {
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
     },
   }))
   const classes = useStyles()
@@ -401,7 +402,7 @@ const Links = ({ history }) => {
   const handlesearchchange = (event) => {
     const { value } = event.target
     setSearchvalue(value)
-    console.log('ji', searchvalue)
+    console.log("ji", searchvalue)
   }
 
   const handleChange = (tags) => {
@@ -419,7 +420,9 @@ const Links = ({ history }) => {
 
   const handlechangeinput = (index, event) => {
     const values = [...inputfields]
+    console.log("value", values)
     values[index][event.target.name] = event.target.value
+    console.log("values", values)
     setInputfields(values)
     setAttributes(inputfields)
   }
@@ -445,15 +448,20 @@ const Links = ({ history }) => {
   // }
 
   const handleclickfields = () => {
+    let zb = [
+      ...inputfields,
+      { attributeName: "", attributeValue: "", attributeType: "" },
+    ]
     setInputfields([
       ...inputfields,
-      { attributeName: '', attributeValue: '', attributeType: '' },
+      { attributeName: "", attributeValue: "", attributeType: "" },
     ])
+    console.log("setInputfields", zb)
   }
   const handleclickupdatefields = () => {
     setUpdateinputfields([
       ...updateinputfields,
-      { attributeName: '', attributeValue: '', attributeType: '' },
+      { attributeName: "", attributeValue: "", attributeType: "" },
     ])
   }
   const handlgeupdateedge = () => {
@@ -476,7 +484,7 @@ const Links = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    console.log('ab', nodde?.nodes?.length, oauth?.packageid?.Nodes)
+    console.log("ab", nodde?.nodes?.length, oauth?.packageid?.Nodes)
     if (nodde?.nodes?.length < oauth?.packageid?.Nodes) {
       let color = colorarr.sort(() => Math.random() - 0.5)[0]
       nodde.nodes.filter((node) => {
@@ -489,15 +497,15 @@ const Links = ({ history }) => {
       // dispatch(Nodefetch(oauth?._id))
 
       handleClose()
-      setId('')
-      setType('')
+      setId("")
+      setType("")
       setTags([])
       setInputfields([])
     } else {
       handlepayvisi()
 
-      setId('')
-      setType('')
+      setId("")
+      setType("")
       setTags([])
       setInputfields([])
     }
@@ -517,8 +525,8 @@ const Links = ({ history }) => {
     )
     // dispatch(Nodefetch(oauth._id))
     handleClose()
-    setUpdatenodeid('')
-    setUpdatenodetype('')
+    setUpdatenodeid("")
+    setUpdatenodetype("")
     setUpdatenodetags([])
     setUpdateinputfields([])
   }
@@ -529,16 +537,16 @@ const Links = ({ history }) => {
       dispatch(EdgeAdd(oauth._id, source, target, edgetags))
       // dispatch(Nodefetch(oauth._id))
       handleClose()
-      setSource('')
-      setTarget('')
+      setSource("")
+      setTarget("")
       setEdgetags([])
       setNodefilterss([])
       setNodefiltersss([])
     } else {
       handlepayvisi()
       // handleClose()
-      setSource('')
-      setTarget('')
+      setSource("")
+      setTarget("")
       setEdgetags([])
     }
   }
@@ -554,7 +562,7 @@ const Links = ({ history }) => {
     pubs_data = Number(pubs_dataa)
     co_author_data = Number(co_author_dataa)
     console.log(
-      'respone',
+      "respone",
       author_data,
       institution_data,
       limit_data,
@@ -568,12 +576,12 @@ const Links = ({ history }) => {
     )
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         // 'Access-Control-Allow-Origin': '*',
       },
     }
     const { data } = await axios.post(
-      'http://192.168.1.178:5000/api/gs_search',
+      "http://192.168.1.178:5000/api/gs_search",
       {
         author_data,
         institution_data,
@@ -583,10 +591,10 @@ const Links = ({ history }) => {
       },
       config
     )
-    if (data?.msg === 'faliure' || data?.nodes?.length <= 0) {
+    if (data?.msg === "faliure" || data?.nodes?.length <= 0) {
       setApiloader(false)
-      toast.error('You typed wrong information', {
-        position: 'bottom-center',
+      toast.error("You typed wrong information", {
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -600,10 +608,10 @@ const Links = ({ history }) => {
     }
     if (data?.nodes?.length > 0) {
       setShowgraph(true)
-      console.log('setting data in graph 1', data, apiloader)
+      console.log("setting data in graph 1", data, apiloader)
       // setApigraph(data)
       apidata = data
-      console.log('api graph nodes', data.nodes)
+      console.log("api graph nodes", data.nodes)
       let newArr = data?.nodes?.map((importedNode) => {
         let color = colorarr.sort(() => Math.random() - 0.5)[0]
         for (let node of nodde?.nodes) {
@@ -616,13 +624,13 @@ const Links = ({ history }) => {
         importedNode.nodeid = nodeid
         let tags = []
         importedNode.tags = tags
-        console.log('new node', importedNode)
+        console.log("new node", importedNode)
         return importedNode
       })
       let newedd = data?.edges?.map((importededge) => {
         let edgeid = oauth?._id
         importededge.edgeid = edgeid
-        console.log('new edge', importededge)
+        console.log("new edge", importededge)
         return importededge
       })
       // // console.log('importview api res', data, limit_data, apigraph)
@@ -631,11 +639,11 @@ const Links = ({ history }) => {
       // setSendinggraphdata(abcd)
       // setMydata({  nodes: apigraph?.nodes, links: apigraph?.edges })
       // console.log('abcd', abcd)
-      console.log('setting data in graph 2', abcd)
+      console.log("setting data in graph 2", abcd)
       // setApigraph(abcd)
       apidata = abcd
       setApigraph(abcd)
-      console.log('view', apigraph, apidata?.nodes, apidata?.edges)
+      console.log("view", apigraph, apidata?.nodes, apidata?.edges)
       checkingnodes = apidata?.nodes?.filter((xd) => {
         let flag = true
         for (let node of nodde?.nodes) {
@@ -646,7 +654,7 @@ const Links = ({ history }) => {
         }
         return flag
       })
-      console.log('newdata', checkingnodes)
+      console.log("newdata", checkingnodes)
     }
     // const {
     //   data,
@@ -654,7 +662,7 @@ const Links = ({ history }) => {
     // console.log('apireps', data)
   }
   useEffect(() => {
-    console.log('abcd', abcd)
+    console.log("abcd", abcd)
   }, [abcd])
 
   const mydata = {
@@ -667,16 +675,16 @@ const Links = ({ history }) => {
     nodeHighlightBehavior: true,
     directed: true,
     node: {
-      color: '#3A4A57',
+      color: "#3A4A57",
       size: 550,
-      highlightStrokeColor: 'blue',
+      highlightStrokeColor: "blue",
       fontSize: 18,
     },
     link: {
-      highlightColor: 'lightblue',
+      highlightColor: "lightblue",
       size: 1500,
       strokeWidth: 2.4,
-      color: '#6F93B0',
+      color: "#6F93B0",
     },
   }
 
@@ -687,71 +695,71 @@ const Links = ({ history }) => {
     let edgges
     setApiloader(true)
 
-    console.log('newdatas', apidata?.nodes, apidata?.edges)
+    console.log("newdatas", apidata?.nodes, apidata?.edges)
     if (
       nodde?.nodes?.length < oauth?.packageid?.Nodes &&
       checkingnodes?.length > 0
     ) {
       ;(async () => {
-        console.log('newdata', apidata?.nodes, apidata?.edges)
+        console.log("newdata", apidata?.nodes, apidata?.edges)
         const config = {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             // 'Access-Control-Allow-Origin': '*',
           },
         }
         const { data } = await axios.post(
-          'https://netbook-server.herokuapp.com/nodes/many',
+          `${baseURL}/nodes/many`,
           apidata?.nodes,
           config
         )
         newernodes = data
-        console.log('data', data, newernodes)
+        console.log("data", data, newernodes)
         // setNewnode(data)
         edgges = apidata?.edges?.map((edge) => {
-          console.log('newnodees', newnode)
+          console.log("newnodees", newnode)
           for (let node of data) {
             if (edge.source === node.id) {
-              console.log('nodeid', edge?.source, node?.id)
+              console.log("nodeid", edge?.source, node?.id)
               edge.source = node._id
             }
             if (edge.target === node.id) {
               edge.target = node._id
             }
           }
-          console.log('edgggge', edge)
+          console.log("edgggge", edge)
           return edge
         })
 
         if (nodde?.links?.length < oauth?.packageid?.Edges) {
-          console.log('eddge', edgges)
+          console.log("eddge", edgges)
           const config = {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               // 'Access-Control-Allow-Origin': '*',
             },
           }
           const { data } = await axios.post(
-            'https://netbook-server.herokuapp.com/edges/many',
+            `${baseURL}/edges/many`,
             edgges,
             config
           )
           neweredges = data
-          console.log('data2', data, neweredges)
+          console.log("data2", data, neweredges)
           // setNewedge(data)
         }
-        console.log('abbbc')
+        console.log("abbbc")
         dispatch(NodeEdgefetch(newernodes, neweredges))
       })()
     }
     setApiloader(false)
 
     setSelectimport([])
-    setAuthor_data('')
-    setInstitution_data('')
+    setAuthor_data("")
+    setInstitution_data("")
     handleClose()
 
-    console.log('newedges', edgges)
+    console.log("newedges", edgges)
   }
 
   const submitupdateedgehandler = (e) => {
@@ -772,20 +780,20 @@ const Links = ({ history }) => {
   }
 
   const blackTheme = createMuiTheme({
-    palette: { primary: { main: '#000000' } },
+    palette: { primary: { main: "#000000" } },
   })
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>Add Node</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">Add Node</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
 
@@ -793,92 +801,89 @@ const Links = ({ history }) => {
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <TextField
-              style={{ color: 'black', width: '100%', marginTop: 9 }}
-              id='outlined-basic'
-              size='small'
-              label='Name'
+              style={{ color: "black", width: "100%", marginTop: 9 }}
+              id="outlined-basic"
+              size="small"
+              label="Name"
               value={id}
               onChange={(e) => setId(e.target.value)}
-              variant='outlined'
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
-              style={{ width: '100%', marginTop: 9 }}
-              id='outlined-basic'
-              label='Type'
-              size='small'
+              style={{ width: "100%", marginTop: 9 }}
+              id="outlined-basic"
+              label="Type"
+              size="small"
               value={type}
               onChange={(e) => setType(e.target.value)}
-              variant='outlined'
+              variant="outlined"
             />
           </Grid>
         </Grid>
         <div style={{ height: 9 }}></div>
         <TagsInput
-          style={{ color: 'black' }}
+          style={{ color: "black" }}
           value={tags}
           onChange={handleChange}
         />
         <div style={{ height: 9 }}></div>
         {inputfields.map((inputfield, index) => (
           <div
-            style={{ width: '100%', display: 'flex', marginBottom: 8 }}
+            style={{ width: "100%", display: "flex", marginBottom: 8 }}
             key={index}
           >
             <Grid container spacing={1} style={{ flex: 1 }}>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeName'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Name'
+                  name="attributeName"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={inputfield.attributeName}
                   onChange={(event) => handlechangeinput(index, event)}
                 />
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeValue'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Value'
+                  name="attributeValue"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={inputfield.attributeValue}
                   onChange={(event) => handlechangeinput(index, event)}
                 />
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeType'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Type'
+                  name="attributeType"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={inputfield.attributeType}
                   onChange={(event) => handlechangeinput(index, event)}
                 />
               </Grid>
             </Grid>
             <IconButton
-              size='small'
-              type='button'
+              size="small"
+              type="button"
               onClick={() => inputfieldsremove(index)}
             >
               <DeleteIcon />
             </IconButton>
           </div>
         ))}
-        <Button type='button' onClick={handleclickfields} color='primary'>
+        <Button type="button" onClick={handleclickfields} color="primary">
           Add Attribute
         </Button>
-        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
           <Button
-            variant='contained'
-            color='primary'
-            type='submit'
-            disabled={id === '' || type === ''}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={id === "" || type === ""}
           >
             <div>Add Node</div>
           </Button>
@@ -888,15 +893,15 @@ const Links = ({ history }) => {
   )
   const boddy = (
     <div style={modalStyle} className={classes.papper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>View Node</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">View Node</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <Grid container>
@@ -904,16 +909,16 @@ const Links = ({ history }) => {
           <p style={{ fontSize: 15 }}>
             Name:
             <span style={{ fontSize: 17, fontWeight: 500 }}>
-              {' '}
+              {" "}
               {nodepopup?.id}
             </span>
           </p>
         </Grid>
         <Grid item xs={6}>
           <p style={{ fontSize: 14 }}>
-            Type:{' '}
+            Type:{" "}
             <span style={{ fontSize: 17, fontWeight: 500 }}>
-              {' '}
+              {" "}
               {nodepopup?.type}
             </span>
           </p>
@@ -923,22 +928,22 @@ const Links = ({ history }) => {
         <>
           <div style={{ height: 17 }}></div>
           <p>
-            <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+            <span style={{ fontSize: 15 }}>Tags:</span>{" "}
             {nodepopup?.tags?.map((tagg, index) => (
               <>
                 <span
                   key={index}
                   style={{
-                    display: 'inline !important',
-                    backgroundColor: 'black',
-                    color: 'white',
+                    display: "inline !important",
+                    backgroundColor: "black",
+                    color: "white",
                     padding: 3.1,
                     paddingLeft: 9,
                     paddingRight: 9,
                     minWidth: 400,
                     marginRight: 3.8,
                     borderRadius: 3.3,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
                   {tagg}
@@ -951,16 +956,16 @@ const Links = ({ history }) => {
 
       <div style={{ height: 17 }}></div>
       {nodepopup?.attributes?.length > 0 ? (
-        <table style={{ width: '100%' }}>
+        <table style={{ width: "100%" }}>
           <thead>
             <tr>
-              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+              <th style={{ fontWeight: 400, textAlign: "left", fontSize: 16 }}>
                 Attribute Name
               </th>
-              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+              <th style={{ fontWeight: 400, textAlign: "left", fontSize: 16 }}>
                 Attribute Value
               </th>
-              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+              <th style={{ fontWeight: 400, textAlign: "left", fontSize: 16 }}>
                 Attribute Type
               </th>
             </tr>
@@ -1004,25 +1009,25 @@ const Links = ({ history }) => {
           </tbody>
         </table>
       ) : null}
-      <Button type='button' onClick={handleupdatenode}>
+      <Button type="button" onClick={handleupdatenode}>
         Edit Node
       </Button>
-      <Button type='button' onClick={deleteanode}>
+      <Button type="button" onClick={deleteanode}>
         Delete Node
       </Button>
     </div>
   )
   const boddddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>View Edge</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">View Edge</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <Grid container spacing={1}>
@@ -1030,16 +1035,16 @@ const Links = ({ history }) => {
           <p style={{ fontSize: 15 }}>
             Source:
             <span style={{ fontSize: 17, fontWeight: 500 }}>
-              {' '}
+              {" "}
               {haveedgedetails?.source}
             </span>
           </p>
         </Grid>
         <Grid item xs={6}>
           <p style={{ fontSize: 14 }}>
-            Target:{' '}
+            Target:{" "}
             <span style={{ fontSize: 17, fontWeight: 500 }}>
-              {' '}
+              {" "}
               {haveedgedetails?.target}
             </span>
           </p>
@@ -1049,14 +1054,14 @@ const Links = ({ history }) => {
         <>
           <div style={{ height: 17 }}></div>
           <p>
-            <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+            <span style={{ fontSize: 15 }}>Tags:</span>{" "}
             {haveedgedetails?.tags?.map((tagg) => (
               <>
                 <span
                   style={{
-                    display: 'inline !important',
-                    backgroundColor: 'black',
-                    color: 'white',
+                    display: "inline !important",
+                    backgroundColor: "black",
+                    color: "white",
                     padding: 3.1,
 
                     paddingLeft: 9,
@@ -1064,7 +1069,7 @@ const Links = ({ history }) => {
                     minWidth: 400,
                     marginRight: 3.8,
                     borderRadius: 3.3,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
                   {tagg}
@@ -1076,25 +1081,25 @@ const Links = ({ history }) => {
       ) : null}
 
       <div style={{ height: 17 }}></div>
-      <Button type='button' onClick={handlgeupdateedge}>
+      <Button type="button" onClick={handlgeupdateedge}>
         Edit Edge
       </Button>
-      <Button type='button' onClick={deleteaedge}>
+      <Button type="button" onClick={deleteaedge}>
         Delete Edge
       </Button>
     </div>
   )
   const bodddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>Add Edge</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">Add Edge</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <form onSubmit={submitedgehandler}>
@@ -1102,12 +1107,12 @@ const Links = ({ history }) => {
           <Grid item xs={6}>
             <FormControl
               className={classes.formControl}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
             >
-              <InputLabel id='demo-simple-select-label'>Source</InputLabel>
+              <InputLabel id="demo-simple-select-label">Source</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
+                labelId="demo-simple-select-label"
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
               >
@@ -1124,12 +1129,12 @@ const Links = ({ history }) => {
           <Grid item xs={6}>
             <FormControl
               className={classes.formControl}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
             >
-              <InputLabel id='demo-simple-select-label'>Target</InputLabel>
+              <InputLabel id="demo-simple-select-label">Target</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
+                labelId="demo-simple-select-label"
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
               >
@@ -1146,22 +1151,22 @@ const Links = ({ history }) => {
         </Grid>
         <div style={{ height: 9 }}></div>
         <TagsInput
-          style={{ color: 'black' }}
+          style={{ color: "black" }}
           value={edgetags}
           onChange={handleChanges}
         />
         <div
           style={{
-            display: 'flex',
+            display: "flex",
             marginTop: 13,
-            justifyContent: 'space-around',
+            justifyContent: "space-around",
           }}
         >
           <Button
-            variant='contained'
-            color='primary'
-            type='submit'
-            disabled={source === '' || target === '' || edgetags?.length <= 0}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={source === "" || target === "" || edgetags?.length <= 0}
           >
             <div>Add Edge</div>
           </Button>
@@ -1171,14 +1176,14 @@ const Links = ({ history }) => {
   )
   const bodddddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>Update Edge</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">Update Edge</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <form onSubmit={submitupdateedgehandler}>
@@ -1186,12 +1191,12 @@ const Links = ({ history }) => {
           <Grid item xs={6}>
             <FormControl
               className={classes.formControl}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
             >
-              <InputLabel id='demo-simple-select-label'>Edit Source</InputLabel>
+              <InputLabel id="demo-simple-select-label">Edit Source</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
+                labelId="demo-simple-select-label"
                 value={updatesource}
                 onChange={(e) => setUpdatesource(e.target.value)}
               >
@@ -1208,12 +1213,12 @@ const Links = ({ history }) => {
           <Grid item xs={6}>
             <FormControl
               className={classes.formControl}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
             >
-              <InputLabel id='demo-simple-select-label'>Edit Target</InputLabel>
+              <InputLabel id="demo-simple-select-label">Edit Target</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
+                labelId="demo-simple-select-label"
                 value={updatetarget}
                 onChange={(e) => setUpdatetarget(e.target.value)}
               >
@@ -1230,15 +1235,15 @@ const Links = ({ history }) => {
         </Grid>
         <div style={{ height: 9 }}></div>
         <TagsInput
-          style={{ color: 'black' }}
+          style={{ color: "black" }}
           value={updateedgetags}
           onChange={handleupdateChanges}
         />
         <Button
-          type='submit'
+          type="submit"
           disabled={
-            updatesource === '' ||
-            updatetarget === '' ||
+            updatesource === "" ||
+            updatetarget === "" ||
             updateedgetags?.length <= 0
           }
         >
@@ -1249,103 +1254,100 @@ const Links = ({ history }) => {
   )
   const bodddddddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>Update Node</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">Update Node</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <form onSubmit={submitupdatenodehandler}>
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <TextField
-              style={{ color: 'black', width: '100%', marginTop: 9 }}
-              id='outlined-basic'
-              size='small'
-              label='Name'
+              style={{ color: "black", width: "100%", marginTop: 9 }}
+              id="outlined-basic"
+              size="small"
+              label="Name"
               value={updatenodeid}
               onChange={(e) => setUpdatenodeid(e.target.value)}
-              variant='outlined'
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
-              style={{ width: '100%', marginTop: 9 }}
-              id='outlined-basic'
-              label='Type'
-              size='small'
+              style={{ width: "100%", marginTop: 9 }}
+              id="outlined-basic"
+              label="Type"
+              size="small"
               value={updatenodetype}
               onChange={(e) => setUpdatenodetype(e.target.value)}
-              variant='outlined'
+              variant="outlined"
             />
           </Grid>
         </Grid>
         <div style={{ height: 9 }}></div>
         <TagsInput
-          style={{ color: 'black' }}
+          style={{ color: "black" }}
           value={updatenodetags ? updatenodetags : null}
           onChange={handlenodeChange}
         />
         <div style={{ height: 9 }}></div>
         {updateinputfields?.map((updateinputfield, index) => (
           <div
-            style={{ width: '100%', display: 'flex', marginBottom: 8 }}
+            style={{ width: "100%", display: "flex", marginBottom: 8 }}
             key={index}
           >
             <Grid container spacing={1} style={{ flex: 1 }}>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeName'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Name'
+                  name="attributeName"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={updateinputfield.attributeName}
                   onChange={(event) => handlechangeupdateinput(index, event)}
                 />
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeValue'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Value'
+                  name="attributeValue"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={updateinputfield.attributeValue}
                   onChange={(event) => handlechangeupdateinput(index, event)}
                 />
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeType'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Type'
+                  name="attributeType"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={updateinputfield.attributeType}
                   onChange={(event) => handlechangeupdateinput(index, event)}
                 />
               </Grid>
             </Grid>
             <IconButton
-              size='small'
-              type='button'
+              size="small"
+              type="button"
               onClick={() => updateinputfieldsremove(index)}
             >
               <DeleteIcon />
             </IconButton>
           </div>
         ))}
-        <Button type='button' onClick={handleclickupdatefields} color='primary'>
+        <Button type="button" onClick={handleclickupdatefields} color="primary">
           Update Attribute
         </Button>
         <Button
-          type='submit'
-          disabled={updatenodeid === '' || updatenodetype === ''}
+          type="submit"
+          disabled={updatenodeid === "" || updatenodetype === ""}
         >
           <div>Edit Node</div>
         </Button>
@@ -1355,15 +1357,15 @@ const Links = ({ history }) => {
 
   const boddddddddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>Import View</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">Import View</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       {apiloader ? (
@@ -1378,14 +1380,14 @@ const Links = ({ history }) => {
                 <Grid item xs={12}>
                   <FormControl
                     className={classes.formControl}
-                    variant='outlined'
-                    size='small'
+                    variant="outlined"
+                    size="small"
                   >
-                    <InputLabel id='demo-simple-select-label'>
+                    <InputLabel id="demo-simple-select-label">
                       Select import
                     </InputLabel>
                     <Select
-                      labelId='demo-simple-select-label'
+                      labelId="demo-simple-select-label"
                       value={selectimport}
                       onChange={(e) => setSelectimport(e.target.value)}
                     >
@@ -1395,17 +1397,17 @@ const Links = ({ history }) => {
                     </Select>
                   </FormControl>
                 </Grid>
-                {selectimport === 'Google Scholar' && (
+                {selectimport === "Google Scholar" && (
                   <>
                     <Grid item xs={12}>
                       <TextField
-                        style={{ color: 'black', width: '100%', marginTop: 9 }}
-                        id='outlined-basic'
-                        size='small'
-                        label='Author'
+                        style={{ color: "black", width: "100%", marginTop: 9 }}
+                        id="outlined-basic"
+                        size="small"
+                        label="Author"
                         value={author_data}
                         onChange={(e) => setAuthor_data(e.target.value)}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     </Grid>
                     {/* <Grid item xs={12}>
@@ -1421,64 +1423,64 @@ const Links = ({ history }) => {
               </Grid> */}
                     <Grid item xs={12}>
                       <TextField
-                        style={{ color: 'black', width: '100%', marginTop: 9 }}
-                        id='outlined-basic'
-                        size='small'
-                        label='Institution'
+                        style={{ color: "black", width: "100%", marginTop: 9 }}
+                        id="outlined-basic"
+                        size="small"
+                        label="Institution"
                         value={institution_data}
                         onChange={(e) => setInstitution_data(e.target.value)}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        style={{ color: 'black', width: '100%', marginTop: 9 }}
-                        id='outlined-basic'
-                        size='small'
-                        label='Limit'
-                        type='number'
+                        style={{ color: "black", width: "100%", marginTop: 9 }}
+                        id="outlined-basic"
+                        size="small"
+                        label="Limit"
+                        type="number"
                         value={limit_dataa}
                         onChange={(e) => setLimit_dataa(e.target.value)}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        style={{ color: 'black', width: '100%', marginTop: 9 }}
-                        id='outlined-basic'
-                        size='small'
-                        label='Publications'
-                        type='number'
+                        style={{ color: "black", width: "100%", marginTop: 9 }}
+                        id="outlined-basic"
+                        size="small"
+                        label="Publications"
+                        type="number"
                         value={pubs_dataa}
                         onChange={(e) => setPubs_dataa(e.target.value)}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        style={{ color: 'black', width: '100%', marginTop: 9 }}
-                        id='outlined-basic'
-                        size='small'
-                        label='Coauthor'
-                        type='number'
+                        style={{ color: "black", width: "100%", marginTop: 9 }}
+                        id="outlined-basic"
+                        size="small"
+                        label="Coauthor"
+                        type="number"
                         value={co_author_dataa}
                         onChange={(e) => setCo_author_dataa(e.target.value)}
-                        variant='outlined'
+                        variant="outlined"
                       />
                     </Grid>
                     <Grid
                       style={{
-                        display: 'flex',
-                        justifyContent: 'space-around',
+                        display: "flex",
+                        justifyContent: "space-around",
                       }}
                       item
                       xs={12}
                     >
                       <Button
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                        disabled={author_data === '' || institution_data === ''}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={author_data === "" || institution_data === ""}
                       >
                         <div>Submit</div>
                       </Button>
@@ -1491,21 +1493,21 @@ const Links = ({ history }) => {
               <div style={{ height: 9 }}></div>
             </form>
           )}
-          <div className='graph1'>
+          <div className="graph1">
             {showgraph && (
               <>
                 <Graph
-                  id='graph-id'
+                  id="graph-id"
                   data={mydata}
                   config={myConfigs}
                   // onClickNode={onClickNode}
                   // onClickLink={onClickLink}
                 />
                 <Button
-                  type='button'
+                  type="button"
                   onClick={sendingapidata}
-                  variant='contained'
-                  color='primary'
+                  variant="contained"
+                  color="primary"
                 >
                   Save Graph
                 </Button>
@@ -1518,27 +1520,27 @@ const Links = ({ history }) => {
   )
   const paymentbody = (
     <div style={modalStyle} className={classes.paperss}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 style={{ textAlign: 'center' }} id='simple-modal-title'>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 style={{ textAlign: "center" }} id="simple-modal-title">
           Limit Reached
         </h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <p style={{ fontWeight: 400, fontSize: 19 }}>
         Please upgrade your subsciption limit has been reached,please upgrade or
         wait for your quota limit to be refreshed
       </p>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-        <Link to='/payment'>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+        <Link to="/payment">
           <Button
-            style={{ backgroundColor: 'rgb(32, 32, 32)', color: 'white' }}
+            style={{ backgroundColor: "rgb(32, 32, 32)", color: "white" }}
           >
             Upgrade
           </Button>
@@ -1546,9 +1548,9 @@ const Links = ({ history }) => {
         <Button
           onClick={handleClose}
           style={{
-            backgroundColor: 'rgb(32, 32, 32)',
-            color: 'white',
-            marginLeft: '18px',
+            backgroundColor: "rgb(32, 32, 32)",
+            color: "white",
+            marginLeft: "18px",
           }}
         >
           Close
@@ -1558,7 +1560,7 @@ const Links = ({ history }) => {
   )
 
   console.log(
-    'data in nodes -->',
+    "data in nodes -->",
     filterednode ? filterednode : nodde?.nodes ? nodde?.nodes : []
   )
 
@@ -1574,16 +1576,16 @@ const Links = ({ history }) => {
     nodeHighlightBehavior: true,
     directed: true,
     node: {
-      color: '#3A4A57',
+      color: "#3A4A57",
       size: 550,
-      highlightStrokeColor: 'blue',
+      highlightStrokeColor: "blue",
       fontSize: 18,
     },
     link: {
-      highlightColor: 'lightblue',
+      highlightColor: "lightblue",
       size: 1500,
       strokeWidth: 2.4,
-      color: '#6F93B0',
+      color: "#6F93B0",
     },
   }
 
@@ -1591,13 +1593,13 @@ const Links = ({ history }) => {
     handleOpenViewNode()
     setPopup(true)
     const nodedetails = nodde?.nodes?.filter((node) => node.id === nodeId)[0]
-    console.log('ab', nodedetails)
+    console.log("ab", nodedetails)
 
     setNodepopup(nodedetails)
   }
 
   const onClickLink = (source, target) => {
-    console.log('source and target', source, target)
+    console.log("source and target", source, target)
     handleOpenViewEdge()
     const edgedetails = nodde?.links?.filter(
       (link) => link.target === target && link.source === source
@@ -1624,9 +1626,8 @@ const Links = ({ history }) => {
 
   const logout = () => {
     dispatch(OauthLogout())
-    history.push('/')
+    history.push("/")
   }
-
   return (
     <>
       <Navbar
@@ -1634,39 +1635,39 @@ const Links = ({ history }) => {
         logout={logout}
         vissible={vissible}
         setVissiblity={setVissiblity}
-        page={'Links'}
+        page={"Links"}
       />
       <div
         className={
-          vissible ? 'graph-actions-expanded graph-actions' : 'graph-actions'
+          vissible ? "graph-actions-expanded graph-actions" : "graph-actions"
         }
       >
-        <div className='web'>
-          <Button onClick={handleOpen} variant='contained' color='primary'>
+        <div className="web">
+          <Button onClick={handleOpen} variant="contained" color="primary">
             Add Node
           </Button>
           {nodde?.nodes?.length > 1 ? (
             <Button
               onClick={handleOpenAddEdge}
               style={{ marginLeft: 10 }}
-              variant='contained'
-              color='primary'
+              variant="contained"
+              color="primary"
             >
               Add Edge
             </Button>
           ) : null}
-          <Button
+          {/* <Button
             onClick={showimportview}
-            color='primary'
-            variant='contained'
+            color="primary"
+            variant="contained"
             style={{ marginLeft: 10 }}
           >
             Import View
-          </Button>
+          </Button> */}
         </div>
-        <div className='mobile'>
+        <div className="mobile">
           <div>
-            <Fab onClick={handleOpen} color='primary' aria-label='add'>
+            <Fab onClick={handleOpen} color="primary" aria-label="add">
               <AddIcon />
             </Fab>
           </div>
@@ -1675,8 +1676,8 @@ const Links = ({ history }) => {
               <Fab
                 onClick={handleOpenAddEdge}
                 style={{ marginTop: 10 }}
-                color='primary'
-                aria-label='add'
+                color="primary"
+                aria-label="add"
               >
                 <TrendingFlatIcon />
               </Fab>
@@ -1686,8 +1687,8 @@ const Links = ({ history }) => {
             <Fab
               onClick={showimportview}
               style={{ marginTop: 10 }}
-              color='primary'
-              aria-label='add'
+              color="primary"
+              aria-label="add"
             >
               <ImportExport />
             </Fab>
@@ -1696,11 +1697,11 @@ const Links = ({ history }) => {
       </div>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          height: 'calc(100vh - 70px)',
-          backgroundColor: 'rgba(230, 230, 230,1)',
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          height: "calc(100vh - 70px)",
+          backgroundColor: "rgba(230, 230, 230,1)",
         }}
       >
         <Sidebar
@@ -1711,42 +1712,42 @@ const Links = ({ history }) => {
         <Modal
           open={open}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {body}
         </Modal>
         <Modal
           open={openViewNode}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {boddy}
         </Modal>
         <Modal
           open={openAddEdge}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {bodddy}
         </Modal>
         <Modal
           open={openViewEdge}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {boddddy}
         </Modal>
         <Modal
           open={haveupdateedge}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {bodddddy}
         </Modal>
         <Modal
           open={openimportview}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {boddddddddy}
         </Modal>
@@ -1754,14 +1755,14 @@ const Links = ({ history }) => {
         <Modal
           open={haveupdatenode}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {bodddddddy}
         </Modal>
         <Modal
           open={payvisi}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {paymentbody}
         </Modal>
@@ -1770,9 +1771,9 @@ const Links = ({ history }) => {
             <CircularProgress />
           </div>
         ) : (
-          <div className='graph'>
+          <div className="graph1">
             <Graph
-              id='graph-id1'
+              id="graph-id1"
               data={data}
               config={myConfig}
               onClickNode={onClickNode}

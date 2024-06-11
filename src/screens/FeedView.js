@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import IconButton from '@material-ui/core/IconButton'
-import ClearIcon from '@material-ui/icons/Clear'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import DeleteIcon from '@material-ui/icons/Delete'
-import TagsInput from 'react-tagsinput'
-import { OauthLogout } from '../actions/oauthAction'
-import { Grid, Container, Modal, TextField, Button } from '@material-ui/core'
+import React, { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import IconButton from "@material-ui/core/IconButton"
+import ClearIcon from "@material-ui/icons/Clear"
+import CircularProgress from "@material-ui/core/CircularProgress"
+import DeleteIcon from "@material-ui/icons/Delete"
+import TagsInput from "react-tagsinput"
+import { OauthLogout } from "../actions/oauthAction"
+import { Grid, Container, Modal, TextField, Button } from "@material-ui/core"
 
-import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
-import { NodeUpdate, NodeDeletion, Nodefetch } from '../actions/nodeAction'
-import './home.css'
-import { makeStyles } from '@material-ui/core/styles'
-import Navbar from '../components/Navbar'
-import Sidebar from '../components/Sidebar'
+import "react-tagsinput/react-tagsinput.css" // If using WebPack and style-loader.
+import { NodeUpdate, NodeDeletion, Nodefetch } from "../actions/nodeAction"
+import "./home.css"
+import { makeStyles } from "@material-ui/core/styles"
+import Navbar from "../components/Navbar"
+import Sidebar from "../components/Sidebar"
 
 const FeedView = ({ history }) => {
   const [visible, setVisiblity] = useState(false)
@@ -21,8 +21,8 @@ const FeedView = ({ history }) => {
   const [openViewNode, setOpenViewNode] = useState(false)
   const [haveupdatenode, setHaveupdatenode] = useState(false)
 
-  const [updatenodeid, setUpdatenodeid] = useState('')
-  const [updatenodetype, setUpdatenodetype] = useState('')
+  const [updatenodeid, setUpdatenodeid] = useState("")
+  const [updatenodetype, setUpdatenodetype] = useState("")
   const [updatenodetags, setUpdatenodetags] = useState([])
   const [updateattributes, setUpdateattributes] = useState([])
 
@@ -42,7 +42,7 @@ const FeedView = ({ history }) => {
   const { innerWidth, innerHeight } = window
 
   useEffect(() => {
-    console.log('filterednode', filterednode)
+    console.log("filterednode", filterednode)
   }, [filterednode])
 
   function getModalStyle() {
@@ -60,39 +60,39 @@ const FeedView = ({ history }) => {
 
   const useStyles = makeStyles((theme) => ({
     paper: {
-      position: 'absolute',
-      width: innerWidth > 600 ? 600 : '100%',
+      position: "absolute",
+      width: innerWidth > 600 ? 600 : "100%",
 
       backgroundColor: theme.palette.background.paper,
       // border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
-      maxHeight: 'calc(100vh - 200px)',
-      overflow: 'auto !important',
-      top: '50%',
+      maxHeight: "calc(100vh - 200px)",
+      overflow: "auto !important",
+      top: "50%",
     },
     multilineColor: {
-      color: 'white',
+      color: "white",
     },
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
-      width: '100%',
+      width: "100%",
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
     root: {
-      width: '100%',
-      '& > * + *': {
+      width: "100%",
+      "& > * + *": {
         marginTop: theme.spacing(2),
       },
     },
     rooot: {
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
     },
   }))
   const handleOpenViewNode = () => {
@@ -130,14 +130,14 @@ const FeedView = ({ history }) => {
   const handleclickupdatefields = () => {
     setUpdateinputfields([
       ...updateinputfields,
-      { attributeName: '', attributeValue: '', attributeType: '' },
+      { attributeName: "", attributeValue: "", attributeType: "" },
     ])
   }
   const showdetails = (nodeid) => {
     const filterednodes = nodde?.nodes.filter((node) => node._id === nodeid)[0]
-    console.log('ho', filterednodes)
+    console.log("ho", filterednodes)
     setNodepopup(filterednodes)
-    console.log('hiii', nodepopup)
+    console.log("hiii", nodepopup)
     handleOpenViewNode()
   }
   const submitupdatenodehandler = (e) => {
@@ -161,15 +161,15 @@ const FeedView = ({ history }) => {
 
   const boddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>View Node</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">View Node</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
           style={{ marginTop: -10, marginBottom: 10 }}
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <Grid container>
@@ -177,16 +177,16 @@ const FeedView = ({ history }) => {
           <p style={{ fontSize: 15 }}>
             Name:
             <span style={{ fontSize: 17, fontWeight: 500 }}>
-              {' '}
+              {" "}
               {nodepopup?.id}
             </span>
           </p>
         </Grid>
         <Grid item xs={6}>
           <p style={{ fontSize: 14 }}>
-            Type:{' '}
+            Type:{" "}
             <span style={{ fontSize: 17, fontWeight: 500 }}>
-              {' '}
+              {" "}
               {nodepopup?.type}
             </span>
           </p>
@@ -194,21 +194,21 @@ const FeedView = ({ history }) => {
       </Grid>
       <div style={{ height: 17 }}></div>
       <p>
-        <span style={{ fontSize: 15 }}>Tags:</span>{' '}
+        <span style={{ fontSize: 15 }}>Tags:</span>{" "}
         {nodepopup?.tags?.map((tagg) => (
           <>
             <span
               style={{
-                display: 'inline !important',
-                backgroundColor: 'black',
-                color: 'white',
+                display: "inline !important",
+                backgroundColor: "black",
+                color: "white",
                 padding: 3.1,
                 paddingLeft: 9,
                 paddingRight: 9,
                 minWidth: 400,
                 marginRight: 3.8,
                 borderRadius: 3.3,
-                textAlign: 'center',
+                textAlign: "center",
               }}
             >
               {tagg}
@@ -218,16 +218,16 @@ const FeedView = ({ history }) => {
       </p>
       <div style={{ height: 17 }}></div>
       {nodepopup?.attributes?.length > 0 ? (
-        <table style={{ width: '100%' }}>
+        <table style={{ width: "100%" }}>
           <thead>
             <tr>
-              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+              <th style={{ fontWeight: 400, textAlign: "left", fontSize: 16 }}>
                 Attribute Name
               </th>
-              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+              <th style={{ fontWeight: 400, textAlign: "left", fontSize: 16 }}>
                 Attribute Value
               </th>
-              <th style={{ fontWeight: 400, textAlign: 'left', fontSize: 16 }}>
+              <th style={{ fontWeight: 400, textAlign: "left", fontSize: 16 }}>
                 Attribute Type
               </th>
             </tr>
@@ -271,10 +271,10 @@ const FeedView = ({ history }) => {
           </tbody>
         </table>
       ) : null}
-      <Button type='button' onClick={handleupdatenode}>
+      <Button type="button" onClick={handleupdatenode}>
         Edit Node
       </Button>
-      <Button type='button' onClick={deleteanode}>
+      <Button type="button" onClick={deleteanode}>
         Delete Node
       </Button>
     </div>
@@ -282,105 +282,102 @@ const FeedView = ({ history }) => {
 
   const bodddddddy = (
     <div style={modalStyle} className={classes.paper}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 id='simple-modal-title'>Update Node</h2>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2 id="simple-modal-title">Update Node</h2>
         <IconButton
           onClick={handleClose}
-          color='inherit'
-          aria-label='open drawer'
+          color="inherit"
+          aria-label="open drawer"
         >
-          <ClearIcon style={{ color: 'grey' }} />
+          <ClearIcon style={{ color: "grey" }} />
         </IconButton>
       </div>
       <form onSubmit={submitupdatenodehandler}>
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <TextField
-              style={{ color: 'black', width: '100%', marginTop: 9 }}
-              id='outlined-basic'
-              size='small'
-              label='Name'
+              style={{ color: "black", width: "100%", marginTop: 9 }}
+              id="outlined-basic"
+              size="small"
+              label="Name"
               value={updatenodeid}
               onChange={(e) => setUpdatenodeid(e.target.value)}
-              variant='outlined'
+              variant="outlined"
             />
           </Grid>
           <Grid item xs={6}>
             <TextField
-              style={{ width: '100%', marginTop: 9 }}
-              id='outlined-basic'
-              label='Type'
-              size='small'
+              style={{ width: "100%", marginTop: 9 }}
+              id="outlined-basic"
+              label="Type"
+              size="small"
               value={updatenodetype}
               onChange={(e) => setUpdatenodetype(e.target.value)}
-              variant='outlined'
+              variant="outlined"
             />
           </Grid>
         </Grid>
         <div style={{ height: 9 }}></div>
         <TagsInput
-          style={{ color: 'black' }}
+          style={{ color: "black" }}
           value={updatenodetags ? updatenodetags : null}
           onChange={handlenodeChange}
         />
         <div style={{ height: 9 }}></div>
         {updateinputfields?.map((updateinputfield, index) => (
           <div
-            style={{ width: '100%', display: 'flex', marginBottom: 8 }}
+            style={{ width: "100%", display: "flex", marginBottom: 8 }}
             key={index}
           >
             <Grid container spacing={1} style={{ flex: 1 }}>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeName'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Name'
+                  name="attributeName"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={updateinputfield.attributeName}
                   onChange={(event) => handlechangeupdateinput(index, event)}
                 />
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeValue'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Value'
+                  name="attributeValue"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={updateinputfield.attributeValue}
                   onChange={(event) => handlechangeupdateinput(index, event)}
                 />
               </Grid>
               <Grid item xs={4}>
                 <TextField
-                  name='attributeType'
-                  label='Type'
-                  size='small'
-                  variant='outlined'
-                  label='Attribute Type'
+                  name="attributeType"
+                  label="Type"
+                  size="small"
+                  variant="outlined"
                   value={updateinputfield.attributeType}
                   onChange={(event) => handlechangeupdateinput(index, event)}
                 />
               </Grid>
             </Grid>
             <IconButton
-              size='small'
-              type='button'
+              size="small"
+              type="button"
               onClick={() => updateinputfieldsremove(index)}
             >
               <DeleteIcon />
             </IconButton>
           </div>
         ))}
-        <Button type='button' onClick={handleclickupdatefields} color='primary'>
+        <Button type="button" onClick={handleclickupdatefields} color="primary">
           Update Attribute
         </Button>
         <Button
-          type='submit'
+          type="submit"
           disabled={
-            updatenodeid === '' ||
-            updatenodetype === '' ||
+            updatenodeid === "" ||
+            updatenodetype === "" ||
             updatenodetags.length <= 0
           }
         >
@@ -392,21 +389,21 @@ const FeedView = ({ history }) => {
 
   const logout = () => {
     dispatch(OauthLogout())
-    history.push('/')
+    history.push("/")
   }
 
   return (
     <>
-      <Navbar setVisiblity={setVisiblity} logout={logout} page={'Feed'} />
+      <Navbar setVisiblity={setVisiblity} logout={logout} page={"Feed"} />
 
       <div
-        className='feedviewside'
+        className="feedviewside"
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          height: 'calc(100vh - 70px)',
-          backgroundColor: 'rgba(230, 230, 230,1)',
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          height: "calc(100vh - 70px)",
+          backgroundColor: "rgba(230, 230, 230,1)",
         }}
       >
         <Sidebar visible={visible} />
@@ -415,16 +412,16 @@ const FeedView = ({ history }) => {
             <CircularProgress />
           </div>
         ) : (
-          <div className='vertics' style={{ marginTop: 15, marginLeft: 16 }}>
+          <div className="vertics" style={{ marginTop: 15, marginLeft: 16 }}>
             {filterednode?.length > 0
               ? filterednode?.map((node, id) => (
                   <div key={id} onClick={() => showdetails(node._id)}>
                     <div
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        display: "flex",
+                        alignItems: "center",
                         marginBottom: 10,
-                        cursor: 'pointer',
+                        cursor: "pointer",
                       }}
                     >
                       <div
@@ -433,10 +430,10 @@ const FeedView = ({ history }) => {
                           borderRadius: 20,
                           height: 40,
                           width: 40,
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          color: 'white',
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "white",
                         }}
                       >
                         <p style={{ fontWeight: 500, fontSize: 18 }}>
@@ -451,10 +448,10 @@ const FeedView = ({ history }) => {
                   <div key={id} onClick={() => showdetails(node._id)}>
                     <div
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        display: "flex",
+                        alignItems: "center",
                         marginBottom: 10,
-                        cursor: 'pointer',
+                        cursor: "pointer",
                       }}
                     >
                       <div
@@ -463,10 +460,10 @@ const FeedView = ({ history }) => {
                           borderRadius: 20,
                           minHeight: 40,
                           minWidth: 40,
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          color: 'white',
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "white",
                         }}
                       >
                         <p style={{ fontWeight: 500, fontSize: 18 }}>
@@ -482,14 +479,14 @@ const FeedView = ({ history }) => {
         <Modal
           open={openViewNode}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {boddy}
         </Modal>
         <Modal
           open={haveupdatenode}
           onClose={handleClose}
-          aria-labelledby='simple-modal-title'
+          aria-labelledby="simple-modal-title"
         >
           {bodddddddy}
         </Modal>

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 import {
   GET_NODE_FAIL,
   GET_NODE_REQUEST,
@@ -40,52 +40,52 @@ import {
   REMOVE_EDGE_SUCCESS,
   REMOVE_EDGE_REQUEST,
   REMOVE_EDGE_FAIL,
-} from '../constants/nodeConstant'
+} from "../constants/nodeConstant"
+import { baseURL } from "../utils/api"
 
-export const NodeAdd = (nodeid, id, type, tags, attributes, color) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: HAVE_NODE_REQUEST,
-    })
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-
-    const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/nodes',
-      { nodeid, id, type, tags, attributes, color },
-      config
-    )
-
-    if (!data.message) {
+export const NodeAdd =
+  (nodeid, id, type, tags, attributes, color) => async (dispatch) => {
+    try {
       dispatch({
-        type: GET_NODE_SUCCESS,
-        payload: data,
+        type: HAVE_NODE_REQUEST,
       })
-      localStorage.setItem('nodehave', JSON.stringify(data))
-    }
-    if (data.message) {
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+
+      const { data } = await axios.post(
+        `${baseURL}/nodes`,
+        { nodeid, id, type, tags, attributes, color },
+        config
+      )
+
+      if (!data.message) {
+        dispatch({
+          type: GET_NODE_SUCCESS,
+          payload: data,
+        })
+        localStorage.setItem("nodehave", JSON.stringify(data))
+      }
+      if (data.message) {
+        dispatch({
+          type: GET_NODE_MESSAGE,
+          payload: data.message,
+        })
+      }
+    } catch (error) {
+      console.log("error", error)
       dispatch({
-        type: GET_NODE_MESSAGE,
-        payload: data.message,
+        type: GET_NODE_FAIL,
+        payload: error,
       })
     }
-  } catch (error) {
-    console.log('error', error)
-    dispatch({
-      type: GET_NODE_FAIL,
-      payload: error,
-    })
   }
-}
 
 export const NodeAdded = (node) => async (dispatch) => {
-  console.log('nodesaction', node)
+  console.log("nodesaction", node)
 
   try {
     dispatch({
@@ -94,23 +94,19 @@ export const NodeAdded = (node) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
 
-    const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/nodes/many',
-      node,
-      config
-    )
-    console.log('dataofnodes', data)
+    const { data } = await axios.post(`${baseURL}/nodes/many`, node, config)
+    console.log("dataofnodes", data)
     dispatch({
       type: GET_NODE_SUCCESSES,
       payload: data,
     })
-    localStorage.setItem('nodehave', JSON.stringify(data))
+    localStorage.setItem("nodehave", JSON.stringify(data))
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error)
     dispatch({
       type: GET_NODE_FAIL,
       payload: error,
@@ -126,16 +122,16 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
 
     const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/nodes/get',
+      `${baseURL}/nodes/get`,
       { nodeid },
       config
     )
-    console.log('dataaa', data)
+    console.log("dataaa", data)
     const links = []
 
     if (data.links?.length > 0) {
@@ -147,6 +143,7 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
           target: link.target.id,
           _id: link._id,
         })
+        console.log("linkkks", links)
       })
     }
 
@@ -154,7 +151,7 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
       type: HAVE_NODE_SUCCESS,
       payload: { ...data, links },
     })
-    localStorage.setItem('nodehave', JSON.stringify({ ...data, links }))
+    localStorage.setItem("nodehave", JSON.stringify({ ...data, links }))
   } catch (error) {
     dispatch({
       type: HAVE_NODE_FAIL,
@@ -163,12 +160,12 @@ export const Nodefetch = (nodeid) => async (dispatch) => {
   }
 }
 export const NodeEdgefetch = (nodes, newedge) => async (dispatch) => {
-  console.log('nodes and newedge', nodes, newedge)
+  console.log("nodes and newedge", nodes, newedge)
   try {
     dispatch({
       type: HAVE_NODE_REQUEST,
     })
-    console.log('actionpayload12', nodes, newedge)
+    console.log("actionpayload12", nodes, newedge)
     const links = []
 
     if (newedge?.length > 0) {
@@ -182,7 +179,7 @@ export const NodeEdgefetch = (nodes, newedge) => async (dispatch) => {
         })
       })
     }
-    console.log('newedge', newedge, links)
+    console.log("newedge", newedge, links)
     dispatch({
       type: HAVE_NODE_SUCCESESS,
       payload: { nodes, links },
@@ -204,12 +201,12 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
 
     const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/edges',
+      `${baseURL}/edges`,
       { edgeid, source, target, tags },
       config
     )
@@ -225,7 +222,7 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
       },
     })
     localStorage.setItem(
-      'edgeadded',
+      "edgeadded",
       JSON.stringify({
         edgeid: data.edgeid,
         tags: data.tags,
@@ -242,7 +239,7 @@ export const EdgeAdd = (edgeid, source, target, tags) => async (dispatch) => {
   }
 }
 export const EdgeAdded = (edge) => async (dispatch) => {
-  console.log('edgesaction', edge)
+  console.log("edgesaction", edge)
   try {
     dispatch({
       type: GET_EDGE_REQUEST,
@@ -250,22 +247,22 @@ export const EdgeAdded = (edge) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
 
     const { data } = await axios.post(
-      'http://localhost:5000/edges/many',
+      `${baseURL}/edges/many`,
       // 'https://netbook-server.herokuapp.com/edges/many',
       [...edge],
       config
     )
-    console.log('dataofedges', data)
+    console.log("dataofedges", data)
     dispatch({
       type: GET_EDGE_SUCCESSES,
       payload: data,
     })
-    localStorage.setItem('edgeadded', JSON.stringify(data))
+    localStorage.setItem("edgeadded", JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: GET_EDGE_FAIL,
@@ -274,96 +271,93 @@ export const EdgeAdded = (edge) => async (dispatch) => {
   }
 }
 
-export const EdgeUpdate = (id, edgeid, source, target, tags) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: UPDATE_EDGE_REQUEST,
-    })
+export const EdgeUpdate =
+  (id, edgeid, source, target, tags) => async (dispatch) => {
+    try {
+      dispatch({
+        type: UPDATE_EDGE_REQUEST,
+      })
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+
+      const { data } = await axios.put(
+        `${baseURL}/edges/${id}`,
+        { edgeid, source, target, tags },
+        config
+      )
+
+      console.log("added data", data)
+
+      dispatch({
+        type: UPDATE_EDGE_SUCCESS,
+        payload: {
+          edgeid: data.edgeid,
+          tags: data.tags,
+          source: data.source.id,
+          target: data.target.id,
+          _id: data._id,
+        },
+      })
+    } catch (error) {
+      dispatch({
+        type: UPDATE_EDGE_FAIL,
+        payload: error,
+      })
     }
-
-    const { data } = await axios.put(
-      `https://netbook-server.herokuapp.com/edges/${id}`,
-      { edgeid, source, target, tags },
-      config
-    )
-
-    console.log('added data', data)
-
-    dispatch({
-      type: UPDATE_EDGE_SUCCESS,
-      payload: {
-        edgeid: data.edgeid,
-        tags: data.tags,
-        source: data.source.id,
-        target: data.target.id,
-        _id: data._id,
-      },
-    })
-  } catch (error) {
-    dispatch({
-      type: UPDATE_EDGE_FAIL,
-      payload: error,
-    })
   }
-}
 
-export const NodeUpdate = (_id, nodeid, id, type, tags, attributes) => async (
-  dispatch,
-  getState
-) => {
-  try {
-    dispatch({
-      type: UPDATE_NODE_REQUEST,
-    })
+export const NodeUpdate =
+  (_id, nodeid, id, type, tags, attributes) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: UPDATE_NODE_REQUEST,
+      })
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
 
-    const { data } = await axios.put(
-      `https://netbook-server.herokuapp.com/nodes/${_id}`,
-      { nodeid, id, type, tags, attributes },
-      config
-    )
+      const { data } = await axios.put(
+        `${baseURL}/nodes/${_id}`,
+        { nodeid, id, type, tags, attributes },
+        config
+      )
 
-    const [oldNode] = getState().getNode.nodde.nodes.filter(
-      (node) => node._id == _id
-    )
+      const [oldNode] = getState().getNode.nodde.nodes.filter(
+        (node) => node._id == _id
+      )
 
-    let updatedLinks = getState().getNode.nodde.links
+      let updatedLinks = getState().getNode.nodde.links
 
-    if (id !== oldNode.id) {
-      for (let i = 0; i < updatedLinks.length; i++) {
-        if (updatedLinks[i].target == oldNode.id) {
-          updatedLinks[i].target = data.id
-        }
-        if (updatedLinks[i].source == oldNode.id) {
-          updatedLinks[i].source = data.id
+      if (id !== oldNode.id) {
+        for (let i = 0; i < updatedLinks.length; i++) {
+          if (updatedLinks[i].target == oldNode.id) {
+            updatedLinks[i].target = data.id
+          }
+          if (updatedLinks[i].source == oldNode.id) {
+            updatedLinks[i].source = data.id
+          }
         }
       }
-    }
 
-    dispatch({
-      type: UPDATE_NODE_SUCCESS,
-      payload: data,
-    })
-    localStorage.setItem('nodehave', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: UPDATE_NODE_FAIL,
-      payload: error,
-    })
+      dispatch({
+        type: UPDATE_NODE_SUCCESS,
+        payload: data,
+      })
+      localStorage.setItem("nodehave", JSON.stringify(data))
+    } catch (error) {
+      dispatch({
+        type: UPDATE_NODE_FAIL,
+        payload: error,
+      })
+    }
   }
-}
 
 export const NodeDeletion = (id) => async (dispatch) => {
   try {
@@ -371,15 +365,13 @@ export const NodeDeletion = (id) => async (dispatch) => {
       type: REMOVE_NODE_REQUEST,
     })
 
-    const { data } = await axios.delete(
-      `https://netbook-server.herokuapp.com/nodes/${id}`
-    )
+    const { data } = await axios.delete(`${baseURL}/nodes/${id}`)
 
     dispatch({
       type: REMOVE_NODE_SUCCESS,
       payload: id,
     })
-    localStorage.removeItem('nodehave', JSON.stringify(data))
+    localStorage.removeItem("nodehave", JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: REMOVE_NODE_FAIL,
@@ -394,7 +386,7 @@ export const EdgeDeletion = (id) => async (dispatch) => {
       type: REMOVE_EDGE_REQUEST,
     })
 
-    await axios.delete(`https://netbook-server.herokuapp.com/edges/${id}`)
+    await axios.delete(`${baseURL}/edges/${id}`)
 
     dispatch({
       type: REMOVE_EDGE_SUCCESS,
@@ -416,12 +408,12 @@ export const Edgefetch = (edgeid) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
 
     const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/edges/get',
+      `${baseURL}/edges/get`,
       { edgeid },
       config
     )
@@ -430,7 +422,7 @@ export const Edgefetch = (edgeid) => async (dispatch) => {
       type: HAVE_EDGE_SUCCESS,
       payload: data,
     })
-    localStorage.setItem('edgehave', JSON.stringify(data))
+    localStorage.setItem("edgehave", JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: HAVE_EDGE_FAIL,
@@ -445,22 +437,22 @@ export const Searchnode = (text, checked) => async (dispatch) => {
       payload: { text: text, checked: checked },
     })
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error)
   }
 }
-export const Searchnodeedge = (text = '', texts = '', checked) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: SEARCH_NODE_EDGE,
-      payload: { text: text, texts: texts, checked: checked },
-    })
-    console.log('heeeel')
-  } catch (error) {
-    console.log('error', error)
+export const Searchnodeedge =
+  (text = "", texts = "", checked) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: SEARCH_NODE_EDGE,
+        payload: { text: text, texts: texts, checked: checked },
+      })
+      console.log("heeeel")
+    } catch (error) {
+      console.log("error", error)
+    }
   }
-}
 
 export const Searchedge = (text, checked) => async (dispatch) => {
   try {
@@ -468,79 +460,79 @@ export const Searchedge = (text, checked) => async (dispatch) => {
       type: SEARCH_EDGE_SUCCESS,
       payload: { text: text, checked: checked },
     })
-    console.log('payload', text)
+    console.log("payload", text)
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error)
   }
 }
-export const Searchedgeand = (edgeand1 = '', edgeand2 = '', checked) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: SEARCH_EDGE_AND,
-      payload: {
-        edgeand1: edgeand1,
-        edgeand2: edgeand2,
-        checked: checked,
-      },
-    })
-    console.log('payloaddd', edgeand1, edgeand2)
-  } catch (error) {
-    console.log('error', error)
+export const Searchedgeand =
+  (edgeand1 = "", edgeand2 = "", checked) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: SEARCH_EDGE_AND,
+        payload: {
+          edgeand1: edgeand1,
+          edgeand2: edgeand2,
+          checked: checked,
+        },
+      })
+      console.log("payloaddd", edgeand1, edgeand2)
+    } catch (error) {
+      console.log("error", error)
+    }
   }
-}
-export const Searchedgeor = (edgeor1 = '', edgeor2 = '', checked) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: SEARCH_EDGE_OR,
-      payload: {
-        edgeor1: edgeor1,
-        edgeor2: edgeor2,
-        checked: checked,
-      },
-    })
-    console.log('payloaddd', edgeor1, edgeor2)
-  } catch (error) {
-    console.log('error', error)
+export const Searchedgeor =
+  (edgeor1 = "", edgeor2 = "", checked) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: SEARCH_EDGE_OR,
+        payload: {
+          edgeor1: edgeor1,
+          edgeor2: edgeor2,
+          checked: checked,
+        },
+      })
+      console.log("payloaddd", edgeor1, edgeor2)
+    } catch (error) {
+      console.log("error", error)
+    }
   }
-}
-export const Searchnodeor = (nodeor1 = '', nodeor2 = '', checked) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: SEARCH_NODE_OR,
-      payload: {
-        nodeor1: nodeor1,
-        nodeor2: nodeor2,
-        checked: checked,
-      },
-    })
-    console.log('payloaddd', nodeor1, nodeor2)
-  } catch (error) {
-    console.log('error', error)
+export const Searchnodeor =
+  (nodeor1 = "", nodeor2 = "", checked) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: SEARCH_NODE_OR,
+        payload: {
+          nodeor1: nodeor1,
+          nodeor2: nodeor2,
+          checked: checked,
+        },
+      })
+      console.log("payloaddd", nodeor1, nodeor2)
+    } catch (error) {
+      console.log("error", error)
+    }
   }
-}
-export const Searchnodeand = (nodeand1 = '', nodeand2 = '', checked) => async (
-  dispatch
-) => {
-  try {
-    dispatch({
-      type: SEARCH_NODE_AND,
-      payload: {
-        nodeand1: nodeand1,
-        nodeand2: nodeand2,
-        checked: checked,
-      },
-    })
-    console.log('payloaddd', nodeand1, nodeand2)
-  } catch (error) {
-    console.log('error', error)
+export const Searchnodeand =
+  (nodeand1 = "", nodeand2 = "", checked) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: SEARCH_NODE_AND,
+        payload: {
+          nodeand1: nodeand1,
+          nodeand2: nodeand2,
+          checked: checked,
+        },
+      })
+      console.log("payloaddd", nodeand1, nodeand2)
+    } catch (error) {
+      console.log("error", error)
+    }
   }
-}
 
 export const Clearnode = () => async (dispatch) => {
   dispatch({

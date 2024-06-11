@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 import {
   GET_OAUTH_FAIL,
   GET_OAUTH_LOGOUT,
@@ -10,53 +10,49 @@ import {
   GET_AIQUERIES_REQUEST,
   GET_AIQUERIES_SUCCESS,
   GET_AIQUERIES_FAIL,
-} from '../constants/oauthConstant'
-export const OauthLogin = (
-  name,
-  email,
-  imageUrl,
-  access_token,
-  expires_in,
-  expires_at,
-  packageid
-) => async (dispatch) => {
-  try {
-    dispatch({
-      type: GET_OAUTH_REQUEST,
-    })
+} from "../constants/oauthConstant"
+import { baseURL } from "../utils/api"
+export const OauthLogin =
+  (name, email, imageUrl, access_token, expires_in, expires_at, packageid) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: GET_OAUTH_REQUEST,
+      })
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+
+      const { data } = await axios.post(
+        `${baseURL}/items`,
+        {
+          name,
+          email,
+          imageUrl,
+          access_token,
+          expires_in,
+          expires_at,
+          packageid,
+        },
+        config
+      )
+
+      dispatch({
+        type: GET_OAUTH_SUCCESS,
+        payload: data,
+      })
+      console.log("abccc", data)
+      localStorage.setItem("useroauth", JSON.stringify(data))
+    } catch (error) {
+      dispatch({
+        type: GET_OAUTH_FAIL,
+        payload: error,
+      })
     }
-
-    const { data } = await axios.post(
-      'https://netbook-server.herokuapp.com/items',
-      {
-        name,
-        email,
-        imageUrl,
-        access_token,
-        expires_in,
-        expires_at,
-        packageid,
-      },
-      config
-    )
-
-    dispatch({
-      type: GET_OAUTH_SUCCESS,
-      payload: data,
-    })
-    localStorage.setItem('useroauth', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: GET_OAUTH_FAIL,
-      payload: error,
-    })
   }
-}
 export const OauthUpdatePackageid = (id, packageid) => async (dispatch) => {
   try {
     dispatch({
@@ -65,23 +61,23 @@ export const OauthUpdatePackageid = (id, packageid) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
-
+    console.log("id, packageid", id, packageid)
     const { data } = await axios.put(
-      `https://netbook-server.herokuapp.com/items/up/${id}`,
+      `${baseURL}/items/up/${id}`,
       {
         packageid,
       },
       config
     )
-    console.log('data', data)
+    console.log("data", data)
     dispatch({
       type: GET_OAUTHUPDATE_SUCCESS,
       payload: data,
     })
-    localStorage.setItem('useroauth', JSON.stringify(data))
+    localStorage.setItem("useroauth", JSON.stringify(data))
   } catch (error) {
     dispatch({
       type: GET_OAUTHUPDATE_FAIL,
@@ -91,8 +87,8 @@ export const OauthUpdatePackageid = (id, packageid) => async (dispatch) => {
 }
 
 export const OauthLogout = () => async (dispatch) => {
-  localStorage.removeItem('useroauth')
-  localStorage.removeItem('nodehave')
+  localStorage.removeItem("useroauth")
+  localStorage.removeItem("nodehave")
   dispatch({
     type: GET_OAUTH_LOGOUT,
   })
@@ -106,23 +102,23 @@ export const AIQueriesfetch = (id, query) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     }
 
     const { data } = await axios.post(
-      `https://netbook-server.herokuapp.com/items/${id}`,
+      `${baseURL}/items/${id}`,
       { query },
       config
     )
     ars = data.userupdated
-    console.log('aiqueries', data, ars)
+    console.log("aiqueries", data, ars)
 
     dispatch({
       type: GET_AIQUERIES_SUCCESS,
       payload: data,
     })
-    localStorage.setItem('useroauth', JSON.stringify(ars))
+    localStorage.setItem("useroauth", JSON.stringify(ars))
   } catch (error) {
     dispatch({
       type: GET_AIQUERIES_FAIL,

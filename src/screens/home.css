@@ -12,7 +12,7 @@ h1 {
   width: 100vw;
 }
 .img {
-  background-image: url('../images/abc.jpg');
+  background-image: url("../images/abc.jpg");
   height: 100%;
   background-position: center;
   background-size: cover;
@@ -152,8 +152,13 @@ h1 {
   width: 100% !important;
   /* height: calc(100vh - 74px) !important; */
 }
-.graph1 #graph-id-graph-container-zoomable {
-  left: 20%;
+.graph1 #graph-id1-graph-container-zoomable {
+  transform: translate(119.415px, 27.009px) scale(0.864339);
+  transition-duration: 0s; /* Ensure no transition effect */
+  position: absolute; /* Ensure it respects the transform properly */
+  left: 50%; /* Center horizontally */
+  top: 50%; /* Center vertically */
+  transform-origin: center center; /* Transform origin set to center */
 }
 
 .link {
