@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import GoogleLogin from "react-google-login"
-import { Grid, Container } from "@material-ui/core"
+import { Grid, Container, CircularProgress } from "@material-ui/core"
 import googleimg from "../images/google.png"
 import { useDispatch, useSelector } from "react-redux"
 import "./home.css"
@@ -11,8 +11,12 @@ const Home = ({ history }) => {
   const packageid = "602f94f28be78a84324eeb1a"
   const getOauth = useSelector((state) => state.getOauth)
   const { loading, oauth, error } = getOauth
+  const [isLoading, setIsLoading] = useState(false)
 
-  const resgoogle = (response) => {
+  const resgoogle = async (response) => {
+    console.log("abc")
+    setIsLoading(true)
+
     console.log(
       response.profileObj.email,
       response.profileObj.name,
@@ -23,7 +27,7 @@ const Home = ({ history }) => {
     )
     if (response) {
       console.log("abc", response, "asd", response.profileObj.name)
-      dispatch(
+      await dispatch(
         OauthLogin(
           response.profileObj.name,
           response.profileObj.email,
@@ -34,6 +38,9 @@ const Home = ({ history }) => {
           packageid
         )
       )
+      setIsLoading(false)
+      console.log("def")
+
       // console.log("abc22")
 
       // history.push("/graph")
@@ -57,17 +64,27 @@ const Home = ({ history }) => {
             }}
           >
             <h2>Login to your account</h2>
-            <div style={{ height: 15 }}></div>
-            <GoogleLogin
-              theme="dark"
-              className="button"
-              clientId="542443202716-1162el1e1nqk02h64h08frl40vsl5hgp.apps.googleusercontent.com"
-              buttonText="Login with Google"
-              onSuccess={resgoogle}
-              // onFailure={resgoogle}
-              isSignedIn={true}
-              cookiePolicy={"single_host_origin"}
-            />
+            <div style={{ height: 15 }}></div>           {" "}
+            {isLoading ? (
+              <div style={{ textAlign: "center" }}>
+                                <CircularProgress />               {" "}
+                <p>
+                  It may take a few seconds while signing up or logging in...
+                </p>
+                             {" "}
+              </div>
+            ) : (
+              <GoogleLogin
+                theme="dark"
+                className="button"
+                clientId="542443202716-1162el1e1nqk02h64h08frl40vsl5hgp.apps.googleusercontent.com"
+                buttonText="Login with Google"
+                onSuccess={resgoogle}
+                // onFailure={resgoogle}
+                isSignedIn={true}
+                cookiePolicy={"single_host_origin"}
+              />
+            )}
           </div>
         </Container>
       </div>
