@@ -69,7 +69,8 @@ const Home = ({ history }) => {
               <div style={{ textAlign: "center" }}>
                                 <CircularProgress />               {" "}
                 <p>
-                  It may take a few seconds while signing up or logging in...
+                  It may take around 50 seconds while signing up or logging in
+                  for the first time...
                 </p>
                              {" "}
               </div>
