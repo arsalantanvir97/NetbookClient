@@ -1,70 +1,38 @@
-# Getting Started with Create React App
+# Netbook (Obsidian like Graph)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A complex graph management system named Netbook using the MERN stack, enabling users to create, update, and delete nodes and edges to form relationships. Initially a free trial system with quota monitoring for limited 6 nodes and 4 edges hence encouraging user to upgrade via Stripe payment for a increase in quota.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Product Browsing**:
+  - Explore our extensive catalog of products, filtered by category, price range, and latest arrivals.
+- **Product Rating & Review**:
+  - Rate and review products to share your experience with other users.
+- **Shopping Cart**:
+  - Easily add products to your cart, review your selections, and proceed to checkout with confidence.
+- **Wishlist**:
+  - Save your favorite products for future purchase consideration, creating a personalized shopping experience.
+- **Order Management**:
+  - View your order history, track the status of your orders, and manage delivery details.
+- **User Authentication**:
+  - Securely sign up and log in to your account using email and password credentials.
+- **Product Rating & Review**:
+  - Rate and review products to share your experience with other users.
+- **Profile Management**:
+  - Update your personal information, such as shipping address and contact details.
+- **Search Functionality**:
+  - Easily find products using our search feature, with options to filter by category, price range, and more.
+    
+## Technologies Used
 
-### `npm start`
+- **React**: JavaScript library for building user interfaces.
+- **React Redux**: Data fetching and caching are managed using React Redux, ensuring efficient data loading and synchronization.
+- **React Router**: Library for handling routing in React applications.
+- **Material UI React**: UI framework for building responsive and accessible web apps.
+- **Other Dependencies**: Check `package.json` for a full list.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Usage
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+To access Netbook features, you'll need to sign up for an account or log in if you already have one. Once logged in, you can create nodes and edges to form relationships.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Visit [Netbook](https://netbook-client.web.app/) to access the Netbook and start exploring it today!
